@@ -1,0 +1,74 @@
+.bookfinder__header {
+    display: flex;
+}
+
+.bookfinder__header-content {
+    position: absolute;
+    width: 710px;
+    height: 137px;
+    left: 387px;
+    top: 167px;
+    
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 20px;
+    /* or 31% */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.2px;
+    
+    color: #000000;
+}
+
+.bookfinder__header-content__input{
+    width: 919px;
+    height: 99px;
+    left: 0px;
+    top: 100px;
+    position: absolute;
+    width: 97%;
+    margin: 2rem 0 1rem;
+
+    display: flex;
+    flex-direction: row;
+
+}
+
+.bookfinder__header-content__input input {
+    flex: 2;
+    width: 100%;
+    min-height: 50px;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+    border: 2px solid #F4F5F4;
+    padding: 0 1rem;
+    outline: none;
+    color: #000;
+
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+}
+
+.bookfinder__header-content__input button {
+    flex: 0.6;
+    width: 100%;
+    min-height: 50px;
+    font-family: var(--font-family);
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 27px;
+    background: #F4F5F4;
+    cursor: pointer;
+    outline: none;
+    padding: 0 1rem;
+    border: none;
+
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
