@@ -1,24 +1,49 @@
-# Project Name
+# PageTurner
 
-![Team Photo](Insert a Team Photo URL here)
-[*how?*](https://help.github.com/articles/about-readmes/#relative-links-and-image-paths-in-readme-files)
+![Team Photo](Incredible team photo to come)
 
-TODO: short project description, some sample screenshots or mockups
+We all want to read more books. With PageTurner, reading is fun again!
+
+* Search top books or add/import your reading history to receive automatic book recommendations
+* Compete against friends and industry leaders to read and discuss your current books
+* Build your reading habit with personalized reminders
+
+Do you use GoodReads or a similar platform? You'll like us better.
 
 ## Architecture
 
-TODO:  descriptions of code organization and tools and libraries used
+Tech Stack: MongoDB, Express.js, React.js, Node.js
 
 ## Setup
 
-TODO: how to get the project dev environment up and running, npm install etc
+First, install both the backend and frontend repository:
+```
+git clone https://github.com/dartmouth-cs98/project-22f-book-recommender.git
+git clone https://github.com/dartmouth-cs98/project-22f-book-recommender-backend.git
+```
+
+Then, in separate terminals, install and start the backend and frontend projects:
+```
+cd project-22f-book-recommender
+npm install
+npm start
+```
+```
+cd project-22f-book-recommender-backend
+npm install
+npm start
+```
 
 ## Deployment
 
-TODO: how to deploy the project
+TBD; only testing process currently set up
 
 ## Authors
 
-TODO: list of authors
+* Alex Kruger
+* Cam Raker
+* Joshua Pasaribu
+* Liam Prevelige
+* Noah Jerris
 
 ## Acknowledgments
