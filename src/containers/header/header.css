@@ -1,8 +1,8 @@
-.bookfinder__header {
+.pageturner__header {
     display: flex;
 }
 
-.bookfinder__header-content {
+.pageturner__header-content {
     position: absolute;
     width: 710px;
     height: 137px;
@@ -23,7 +23,7 @@
     color: #000000;
 }
 
-.bookfinder__header-content__input{
+.pageturner__header-content__input{
     width: 919px;
     height: 99px;
     left: 0px;
@@ -37,7 +37,7 @@
 
 }
 
-.bookfinder__header-content__input input {
+.pageturner__header-content__input input {
     flex: 2;
     width: 100%;
     min-height: 50px;
@@ -55,7 +55,7 @@
 
 }
 
-.bookfinder__header-content__input button {
+.pageturner__header-content__input button {
     flex: 0.6;
     width: 100%;
     min-height: 50px;

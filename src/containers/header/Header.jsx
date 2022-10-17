@@ -11,11 +11,11 @@ const Header = () => {
   };
 
   return (
-    <div className='bookfinder__header section__padding' id="home">
-      <div className='bookfinder__header-content'>
-        <h1 className='gradient__text'>Book Finder</h1>
+    <div className='pageturner__header section__padding' id="home">
+      <div className='pageturner__header-content'>
+        <h1 className='gradient__text'>Page Turner</h1>
 
-        <div className='bookfinder__header-content__input'>
+        <div className='pageturner__header-content__input'>
           <input type="book" placeholder='Tell us the name of the last book you enjoyed' /> 
           <button type="button" onClick={test_api}>Get Started </button>
         </div>
