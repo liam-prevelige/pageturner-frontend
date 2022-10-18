@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { test_endpoint } from '../../api';
+import { test_endpoint } from '../../../api';
 import './header.css';
 
-const Header = () => {
+export const Header = () => {
   // Just for the API test
   const [testText, setTestText] = useState("");
   const test_api = async () => {
@@ -26,5 +26,3 @@ const Header = () => {
     </div>
   )
 };
-
-export default Header
