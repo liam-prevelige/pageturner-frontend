@@ -3,22 +3,22 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {
   BrowserRouter as Router,
-  //Redirect,
+  // Redirect,
   Route,
   Routes,
 } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import { Home } from './components/Home';
+import {Home} from './components/Home';
 
 // Placeholder components
 // TODO: remove these
 const Page1 = () => {
   return <div>Page 1</div>;
-}
+};
 const Page2 = () => {
   return <div>Page 2</div>;
-}
+};
 
 /*
 Example PrivateRoute component:
@@ -43,7 +43,7 @@ const PrivateRoute = ({ authState, element: Component, ...rest }) => {
 /**
  * Core React component
  * Handles auth, navigation, etc.
- * @returns component containing entire application
+ * @return {JSX} component containing entire application
  */
 const App = () => {
   return (
@@ -69,12 +69,12 @@ const App = () => {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/page1" element={<Page1 />} />
-          <Route path="/page2"  element={<Page2 />} />
-          {/* 
+          <Route path="/page2" element={<Page2 />} />
+          {/*
           Example of a private route requiring authorization to access:
           <PrivateRoute authState={authState} path="/create" component={Create} />
           Note we'd need to set up auth separately for this to work
-          
+
           Example of a route taking a parameter from the URL:
           <Route path="/results/:surveyId" element={Results} />
           */}
@@ -82,6 +82,6 @@ const App = () => {
       </div>
     </Router>
   );
-}
+};
 
-export default App
+export default App;

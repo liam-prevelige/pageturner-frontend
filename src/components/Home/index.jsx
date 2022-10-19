@@ -1,10 +1,10 @@
 /*
- * Example major component / page 
+ * Example major component / page
  */
+import React from 'react';
+import {Header} from './Header';
 
-import { Header } from './Header';
-
-export const Home = () => {    
+export const Home = () => {
   return (
     <div className="App">
       <div className='gradient_bg'>
@@ -12,4 +12,4 @@ export const Home = () => {
       </div>
     </div>
   );
-}
+};
