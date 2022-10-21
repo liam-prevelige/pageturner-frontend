@@ -10,12 +10,15 @@ import {
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import { Home } from './components/Home';
+import { BookInfo } from './components/BookInfo';
 
 // Placeholder components
 // TODO: remove these
+/**
 const Page1 = () => {
   return <div>Page 1</div>;
 }
+*/
 const Page2 = () => {
   return <div>Page 2</div>;
 }
@@ -60,7 +63,7 @@ const App = () => {
               <Nav.Link href="/sign-up">Sign Up</Nav.Link>
             </>
             */}
-            <Nav.Link href="/page1">Page 1</Nav.Link>
+            <Nav.Link href="/components/BookInfo">Book Info</Nav.Link>
             <Nav.Link href="/page2">Page 2</Nav.Link>
           </Nav>
         </Navbar.Collapse>
@@ -68,7 +71,7 @@ const App = () => {
       <div className="App container-fluid">
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/page1" element={<Page1 />} />
+          <Route path="/components/BookInfo" element={<BookInfo />} />
           <Route path="/page2"  element={<Page2 />} />
           {/* 
           Example of a private route requiring authorization to access:
