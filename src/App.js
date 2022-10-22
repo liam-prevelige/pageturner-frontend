@@ -10,6 +10,7 @@ import {
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import {Home} from './components/Home';
+import {Browse} from './components/Browse';
 
 // Placeholder components
 // TODO: remove these
@@ -62,6 +63,7 @@ const App = () => {
             */}
             <Nav.Link href="/page1">Page 1</Nav.Link>
             <Nav.Link href="/page2">Page 2</Nav.Link>
+            <Nav.Link href="/browse">Browse</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -70,6 +72,7 @@ const App = () => {
           <Route exact path="/" element={<Home />} />
           <Route path="/page1" element={<Page1 />} />
           <Route path="/page2" element={<Page2 />} />
+          <Route path="/browse" element={<Browse />} />
           {/*
           Example of a private route requiring authorization to access:
           <PrivateRoute authState={authState} path="/create" component={Create} />
