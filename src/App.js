@@ -10,7 +10,7 @@ import {
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import { Home } from './components/Home';
-import { BookInfo } from './components/BookInfo';
+import BookInfo from './components/BookInfo';
 
 // Placeholder components
 // TODO: remove these
