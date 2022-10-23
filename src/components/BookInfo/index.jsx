@@ -128,11 +128,7 @@ class BookInfo extends Component {
                   <h3>{this.state.yearPublished} - {this.state.genre}</h3>
                 </Row>
                 <Row>
-                  <Col>
-                    <Row>
-                      <RatingSystem starCount={5}/>
-                    </Row>
-                  </Col>
+                  <Col><RatingSystem starCount={5}/></Col>
                   <Col>Number of Reviews: {this.state.numberReviews}</Col>
                 </Row>
                 <Row>
@@ -174,26 +170,33 @@ class BookInfo extends Component {
 }
 
 class Stars extends Component {
+  /**
+   * class representing the stars in the star rating system
+   */
   constructor(props) {
     super(props);
     this.state = {currRating : 0}
     this.onHover = this.onHover.bind(this)
     this.onClick = this.onClick.bind(this) 
   }
+
  onHover(e) {
   if (e.target.className === 'star') {
    this.setRating(e.target.dataset.value)
   }
  }
+
  onClick(e) {
   if (e.target.dataset.value === this.state.currRating){
    this.setRating(e.target.dataset.value)
   }
  }
+
  setRating(value) {
    this.setState({currRating : value})
     // TODO: send post request with number of stars, which is in this.state.currRating
  }
+
  render(){
    return(
    [...Array(this.props.starCount).keys()].map((index) => {
@@ -211,6 +214,7 @@ class Stars extends Component {
    )
   }
  }
+ 
 const RatingSystem = (props) =>  {
  return (
    <div className='rating'>
