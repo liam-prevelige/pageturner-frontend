@@ -7,16 +7,17 @@ import "bootstrap/dist/css/bootstrap.css";
 import './bookInfo.css'
 
 import Container from 'react-bootstrap/Container';
+import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image'
 
 
-export const BookInfo = () => {    
+export const BookInfo = () => {
   return (
     <div className="App">
       <div className='gradient_bg'>
-        <Container fluid>
+        <Container>
           <Row>
             <Col><Image src={require('./harry-potter-cover.png')} alt='...' /></Col> 
             <Col>
@@ -24,7 +25,7 @@ export const BookInfo = () => {
                 <h1>Harry Potter and the Goblet of Fire</h1>
               </Row>
               <Row>
-                <h2>2000 - Fantasy/Adventure/Mystery</h2>
+                <h3>2000 - Fantasy/Adventure/Mystery</h3>
               </Row>
               <Row>
                 <Col>*5-star rating system*</Col>
@@ -45,13 +46,24 @@ export const BookInfo = () => {
               </Row>
             </Col>
           </Row>
-          Other books by this author:
+            <h3>Other books by this author:</h3>
           <Row>
-            *Horizontal list of books by this author*
+            <ListGroup horizontal>
+              <ListGroup.Item><Image src={require('./harry-potter-cover.png')} alt='...' /></ListGroup.Item>
+              <ListGroup.Item><Image src={require('./harry-potter-cover.png')} alt='...' /></ListGroup.Item>
+              <ListGroup.Item><Image src={require('./harry-potter-cover.png')} alt='...' /></ListGroup.Item>
+              <ListGroup.Item><Image src={require('./harry-potter-cover.png')} alt='...' /></ListGroup.Item>
+            </ListGroup>
           </Row>
-          What your friends think:
-          <Col>*list of friends' opinions*</Col>
-          
+          <Row>
+          <h3>What your friends think:</h3>
+          <ListGroup vertical>
+              <ListGroup.Item>Review</ListGroup.Item>
+              <ListGroup.Item>Review</ListGroup.Item>
+              <ListGroup.Item>Review</ListGroup.Item>
+              <ListGroup.Item>Review</ListGroup.Item>
+            </ListGroup>
+          </Row>          
         </Container>
       </div>
     </div>
