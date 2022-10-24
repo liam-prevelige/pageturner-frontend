@@ -21,9 +21,9 @@ import {BookInfo} from './components/BookInfo';
 const Page1 = () => {
   return <div>Page 1</div>;
 };
-const Page2 = () => {
-  return <div>Page 2</div>;
-};
+// const Page2 = () => {
+//   return <div>Page 2</div>;
+// };
 
 /*
 Example PrivateRoute component:
@@ -66,7 +66,7 @@ const App = () => {
             </>
             */}
             <Nav.Link href="/page1">Page 1</Nav.Link>
-            <Nav.Link href="/components/BookInfo">Book Info</Nav.Link>
+            <Nav.Link href="/BookInfo">Book Info</Nav.Link>
             <Nav.Link href="/browse">Browse</Nav.Link>
           </Nav>
         </Navbar.Collapse>
