@@ -3,14 +3,16 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {
   BrowserRouter as Router,
-  //Redirect,
+  // Redirect,
   Route,
   Routes,
 } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import { Home } from './components/Home';
-import BookInfo from './components/BookInfo';
+
+import {Home} from './components/Home';
+import {Browse} from './components/Browse';
+import {BookInfo} from './components/BookInfo';
 
 // Placeholder components
 // TODO: remove these
@@ -18,11 +20,10 @@ import BookInfo from './components/BookInfo';
 
 const Page1 = () => {
   return <div>Page 1</div>;
-}
-
+};
 const Page2 = () => {
   return <div>Page 2</div>;
-}
+};
 
 /*
 Example PrivateRoute component:
@@ -47,7 +48,7 @@ const PrivateRoute = ({ authState, element: Component, ...rest }) => {
 /**
  * Core React component
  * Handles auth, navigation, etc.
- * @returns component containing entire application
+ * @return {JSX} component containing entire application
  */
 const App = () => {
   return (
@@ -65,22 +66,22 @@ const App = () => {
             </>
             */}
             <Nav.Link href="/page1">Page 1</Nav.Link>
-            <Nav.Link href="/page2">Page 2</Nav.Link>
             <Nav.Link href="/components/BookInfo">Book Info</Nav.Link>
+            <Nav.Link href="/browse">Browse</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
       <div className="App container-fluid">
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/page1"  element={<Page1 />} />
-          <Route path="/page2"  element={<Page2 />} />
+          <Route path="/page1" element={<Page1 />} />
           <Route path="/components/BookInfo" element={<BookInfo />} />
-          {/* 
+          <Route path="/browse" element={<Browse />} />
+          {/*
           Example of a private route requiring authorization to access:
           <PrivateRoute authState={authState} path="/create" component={Create} />
           Note we'd need to set up auth separately for this to work
-          
+
           Example of a route taking a parameter from the URL:
           <Route path="/results/:surveyId" element={Results} />
           */}
@@ -88,6 +89,6 @@ const App = () => {
       </div>
     </Router>
   );
-}
+};
 
-export default App
+export default App;
