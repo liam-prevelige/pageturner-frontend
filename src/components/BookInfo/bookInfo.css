@@ -1,0 +1,10 @@
+/*
+styling for the book info page
+author: Alex Kruger
+*/
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+} /* controls the size of the book covers for the author's other books */
