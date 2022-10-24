@@ -1,15 +1,15 @@
 import React from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-export const BookDisplay = () => {
+export const BookDisplay = ({imagesrc, title, author}) => {
   return (
     <div className="mb-3">
-      <img src="goblet.jpg" alt="Harry Potter" width="150" height="210"/>
+      <img src={imagesrc} alt="Harry Potter" width="150" height="210"/>
       <h5>
-        Harry Potter and the Goblet of Fire
+        {title}
       </h5>
       <h6>
-        JK Rowling
+        {author}
       </h6>
       <ProgressBar animated variant="success" now="90" label="90%" />
     </div>

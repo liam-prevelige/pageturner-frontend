@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {testEndpoint} from '../../../api';
 import './header.css';
 import {HiMagnifyingGlass} from 'react-icons/hi2';
+import {createSearchParams, useNavigate} from 'react-router-dom';
 // import Button from 'react-bootstrap/Button';
 import {Row, Col} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,14 +15,30 @@ export const Header = () => {
     setTestText(text);
   };
 
+  const [search, setSearch] = useState('');
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+    console.log('value is:', event.target.value);
+  };
+
+  const navigate = useNavigate();
+  const opensearch = (id) => {
+    navigate({
+      pathname: '/browse',
+      search: createSearchParams({
+        query: search,
+      }).toString(),
+    });
+  };
+
   return (
     <div className='pageturner__header section__padding' id="home">
       <div className='pageturner__header-content'>
         <h1 className='gradient__text'>Search for Content</h1>
 
         <div className='pageturner__header-content__input'>
-          <input type="book" placeholder='Tell us the name of the last book you enjoyed'/>
-          <button type="button" onClick={testApi}> <HiMagnifyingGlass/> </button>
+          <input type="book" onChange={handleSearchChange} value={search} placeholder='Tell us the name of the last book you enjoyed'/>
+          <button type="button" onClick={opensearch}> <HiMagnifyingGlass/> </button>
         </div>
 
         {/* Adapted from Upmostly https://upmostly.com/tutorials/build-a-react-switch-toggle-component */}
