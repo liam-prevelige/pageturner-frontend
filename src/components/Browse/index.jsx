@@ -6,25 +6,24 @@ import {getSearch} from '../../api';
 export const Browse = () => {
   const [searchparams] = useSearchParams();
   const searchParams = searchparams.get('query');
-  console.log('testing here', searchParams);
 
-  const [searchResults, setSearchResults] = useState('');
-  const getSearchResults = async () => {
-    const results = await getSearch(searchparams.get('query'));
-    setSearchResults(results);
+  const [searchResults, setSearchResults] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const load = async () => {
+    if (!loaded) {
+      const results = await getSearch(searchParams);
+      setSearchResults(results);
+      setLoaded(true);
+    }
   };
 
   useEffect(() => {
-    let ignore = false;
-
-    if (!ignore) {
-      getSearchResults();
-      return () => {
-        ignore = true;
-      };
-    }
+    load();
   }, []);
-  console.log('is this undefined', searchResults); // TODO: Update population of books with data from search results
+
+  useEffect(() => {
+    console.log(`${searchResults} ${loaded}`);
+  }, [searchResults, loaded]);
 
   return (
     <div>
