@@ -14,6 +14,7 @@ import {Home} from './components/Home';
 import {Browse} from './components/Browse';
 import {BookInfo} from './components/BookInfo';
 import {SocialFeed} from './components/SocialFeed';
+import {Feed} from './components/Feed';
 
 // Placeholder components
 // TODO: remove these
@@ -55,7 +56,7 @@ const App = () => {
   return (
     <Router>
       <Navbar className="p-2" bg="light" expand="lg">
-        <Navbar.Brand href="/">PageTurner</Navbar.Brand>
+        <Navbar.Brand href="/">Pageturner</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -70,6 +71,7 @@ const App = () => {
             <Nav.Link href="/BookInfo">Book Info</Nav.Link>
             <Nav.Link href="/browse">Browse</Nav.Link>
             <Nav.Link href="/SocialFeed">Social Feed</Nav.Link>
+            <Nav.Link href="/feed">Feed</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -80,6 +82,7 @@ const App = () => {
           <Route path="/components/BookInfo" element={<BookInfo />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/SocialFeed" element={<SocialFeed />} />
+          <Route path="/feed" element={<Feed />} />
           {/*
           Example of a private route requiring authorization to access:
           <PrivateRoute authState={authState} path="/create" component={Create} />
