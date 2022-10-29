@@ -1,0 +1,21 @@
+.search {
+    width: 70%;
+    min-width: 15em;
+}
+
+.searchInput {
+    font-size: 25px;
+    border: none;
+    border-bottom: 1.5px solid gray;
+    padding-bottom: 0%;
+    width: 100%;
+}
+
+.searchInput:focus {
+    outline: none;
+}
+
+.searchResult {
+    padding-left: 0px;
+    cursor: pointer;
+}
