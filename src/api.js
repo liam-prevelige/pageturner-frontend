@@ -22,6 +22,25 @@ export const testEndpoint = async () => {
   return body.test_result;
 };
 
+export const getFeed = async () => {
+  const response = await fetch(`${API_URL}/feed/get`, {
+    Method: 'GET',
+    Headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    Body: {},
+    Cache: 'default',
+  });
+  const body = await response.json();
+
+  if (!response.ok) {
+    throw new Error('Call to /feed/get failed');
+  }
+
+  return body.data;
+};
+
 // A test endpoint to fetch some text from the backend
 export const getSearch = async (query) => {
   const response = await fetch(`${API_URL}/search/${query}`, {
