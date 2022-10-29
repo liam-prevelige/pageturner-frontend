@@ -10,9 +10,8 @@ import {
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
-import {Home} from './components/Home';
+import {LandingPage} from './components/LandingPage';
 import {Browse} from './components/Browse';
-import {BookInfo} from './components/BookInfo';
 import {SocialFeed} from './components/SocialFeed';
 import {Feed} from './components/Feed';
 
@@ -75,11 +74,10 @@ const App = () => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <div className="App container-fluid">
+      <div className="container-fluid">
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path="/" element={<LandingPage />} />
           <Route path="/page1" element={<Page1 />} />
-          <Route path="/components/BookInfo" element={<BookInfo />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/SocialFeed" element={<SocialFeed />} />
           <Route path="/feed" element={<Feed />} />
