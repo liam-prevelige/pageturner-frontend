@@ -35,7 +35,7 @@ export const getSearch = async (query) => {
   });
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to test_endpoint failed');
+    throw new Error('Call to /search failed');
   }
 
   return body;
