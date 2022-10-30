@@ -12,6 +12,7 @@ import './App.css';
 
 import {LandingPage} from './components/LandingPage';
 import {Browse} from './components/Browse';
+import {BookInfo} from './components/BookInfo';
 import {SocialFeed} from './components/SocialFeed';
 import {Feed} from './components/Feed';
 
@@ -69,7 +70,6 @@ const App = () => {
             <Nav.Link href="/page1">Page 1</Nav.Link>
             <Nav.Link href="/BookInfo">Book Info</Nav.Link>
             <Nav.Link href="/browse">Browse</Nav.Link>
-            <Nav.Link href="/SocialFeed">Social Feed</Nav.Link>
             <Nav.Link href="/feed">Feed</Nav.Link>
           </Nav>
         </Navbar.Collapse>
@@ -79,7 +79,6 @@ const App = () => {
           <Route exact path="/" element={<LandingPage />} />
           <Route path="/page1" element={<Page1 />} />
           <Route path="/browse" element={<Browse />} />
-          <Route path="/SocialFeed" element={<SocialFeed />} />
           <Route path="/feed" element={<Feed />} />
           {/*
           Example of a private route requiring authorization to access:
