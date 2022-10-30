@@ -10,20 +10,14 @@ import './feed.css';
 export const Feed = () => {
   return (
     <div>
-      <PostContainer />
       <Container fluid>
         <Row>
           <Col> {/** fixed */}
             <div className='disable-scroll'>
-              <PreferenceList />
+              <PreferenceList name='Darrell'/>
             </div>
           </Col>
           <Col> {/** scrollable - Alex's work goes in this column */}
-            <PostContainer />
-            <PostContainer />
-            <PostContainer />
-            <PostContainer />
-            <PostContainer />
             <PostContainer />
           </Col>
           <Col> {/** fixed */}
