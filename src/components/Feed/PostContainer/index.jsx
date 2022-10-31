@@ -5,13 +5,18 @@
 import React, {useState, useEffect} from 'react';
 import {Post} from './Post/post';
 import {getFeed} from '../../../api';
+import {useTrackVisibility} from 'react-intersection-observer-hook';
+
 
 export const PostContainer = () => {
   const [posts, setPosts] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const [observer, setObserver] = useState(null);
-  const [, setPage] = useState(0);
-  const [prevY, setPrevY] = useState(0);
+
+  const [
+    ref,
+    {isVisible},
+  ] = useTrackVisibility();
+
   const load = async () => {
     if (!loaded) {
       const results = await getFeed();
@@ -22,46 +27,8 @@ export const PostContainer = () => {
 
   useEffect(() => {
     load();
-
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 1.0,
-    };
-    setObserver(new IntersectionObserver(
-        // eslint-disable-next-line no-invalid-this
-        handleObserver.bind(this),
-        options,
-    ));
-    // eslint-disable-next-line no-invalid-this
-    observer.observe(this.loadingRef);
-  }, []);
-
-  /**
-  * description
-  * @param {*} page
-  */
-  async function getPosts(page) {
-    tempPosts = posts;
-    tempPosts.push(await getFeed());
-    setPosts(tempPosts);
-  }
-
-  /**
-  * description
-  * @param {*} entities
-  * @param {*} observer
-  */
-  function handleObserver(entities, observer) {
-    const y = entities[0].boundingClientRect.y;
-    if (prevY > y) {
-      const lastPost = posts[posts.length - 1];
-      const curPage = lastPost.albumId;
-      getPosts(curPage);
-      setPage(curPage);
-    }
-    setPrevY(y);
-  }
+    console.log(`The component is ${isVisible ? 'visible' : 'not visible'}.`);
+  }, [isVisible]);
 
   return (
     <div className='feed'>
@@ -70,7 +37,7 @@ export const PostContainer = () => {
         // eslint-disable-next-line arrow-parens
         posts.map(post => (
           // eslint-disable-next-line react/jsx-key
-          <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl}/>
+          <Post ref={ref} username={post.username} caption={post.caption} imageUrl={post.imageUrl}/>
         ))
       }
     </div>
