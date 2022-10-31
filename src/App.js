@@ -12,8 +12,6 @@ import './App.css';
 
 import {LandingPage} from './components/LandingPage';
 import {Browse} from './components/Browse';
-import {BookInfo} from './components/BookInfo';
-import {SocialFeed} from './components/SocialFeed';
 import {Feed} from './components/Feed';
 
 // Placeholder components
