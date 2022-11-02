@@ -27,26 +27,11 @@ export const PostContainer = () => {
   };
 
   const addPosts = async () => {
-    // try {
-    //   incrementPage();
-    //   const tempTriggerNumber = triggerNumber;
-    //   setTriggerNumber(tempTriggerNumber + 10);
-    //   const results = await getFeed();
-    //   const tempPosts = posts;
-    //   tempPosts.concat(results);
-    //   setPosts(tempPosts);
-    // } catch (err) {
-    //   console.log(err);
-    // };
     incrementPage();
     const tempTriggerNumber = triggerNumber;
     setTriggerNumber(tempTriggerNumber + 10);
     const results = await getFeed();
-    console.log(posts);
-    console.log(results);
-    const tempPosts = posts;
-    tempPosts.concat(results);
-    setPosts(tempPosts);
+    setPosts([...posts, ...results]);
   };
 
   useEffect(() => {
