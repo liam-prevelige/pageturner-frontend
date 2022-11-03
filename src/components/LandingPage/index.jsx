@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {createSearchParams, useNavigate} from 'react-router-dom';
 import {DynamicSearch} from '../DynamicSearch';
 import {getSearch} from '../../api';
-import {BookDisplay} from '../Browse/BookDisplay'; // TODO: switch to BookInfo
+import {BookDisplay} from './BookDisplay'; // TODO: switch to BookInfo
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import './LandingPage.css';
@@ -12,6 +12,28 @@ import './LandingPage.css';
  * @return {JSX} for landing page component
  */
 export const LandingPage = () => {
+  // const [searchparams] = useSearchParams();
+  // const searchParams = searchparams.get('query');
+
+  // const [searchResults, setSearchResults] = useState([]);
+  // const [loaded, setLoaded] = useState(false);
+  // const load = async () => {
+  //   if (!loaded) {
+  //     const results = await getSearch(searchParams);
+  //     setSearchResults(results);
+  //     setLoaded(true);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   load();
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log(`${searchResults} ${loaded}`);
+  // }, [searchResults, loaded]);
+
+
   const [book, setBook] = useState(null);
 
   // TODO: rework everything in cluster below when cleaning up getSearch endpoint
@@ -61,6 +83,28 @@ export const LandingPage = () => {
           </Card.Body>
         </Card>
       </div>}
+      <div className="container-sm text-center">
+        <div className="row align-items-center">
+          <div className="col-2">
+            <BookDisplay imagesrc="http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg" title="YES" author="Whatever"/>
+          </div>
+          <div className="col-2">
+            <BookDisplay imagesrc="http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg" title="YES" author="Whatever"/>
+          </div>
+          <div className="col-2">
+            <BookDisplay imagesrc="http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg" title="YES" author="Whatever"/>
+          </div>
+          <div className="col-2">
+            <BookDisplay imagesrc="http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg" title="YES" author="Whatever"/>
+          </div>
+          <div className="col-2">
+            <BookDisplay imagesrc="http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg" title="YES" author="Whatever"/>
+          </div>
+          <div className="col-2">
+            <BookDisplay imagesrc="http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg" title="YES" author="Whatever"/>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
