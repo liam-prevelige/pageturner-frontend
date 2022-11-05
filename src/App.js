@@ -13,6 +13,7 @@ import './App.css';
 import {LandingPage} from './components/LandingPage';
 import {Browse} from './components/Browse';
 import {Feed} from './components/Feed';
+import {BookInfo} from './components/BookInfo';
 
 // Placeholder components
 // TODO: remove these
@@ -66,7 +67,7 @@ const App = () => {
             </>
             */}
             <Nav.Link href="/page1">Page 1</Nav.Link>
-            <Nav.Link href="/BookInfo">Book Info</Nav.Link>
+            <Nav.Link href="/book-info/*">Book Info</Nav.Link>
             <Nav.Link href="/browse">Browse</Nav.Link>
             <Nav.Link href="/feed">Feed</Nav.Link>
           </Nav>
@@ -75,6 +76,7 @@ const App = () => {
       <div className="container-fluid">
         <Routes>
           <Route exact path="/" element={<LandingPage />} />
+          <Route path="/book-info/*" element={<BookInfo />} />
           <Route path="/page1" element={<Page1 />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/feed" element={<Feed />} />

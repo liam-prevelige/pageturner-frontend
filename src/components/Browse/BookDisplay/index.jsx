@@ -16,7 +16,7 @@ export const BookDisplay = () => {
         JK Rowling
       </h6>
       <nav>
-        <Link to='../../BookInfo/*'>Harry Potter and the Goblet of Fire</Link>
+        <Link to='../../book-info/*'>Harry Potter and the Goblet of Fire</Link>
       </nav>
       <ProgressBar animated variant="success" now="90" label="90%" />
     </div>
