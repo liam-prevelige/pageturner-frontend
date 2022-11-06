@@ -41,6 +41,25 @@ export const getFeed = async () => {
   return body.data;
 };
 
+// Returns the top rated books
+export const getTopBooks = async () => {
+  const response = await fetch(`${API_URL}/topbooks`, {
+    Method: 'GET',
+    Headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    Body: {},
+    Cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /topbooks/get failed');
+  }
+
+  return body.data;
+};
+
 // A test endpoint to fetch some text from the backend
 export const getSearch = async (query) => {
   const response = await fetch(`${API_URL}/search/${query}`, {

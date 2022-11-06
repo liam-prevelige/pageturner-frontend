@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createSearchParams, useNavigate} from 'react-router-dom';
 import {DynamicSearch} from '../DynamicSearch';
-import {getSearch} from '../../api';
-import {BookDisplay} from '../Browse/BookDisplay'; // TODO: switch to BookInfo
+import {getSearch, getTopBooks} from '../../api';
+import {BookDisplay} from './BookDisplay'; // TODO: switch to BookInfo
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import './LandingPage.css';
@@ -13,6 +13,9 @@ import './LandingPage.css';
  */
 export const LandingPage = () => {
   const [book, setBook] = useState(null);
+
+  const [topBooks, setTopBooks] = useState([]);
+  const [loaded, hasLoaded] = useState(false);
 
   // TODO: rework everything in cluster below when cleaning up getSearch endpoint
   const [books, setBooks] = useState([]);
@@ -36,6 +39,18 @@ export const LandingPage = () => {
       }
     });
   };
+
+  const load = async () => {
+    const books1 = await getTopBooks();
+    setTopBooks(books1);
+    hasLoaded(true);
+  };
+
+  useEffect(() => {
+    if (!loaded) {
+      load();
+    }
+  }, []);
 
   const navigate = useNavigate();
   const navToRecs = (isbn) => {
@@ -61,6 +76,21 @@ export const LandingPage = () => {
           </Card.Body>
         </Card>
       </div>}
+      <div className="row align-items-center justify-content-center browse">
+        {
+          // eslint-disable-next-line arrow-parens
+          topBooks.map((book, index) => (
+            // eslint-disable-next-line react/jsx-key
+            <div className="col-2" key={index}>
+              <Card>
+                <Card.Body>
+                  <BookDisplay url={book.url} title={book.title} author={book.author}/>
+                </Card.Body>
+              </Card>
+            </div>
+          ))
+        }
+      </div>
     </div>
   );
 };
