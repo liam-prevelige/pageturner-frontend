@@ -37,18 +37,6 @@ export const LandingPage = () => {
     });
   };
 
-  /*
-  const navigate = useNavigate();
-  const navToRecs = (isbn) => {
-    navigate({
-      pathname: '/browse',
-      search: createSearchParams({
-        isbn,
-      }).toString(),
-    });
-  };
-  */
-
   return (
     <div>
       <div className="row justify-content-center h1 m-4">Get Started</div>
