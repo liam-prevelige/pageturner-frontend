@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-// import {createSearchParams, useNavigate} from 'react-router-dom';
 import {DynamicSearch} from '../DynamicSearch';
 import {getSearch} from '../../api';
-// import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import './LandingPage.css';
 import {BookPreview} from './BookPreview';
+import {Container, Row} from 'react-bootstrap';
 
 /**
  * Component containing the landing page
@@ -38,12 +37,12 @@ export const LandingPage = () => {
   };
 
   return (
-    <div>
-      <div className="row justify-content-center h1 m-4">Get Started</div>
-      <div className="row justify-content-center">
+    <Container>
+      <Row className="justify-content-center h1 m-4">Get Started</Row>
+      <Row className="justify-content-center">
         <DynamicSearch searchFn={searchFn} onSelect={onSelect} placeholder="Enter the title of a book you enjoyed" />
-      </div>
-      {book && <div className="row justify-content-center">
+      </Row>
+      {book && <Row className="justify-content-center">
         <Card className="book m-4">
           <Card.Body>
             <BookPreview
@@ -55,7 +54,7 @@ export const LandingPage = () => {
             />
           </Card.Body>
         </Card>
-      </div>}
-    </div>
+      </Row>}
+    </Container>
   );
 };

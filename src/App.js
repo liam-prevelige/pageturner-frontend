@@ -71,22 +71,20 @@ const App = () => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <div className="container-fluid">
-        <Routes>
-          <Route exact path="/" element={<LandingPage />} />
-          <Route path="/page1" element={<Page1 />} />
-          <Route path="/browse" element={<Browse />} />
-          <Route path="/feed" element={<Feed />} />
-          {/*
-          Example of a private route requiring authorization to access:
-          <PrivateRoute authState={authState} path="/create" component={Create} />
-          Note we'd need to set up auth separately for this to work
+      <Routes>
+        <Route exact path="/" element={<LandingPage />} />
+        <Route path="/page1" element={<Page1 />} />
+        <Route path="/browse" element={<Browse />} />
+        <Route path="/feed" element={<Feed />} />
+        {/*
+        Example of a private route requiring authorization to access:
+        <PrivateRoute authState={authState} path="/create" component={Create} />
+        Note we'd need to set up auth separately for this to work
 
-          Example of a route taking a parameter from the URL:
-          <Route path="/results/:surveyId" element={Results} />
-          */}
-        </Routes>
-      </div>
+        Example of a route taking a parameter from the URL:
+        <Route path="/results/:surveyId" element={Results} />
+        */}
+      </Routes>
     </Router>
   );
 };
