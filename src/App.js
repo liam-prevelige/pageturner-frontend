@@ -66,7 +66,6 @@ const App = () => {
             </>
             */}
             <Nav.Link href="/page1">Page 1</Nav.Link>
-            <Nav.Link href="/BookInfo">Book Info</Nav.Link>
             <Nav.Link href="/browse">Browse</Nav.Link>
             <Nav.Link href="/feed">Feed</Nav.Link>
           </Nav>
