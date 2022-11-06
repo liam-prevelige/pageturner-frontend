@@ -1,5 +1,4 @@
 import React from 'react';
-import ProgressBar from 'react-bootstrap/ProgressBar';
 import {
   // Route,
   // Routes,
@@ -8,17 +7,13 @@ import {
 
 // import {BookInfo} from '../../BookInfo';
 
-export const BookDisplay = () => {
+export const BookDisplay = ({url, title, author}) => {
   return (
-    <div className="mb-3">
-      <img src="goblet.jpg" alt="Harry Potter" width="150" height="210"/>
-      <h6>
-        JK Rowling
-      </h6>
+    <div className="mb-3 align-text-center">
+      <img src={url} width="125" height="190"/>
       <nav>
-        <Link to='../../BookInfo/*'>Harry Potter and the Goblet of Fire</Link>
+        <Link to='../../BookInfo/*'>{title} by {author}</Link>
       </nav>
-      <ProgressBar animated variant="success" now="90" label="90%" />
     </div>
   );
 };
