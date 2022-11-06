@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {createSearchParams, useNavigate} from 'react-router-dom';
+// import {createSearchParams, useNavigate} from 'react-router-dom';
 import {DynamicSearch} from '../DynamicSearch';
 import {getSearch} from '../../api';
-import {BookDisplay} from '../Browse/BookDisplay'; // TODO: switch to BookInfo
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import './LandingPage.css';
+import {BookPreview} from './BookPreview';
 
 /**
  * Component containing the landing page
@@ -20,7 +20,7 @@ export const LandingPage = () => {
     const results = await getSearch(query);
     const newBooks = results.map((res) => {
       return {
-        id: res.isbn,
+        id: res.ISBN,
         label: res.title,
         rest: res,
       };
@@ -37,6 +37,7 @@ export const LandingPage = () => {
     });
   };
 
+  /*
   const navigate = useNavigate();
   const navToRecs = (isbn) => {
     navigate({
@@ -46,6 +47,7 @@ export const LandingPage = () => {
       }).toString(),
     });
   };
+  */
 
   return (
     <div>
@@ -56,8 +58,13 @@ export const LandingPage = () => {
       {book && <div className="row justify-content-center">
         <Card className="book m-4">
           <Card.Body>
-            <BookDisplay title={book.title} author={book.author} imagesrc={book.image_l} />
-            <Button onClick={() => navToRecs(book.isbn)}>More Books Like This</Button>
+            <BookPreview
+              title={book.title}
+              author={book.author}
+              coverImg={book.image_m}
+              publisher={book.publisher}
+              year={book.year}
+            />
           </Card.Body>
         </Card>
       </div>}
