@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {
@@ -12,6 +12,8 @@ import './App.css';
 
 import {LandingPage} from './components/LandingPage';
 import {Feed} from './components/Feed';
+import Auth from './components/Auth/Auth';
+import {gapi} from 'gapi-script';
 
 // Placeholder components
 // TODO: remove these
@@ -43,6 +45,17 @@ const PrivateRoute = ({ authState, element: Component, ...rest }) => {
  * @return {JSX} component containing entire application
  */
 const App = () => {
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: '556168228068-60hp84a7hnkqoh1i8vs2m2vakff2a7ae.apps.googleusercontent.com',
+        scope: 'email',
+      });
+    };
+
+    gapi.load('client:auth2', start);
+  }, []);
+
   return (
     <Router>
       <Navbar className="p-2" bg="light" expand="lg">
@@ -58,6 +71,9 @@ const App = () => {
             </>
             */}
             <Nav.Link href="/feed">Feed</Nav.Link>
+          </Nav>
+          <Nav className="nav navbar-nav navbar-right">
+            <Auth/>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
