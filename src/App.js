@@ -11,19 +11,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
 import {LandingPage} from './components/LandingPage';
-import {Browse} from './components/Browse';
 import {Feed} from './components/Feed';
 
 // Placeholder components
 // TODO: remove these
 // TODO: (from Alex) remove the "Book Info" page from the navbar once we can connect it to other pages
-
-const Page1 = () => {
-  return <div>Page 1</div>;
-};
-// const Page2 = () => {
-//   return <div>Page 2</div>;
-// };
 
 /*
 Example PrivateRoute component:
@@ -65,29 +57,21 @@ const App = () => {
               <Nav.Link href="/sign-up">Sign Up</Nav.Link>
             </>
             */}
-            <Nav.Link href="/page1">Page 1</Nav.Link>
-            <Nav.Link href="/BookInfo">Book Info</Nav.Link>
-            <Nav.Link href="/browse">Browse</Nav.Link>
             <Nav.Link href="/feed">Feed</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <div className="container-fluid">
-        <Routes>
-          <Route exact path="/" element={<LandingPage />} />
-          <Route path="/page1" element={<Page1 />} />
-          <Route path="/browse" element={<Browse />} />
-          <Route path="/feed" element={<Feed />} />
-          {/*
-          Example of a private route requiring authorization to access:
-          <PrivateRoute authState={authState} path="/create" component={Create} />
-          Note we'd need to set up auth separately for this to work
-
-          Example of a route taking a parameter from the URL:
-          <Route path="/results/:surveyId" element={Results} />
-          */}
-        </Routes>
-      </div>
+      <Routes>
+        <Route exact path="/" element={<LandingPage />} />
+        <Route path="/feed" element={<Feed />} />
+        {/*
+        Example of a private route requiring authorization to access:
+        <PrivateRoute authState={authState} path="/create" component={Create} />
+        Note we'd need to set up auth separately for this to work
+        Example of a route taking a parameter from the URL:
+        <Route path="/results/:surveyId" element={Results} />
+        */}
+      </Routes>
     </Router>
   );
 };

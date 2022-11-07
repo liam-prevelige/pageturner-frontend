@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {createSearchParams, useNavigate} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 import {DynamicSearch} from '../DynamicSearch';
-import {getSearch} from '../../api';
-import {BookDisplay} from '../Browse/BookDisplay'; // TODO: switch to BookInfo
-import Button from 'react-bootstrap/Button';
+import {getSearch, getTopBooks} from '../../api';
+import {BookDisplay} from './BookDisplay'; // TODO: switch to BookInfo
 import Card from 'react-bootstrap/Card';
 import './LandingPage.css';
+import {BookPreview} from './BookPreview';
+import {Container, Row} from 'react-bootstrap';
 
 /**
  * Component containing the landing page
@@ -14,13 +14,16 @@ import './LandingPage.css';
 export const LandingPage = () => {
   const [book, setBook] = useState(null);
 
+  const [topBooks, setTopBooks] = useState([]);
+  const [loaded, hasLoaded] = useState(false);
+
   // TODO: rework everything in cluster below when cleaning up getSearch endpoint
   const [books, setBooks] = useState([]);
   const searchFn = async (query) => {
     const results = await getSearch(query);
     const newBooks = results.map((res) => {
       return {
-        id: res.isbn,
+        id: res.ISBN,
         label: res.title,
         rest: res,
       };
@@ -37,30 +40,52 @@ export const LandingPage = () => {
     });
   };
 
-  const navigate = useNavigate();
-  const navToRecs = (isbn) => {
-    navigate({
-      pathname: '/browse',
-      search: createSearchParams({
-        isbn,
-      }).toString(),
-    });
+  const load = async () => {
+    const books1 = await getTopBooks();
+    setTopBooks(books1);
+    hasLoaded(true);
   };
 
+  useEffect(() => {
+    if (!loaded) {
+      load();
+    }
+  }, []);
+
   return (
-    <div>
-      <div className="row justify-content-center h1 m-4">Get Started</div>
-      <div className="row justify-content-center">
+    <Container>
+      <Row className="justify-content-center h1 m-4">Get Started</Row>
+      <Row className="justify-content-center">
         <DynamicSearch searchFn={searchFn} onSelect={onSelect} placeholder="Enter the title of a book you enjoyed" />
-      </div>
-      {book && <div className="row justify-content-center">
+      </Row>
+      {book && <Row className="justify-content-center">
         <Card className="book m-4">
           <Card.Body>
-            <BookDisplay title={book.title} author={book.author} imagesrc={book.image_l} />
-            <Button onClick={() => navToRecs(book.isbn)}>More Books Like This</Button>
+            <BookPreview
+              title={book.title}
+              author={book.author}
+              coverImg={book.image_m}
+              publisher={book.publisher}
+              year={book.year}
+            />
           </Card.Body>
         </Card>
-      </div>}
-    </div>
+      </Row>}
+      <Row className="align-items-center justify-content-center browse">
+        {
+          // eslint-disable-next-line arrow-parens
+          topBooks.map((book, index) => (
+            // eslint-disable-next-line react/jsx-key
+            <div className="col-2" key={index}>
+              <Card>
+                <Card.Body>
+                  <BookDisplay url={book.url} title={book.title} author={book.author}/>
+                </Card.Body>
+              </Card>
+            </div>
+          ))
+        }
+      </Row>
+    </Container>
   );
 };

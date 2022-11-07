@@ -72,6 +72,8 @@ export const BookInfo = () => {
   function handleSubmit(event) {
   }
 
+  console.log('we made it');
+
   return (
     <div className="App">
       <div className='gradient_bg'>
