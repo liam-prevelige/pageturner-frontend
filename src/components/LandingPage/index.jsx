@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {createSearchParams, useNavigate} from 'react-router-dom';
 import {DynamicSearch} from '../DynamicSearch';
 import {getSearch, getTopBooks} from '../../api';
 import {BookDisplay} from './BookDisplay'; // TODO: switch to BookInfo
