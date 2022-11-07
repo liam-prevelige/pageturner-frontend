@@ -82,7 +82,7 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<LandingPage />} />
         <Route path="/feed" element={<Feed />} />
-        <Nav.Link href="/profile">My Profile</Nav.Link>
+        <Route path="/profile" element={<Profile />} />
         {/*
         Example of a private route requiring authorization to access:
         <PrivateRoute authState={authState} path="/create" component={Create} />

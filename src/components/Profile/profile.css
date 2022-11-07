@@ -1,4 +1,13 @@
-.disable-scroll{
-  position: fixed;
-  text-align: center;
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 0;
 }
