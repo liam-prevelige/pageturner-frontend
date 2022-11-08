@@ -74,7 +74,7 @@ export const BookInfo = (props) => {
  */
   const handleSubmit = async () => {
     // await postBookReview(props.user, props.isbn, textReview);
-    await postBookReview('alex2', 1234, textReview);
+    await postBookReview('alex2', '0613496744', textReview);
     console.log('reached frontend event function');
   };
 

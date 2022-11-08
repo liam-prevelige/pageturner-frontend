@@ -22,8 +22,9 @@ export const testEndpoint = async () => {
   return body.test_result;
 };
 
-export const getFeed = async () => {
-  const response = await fetch(`${API_URL}/feed/get`, {
+export const getFeed = async (query) => {
+  const oldestPost = String(query);
+  const response = await fetch(`${API_URL}/feed/get/${oldestPost}`, {
     Method: 'GET',
     Headers: {
       'Accept': 'application.json',
@@ -38,7 +39,7 @@ export const getFeed = async () => {
     throw new Error('Call to /feed/get failed');
   }
 
-  return body.data;
+  return body;
 };
 
 // endpoint to add a new post to the database from the book-info page
