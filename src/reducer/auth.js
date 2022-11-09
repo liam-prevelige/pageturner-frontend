@@ -1,3 +1,7 @@
+/**
+ * Get user profile and setting it to local storage
+ */
+
 const authReducer = (state = {authData: null}, action) => {
   switch (action.type) {
     case 'AUTH':

@@ -62,13 +62,15 @@ export const getTopBooks = async () => {
 
 // Search for a book
 export const getSearch = async (query) => {
+  console.log(sessionStorage.getItem('auth_token'));
   const response = await fetch(`${API_URL}/search/${query}`, {
     Method: 'GET',
-    Headers: {
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
     },
-    Body: {},
+    // body: JSON.stringify({'Authorization': sessionStorage.getItem('auth_token')}),
     Cache: 'default',
   });
   const body = await response.json();
