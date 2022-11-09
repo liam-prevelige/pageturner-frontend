@@ -31,14 +31,6 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    // const token = user?.token;
-
-    // if (token) {
-    //   const decodedToken = decode(token);
-
-    //   if (decodedToken.exp * 1000 < new Date().getTime()) logout();
-    // }
-
     setUser(JSON.parse(localStorage.getItem('profile')));
   }, [location]);
 
@@ -47,7 +39,8 @@ const Auth = () => {
     const token = res?.tokenId;
 
     try {
-      dispatch({type: 'AUTH', data: {result, token}});
+      sessionStorage.setItem('auth_token', token);
+      sessionStorage.setItem('profile', result);
       navigate('/');
     } catch (error) {
       console.log(error);
