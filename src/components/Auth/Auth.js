@@ -39,6 +39,7 @@ const Auth = () => {
     const token = res?.tokenId;
 
     try {
+      dispatch({type: 'AUTH', data: {result, token}});
       sessionStorage.setItem('auth_token', token);
       sessionStorage.setItem('profile', result);
       navigate('/');
