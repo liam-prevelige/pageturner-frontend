@@ -1,4 +1,5 @@
 import React from 'react';
+import './BookDisplay.css';
 import {
   // Route,
   // Routes,
@@ -11,8 +12,10 @@ export const BookDisplay = ({url, title, author}) => {
   return (
     <div className="card">
       <img src={url}/>
-      <nav>
-        <Link to='../../BookInfo/*'>{title} by {author}</Link>
+      <nav className="info">
+        <center>
+          <Link to='../../BookInfo/*'>{title} <br/> {author}</Link>
+        </center>
       </nav>
     </div>
   );
