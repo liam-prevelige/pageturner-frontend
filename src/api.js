@@ -49,7 +49,6 @@ export const getTopBooks = async () => {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    body: {},
     cache: 'default',
   });
   const body = await response.json();
@@ -68,7 +67,6 @@ export const getTopRecs = async () => {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    body: {},
     cache: 'default',
   });
   const body = await response.json();

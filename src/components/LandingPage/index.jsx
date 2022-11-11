@@ -44,6 +44,7 @@ export const LandingPage = () => {
   const load = async () => {
     const books1 = await getTopBooks();
     const books2 = await getTopRecs();
+    console.log(books1, books2);
     setTopBooks(books1);
     setTopRecs(books2);
     hasLoaded(true);
