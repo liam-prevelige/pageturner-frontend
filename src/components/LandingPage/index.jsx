@@ -81,11 +81,7 @@ export const LandingPage = () => {
           topBooks.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
             <div className="col-2" key={index}>
-              <Card>
-                <Card.Body>
-                  <BookDisplay url={book.url} title={book.title} author={book.author}/>
-                </Card.Body>
-              </Card>
+              <BookDisplay url={book.url} title={book.title} author={book.author}/>
             </div>
           ))
         }
@@ -96,11 +92,7 @@ export const LandingPage = () => {
           topRecs.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
             <div className="col-2" key={index}>
-              <Card>
-                <Card.Body>
-                  <BookDisplay url={book.url} title={book.title} author={book.author}/>
-                </Card.Body>
-              </Card>
+              <BookDisplay url={book.url} title={book.title} author={book.author}/>
             </div>
           ))
         }
