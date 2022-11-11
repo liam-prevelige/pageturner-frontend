@@ -9,8 +9,8 @@ import {
 
 export const BookDisplay = ({url, title, author}) => {
   return (
-    <div className="mb-3 align-text-center">
-      <img src={url} width="125" height="190"/>
+    <div className="card">
+      <img src={url}/>
       <nav>
         <Link to='../../BookInfo/*'>{title} by {author}</Link>
       </nav>
