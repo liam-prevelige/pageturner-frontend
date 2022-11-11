@@ -54,7 +54,26 @@ export const getTopBooks = async () => {
   });
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to /topbooks/get failed');
+    throw new Error('Call to /topbooks failed');
+  }
+
+  return body.data;
+};
+
+// Returns the top recommended books
+export const getTopRecs = async () => {
+  const response = await fetch(`${API_URL}/toprecs`, {
+    Method: 'GET',
+    Headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    Body: {},
+    Cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /toprecs failed');
   }
 
   return body.data;
