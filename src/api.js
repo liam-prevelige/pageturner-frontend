@@ -5,13 +5,13 @@ const API_URL = 'http://localhost:5001';
 // A test endpoint to fetch some text from the backend
 export const testEndpoint = async () => {
   const response = await fetch(`${API_URL}/test_endpoint`, {
-    Method: 'GET',
-    Headers: {
+    method: 'GET',
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Body: {},
-    Cache: 'default',
+    body: {},
+    cache: 'default',
   });
   const body = await response.json();
 
@@ -24,13 +24,13 @@ export const testEndpoint = async () => {
 
 export const getFeed = async () => {
   const response = await fetch(`${API_URL}/feed/get`, {
-    Method: 'GET',
-    Headers: {
+    method: 'GET',
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Body: {},
-    Cache: 'default',
+    body: {},
+    cache: 'default',
   });
   const body = await response.json();
 
@@ -44,13 +44,13 @@ export const getFeed = async () => {
 // Returns the top rated books
 export const getTopBooks = async () => {
   const response = await fetch(`${API_URL}/topbooks`, {
-    Method: 'GET',
-    Headers: {
+    method: 'GET',
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Body: {},
-    Cache: 'default',
+    body: {},
+    cache: 'default',
   });
   const body = await response.json();
   if (!response.ok) {
@@ -63,13 +63,13 @@ export const getTopBooks = async () => {
 // Returns the top recommended books
 export const getTopRecs = async () => {
   const response = await fetch(`${API_URL}/toprecs`, {
-    Method: 'GET',
-    Headers: {
+    method: 'GET',
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Body: {},
-    Cache: 'default',
+    body: {},
+    cache: 'default',
   });
   const body = await response.json();
   if (!response.ok) {
@@ -83,14 +83,14 @@ export const getTopRecs = async () => {
 export const getSearch = async (query) => {
   console.log(sessionStorage.getItem('auth_token'));
   const response = await fetch(`${API_URL}/search/${query}`, {
-    Method: 'GET',
+    method: 'GET',
     headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
     // body: JSON.stringify({'Authorization': sessionStorage.getItem('auth_token')}),
-    Cache: 'default',
+    cache: 'default',
   });
   const body = await response.json();
   if (!response.ok) {
@@ -103,13 +103,13 @@ export const getSearch = async (query) => {
 // Get recommendations for a book (given its title)
 export const getRecs = async (title) => {
   const response = await fetch(`${API_URL}/recommendations/${title}`, {
-    Method: 'GET',
-    Headers: {
+    method: 'GET',
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Body: {},
-    Cache: 'default',
+    body: {},
+    cache: 'default',
   });
   const body = await response.json();
   if (!response.ok) {
