@@ -4,11 +4,43 @@
  */
 
 import React from 'react';
-import {MDBRow, MDBCard, MDBCardText, MDBCardImage, MDBBtn, MDBTypography} from 'mdb-react-ui-kit';
+import {MDBRow, MDBCard, MDBCardText, MDBCardImage, MDBTypography} from 'mdb-react-ui-kit';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
-// import CanvasJSReact from './assets/canvasjs.react.js';
+import {Row, Col, Button} from 'react-bootstrap';
 import './profile.css';
+import 'chart.js/auto';
+import {Chart} from 'react-chartjs-2';
+import {
+  HStack,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+} from '@chakra-ui/react';
+
+const state = {
+  labels: ['January', 'February', 'March',
+    'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  datasets: [
+    {
+      fill: false,
+      label: 'Books Read',
+      display: false,
+      lineTension: 0.5,
+      backgroundColor: 'rgba(75,192,192,1)',
+      borderColor: 'rgba(0,192,192,1)',
+      strokeColor: 'rgba(220,220,220,1)',
+      borderWidth: 2,
+      data: [1, 2, 3, 0, 1, 2, 2, 1, 3, 2, 1, 2],
+    },
+  ],
+  options: {
+    legend: {
+      display: false,
+    },
+  },
+};
+
 
 /**
  * Component containing the My Profile page
@@ -42,18 +74,16 @@ export const Profile = () => {
   //   setTabIndex(index);
   // };
   return (
-    <div className="gradient-custom-2" style={{backgroundColor: '#9de2ff', width: '100%'}} >
-      <div className='row' style={{marginLeft: '2.5%', marginRight: '2.5%'}}>
-        <div className='column' style={{width: '45%'}}>
-          <MDBRow className="justify-content-center align-items-center" style={{margin: '0px'}}>
+    <div className="gradient-custom-2" style={{backgroundColor: '#9de2ff'}} >
+      <Row className='justify-content-center align-items-center'>
+        <Col className='col-5' style={{marginRight: '1%'}}>
+          <MDBRow className="justify-content-center align-items-center">
             <MDBCard style={{margin: '50px'}}>
               <div className="rounded-top text-white d-flex flex-row" style={{backgroundColor: '#000', height: '200px'}}>
-                <div className="ms-4 mt-5 d-flex flex-column">
+                <div className="ms-4 mt-5 d-flex flex-column" style={{width: '150px'}}>
                   <MDBCardImage src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
                     alt="Generic placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{width: '150px', zIndex: '1'}} />
-                  <MDBBtn outline color="dark" style={{height: '36px', overflow: 'visible'}}>
-                    Edit profile
-                  </MDBBtn>
+                  <Button variant='outline-dark' size='sm' style={{overflow: 'visible', zIndex: '1'}}>Edit Profile</Button>
                 </div>
                 <div className="ms-3" style={{marginTop: '130px'}}>
                   <MDBTypography tag="h5">Andy Horwitz</MDBTypography>
@@ -133,13 +163,51 @@ export const Profile = () => {
               </ChakraProvider>
             </MDBCard>
           </MDBRow>
-        </div>
-        <div className='column' style={{marginRight: '2.5%', width: '45%'}}>
-          <div>
-            {/* <CanvasJSChart options={options} onRef={ref => this.chart = ref}/> */}
-          </div>
-        </div>
-      </div>
+        </Col>
+        <Col className='col-5' style={{marginLeft: '1%'}}>
+          <MDBRow className="justify-content-center align-items-center">
+            <MDBCard style={{margin: '50px', padding: '30px'}}>
+              <MDBCardText className="mb-1 h2">Based on Your Reading...</MDBCardText>
+              <MDBCardText className="mb-1 h5">Reading Activity</MDBCardText>
+              <Chart type='line' data={state} />
+              <MDBCardText className="mb-1 h5">You typically like:</MDBCardText>
+              <ChakraProvider>
+                <HStack spacing={4}>
+                  {['Mystery', 'Suspense', 'Post-2000s'].map((label) => (
+                    <Tag
+                      size='lg'
+                      key={label}
+                      borderRadius='full'
+                      variant='solid'
+                      colorScheme='green'
+                    >
+                      <TagLabel>{label}</TagLabel>
+                      <TagCloseButton />
+                    </Tag>
+                  ))}
+                </HStack>
+              </ChakraProvider>
+              <MDBCardText className="mb-1 h5">You typically dislike:</MDBCardText>
+              <ChakraProvider>
+                <HStack spacing={4}>
+                  {['Drama', 'Nonfiction', 'Sad Endings'].map((label) => (
+                    <Tag
+                      size='lg'
+                      key={label}
+                      borderRadius='full'
+                      variant='solid'
+                      colorScheme='red'
+                    >
+                      <TagLabel>{label}</TagLabel>
+                      <TagCloseButton />
+                    </Tag>
+                  ))}
+                </HStack>
+              </ChakraProvider>
+            </MDBCard>
+          </MDBRow>
+        </Col>
+      </Row>
     </div >
   );
 };
