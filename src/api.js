@@ -2,34 +2,28 @@
 
 const API_URL = 'http://localhost:5001';
 
-// A test endpoint to fetch some text from the backend
-export const testEndpoint = async () => {
-  const response = await fetch(`${API_URL}/test_endpoint`, {
-    Method: 'GET',
-    Headers: {
-      'Accept': 'application.json',
+/**
+ * TODO
+ */
+export async function onLogin() {
+  await fetch(`${API_URL}/user/on_login`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
     },
-    Body: {},
-    Cache: 'default',
   });
-  const body = await response.json();
-
-  if (!response.ok) {
-    throw new Error('Call to test_endpoint failed');
-  }
-
-  return body.test_result;
-};
+  // We don't care about the result here
+}
 
 export const getFeed = async () => {
   const response = await fetch(`${API_URL}/feed/get`, {
-    Method: 'GET',
-    Headers: {
+    method: 'GET',
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Body: {},
     Cache: 'default',
   });
   const body = await response.json();
@@ -44,13 +38,12 @@ export const getFeed = async () => {
 // Returns the top rated books
 export const getTopBooks = async () => {
   const response = await fetch(`${API_URL}/topbooks`, {
-    Method: 'GET',
-    Headers: {
+    method: 'GET',
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Body: {},
-    Cache: 'default',
+    cache: 'default',
   });
   const body = await response.json();
   if (!response.ok) {
@@ -62,13 +55,11 @@ export const getTopBooks = async () => {
 
 // Search for a book
 export const getSearch = async (query) => {
-  console.log(sessionStorage.getItem('auth_token'));
   const response = await fetch(`${API_URL}/search/${query}`, {
     Method: 'GET',
     headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
     },
     // body: JSON.stringify({'Authorization': sessionStorage.getItem('auth_token')}),
     Cache: 'default',
