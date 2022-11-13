@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {
@@ -9,12 +9,10 @@ import {
 } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-
 import {LandingPage} from './components/LandingPage';
 import {Feed} from './components/Feed';
 import {Profile} from './components/Profile';
 import Auth from './components/Auth/Auth';
-import {gapi} from 'gapi-script';
 
 // Placeholder components
 // TODO: remove these
@@ -46,17 +44,6 @@ const PrivateRoute = ({ authState, element: Component, ...rest }) => {
  * @return {JSX} component containing entire application
  */
 const App = () => {
-  useEffect(() => {
-    const start = () => {
-      gapi.client.init({
-        clientId: '556168228068-60hp84a7hnkqoh1i8vs2m2vakff2a7ae.apps.googleusercontent.com',
-        scope: 'email',
-      });
-    };
-
-    gapi.load('client:auth2', start);
-  }, []);
-
   return (
     <Router>
       <Navbar className="p-2" bg="light" expand="lg">
@@ -65,12 +52,12 @@ const App = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {/*
-            Example showing how to show / hide nav options based on auth state
-            authState === 'unauthenticated' && <>
-              <Nav.Link href="/sign-in">Sign In</Nav.Link>
-              <Nav.Link href="/sign-up">Sign Up</Nav.Link>
-            </>
-            */}
+              Example showing how to show / hide nav options based on auth state
+              authState === 'unauthenticated' && <>
+                <Nav.Link href="/sign-in">Sign In</Nav.Link>
+                <Nav.Link href="/sign-up">Sign Up</Nav.Link>
+              </>
+              */}
             <Nav.Link href="/feed">Feed</Nav.Link>
             <Nav.Link href="/profile">My Profile</Nav.Link>
           </Nav>
@@ -84,12 +71,12 @@ const App = () => {
         <Route path="/feed" element={<Feed />} />
         <Route path="/profile" element={<Profile />} />
         {/*
-        Example of a private route requiring authorization to access:
-        <PrivateRoute authState={authState} path="/create" component={Create} />
-        Note we'd need to set up auth separately for this to work
-        Example of a route taking a parameter from the URL:
-        <Route path="/results/:surveyId" element={Results} />
-        */}
+          Example of a private route requiring authorization to access:
+          <PrivateRoute authState={authState} path="/create" component={Create} />
+          Note we'd need to set up auth separately for this to work
+          Example of a route taking a parameter from the URL:
+          <Route path="/results/:surveyId" element={Results} />
+          */}
       </Routes>
     </Router>
   );
