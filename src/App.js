@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import {LandingPage} from './components/LandingPage';
 import {Feed} from './components/Feed';
+import {Profile} from './components/Profile';
 import Auth from './components/Auth/Auth';
 
 // Placeholder components
@@ -58,6 +59,7 @@ const App = () => {
               </>
               */}
             <Nav.Link href="/feed">Feed</Nav.Link>
+            <Nav.Link href="/profile">My Profile</Nav.Link>
           </Nav>
           <Nav className="nav navbar-nav navbar-right">
             <Auth/>
@@ -67,6 +69,7 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<LandingPage />} />
         <Route path="/feed" element={<Feed />} />
+        <Route path="/profile" element={<Profile />} />
         {/*
           Example of a private route requiring authorization to access:
           <PrivateRoute authState={authState} path="/create" component={Create} />
