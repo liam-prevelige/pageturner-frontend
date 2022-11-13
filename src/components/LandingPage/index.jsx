@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {DynamicSearch} from '../DynamicSearch';
-import {getSearch, getTopBooks} from '../../api';
+import {getSearch, getTopBooks, getTopRecs} from '../../api';
 import {BookDisplay} from './BookDisplay'; // TODO: switch to BookInfo
 import Card from 'react-bootstrap/Card';
 import './LandingPage.css';
@@ -15,6 +15,7 @@ export const LandingPage = () => {
   const [book, setBook] = useState(null);
 
   const [topBooks, setTopBooks] = useState([]);
+  const [topRecs, setTopRecs] = useState([]);
   const [loaded, hasLoaded] = useState(false);
 
   // TODO: rework everything in cluster below when cleaning up getSearch endpoint
@@ -42,7 +43,9 @@ export const LandingPage = () => {
 
   const load = async () => {
     const books1 = await getTopBooks();
+    const books2 = await getTopRecs();
     setTopBooks(books1);
+    setTopRecs(books2);
     hasLoaded(true);
   };
 
@@ -71,17 +74,24 @@ export const LandingPage = () => {
           </Card.Body>
         </Card>
       </Row>}
-      <Row className="align-items-center justify-content-center browse">
+      <Row className="align-items-top justify-content-center browse">
         {
           // eslint-disable-next-line arrow-parens
           topBooks.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
             <div className="col-2" key={index}>
-              <Card>
-                <Card.Body>
-                  <BookDisplay url={book.url} title={book.title} author={book.author}/>
-                </Card.Body>
-              </Card>
+              <BookDisplay url={book.image_m} title={book.title} author={book.author}/>
+            </div>
+          ))
+        }
+      </Row>
+      <Row className="align-items-top justify-content-center browse">
+        {
+          // eslint-disable-next-line arrow-parens
+          topRecs.map((book, index) => (
+            // eslint-disable-next-line react/jsx-key
+            <div className="col-2" key={index}>
+              <BookDisplay url={book.image_m} title={book.title} author={book.author}/>
             </div>
           ))
         }

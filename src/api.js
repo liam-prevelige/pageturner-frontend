@@ -2,6 +2,7 @@
 
 const API_URL = 'http://localhost:5001';
 
+
 /**
  * TODO
  */
@@ -24,7 +25,7 @@ export const getFeed = async () => {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Cache: 'default',
+    cache: 'default',
   });
   const body = await response.json();
 
@@ -47,22 +48,39 @@ export const getTopBooks = async () => {
   });
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to /topbooks/get failed');
+    throw new Error('Call to /topbooks failed');
+  }
+  return body.top;
+};
+
+// Returns the top recommended books
+export const getTopRecs = async () => {
+  const response = await fetch(`${API_URL}/toprecs`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /toprecs failed');
   }
 
-  return body.data;
+  return body.recs;
 };
 
 // Search for a book
 export const getSearch = async (query) => {
   const response = await fetch(`${API_URL}/search/${query}`, {
-    Method: 'GET',
+    method: 'GET',
     headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
     // body: JSON.stringify({'Authorization': sessionStorage.getItem('auth_token')}),
-    Cache: 'default',
+    cache: 'default',
   });
   const body = await response.json();
   if (!response.ok) {
@@ -75,13 +93,13 @@ export const getSearch = async (query) => {
 // Get recommendations for a book (given its title)
 export const getRecs = async (title) => {
   const response = await fetch(`${API_URL}/recommendations/${title}`, {
-    Method: 'GET',
-    Headers: {
+    method: 'GET',
+    headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    Body: {},
-    Cache: 'default',
+    body: {},
+    cache: 'default',
   });
   const body = await response.json();
   if (!response.ok) {
