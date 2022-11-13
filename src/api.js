@@ -55,8 +55,8 @@ export const getTopBooks = async () => {
   if (!response.ok) {
     throw new Error('Call to /topbooks failed');
   }
-
-  return body.data;
+  console.log(body);
+  return body;
 };
 
 // Returns the top recommended books

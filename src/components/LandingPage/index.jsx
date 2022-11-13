@@ -44,7 +44,6 @@ export const LandingPage = () => {
   const load = async () => {
     const books1 = await getTopBooks();
     const books2 = await getTopRecs();
-    console.log(books1, books2);
     setTopBooks(books1);
     setTopRecs(books2);
     hasLoaded(true);
@@ -81,7 +80,7 @@ export const LandingPage = () => {
           topBooks.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
             <div className="col-2" key={index}>
-              <BookDisplay url={book.url} title={book.title} author={book.author}/>
+              <BookDisplay url={book.image_m} title={book.title} author={book.author}/>
             </div>
           ))
         }
