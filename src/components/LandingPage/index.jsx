@@ -74,7 +74,7 @@ export const LandingPage = () => {
           </Card.Body>
         </Card>
       </Row>}
-      <Row className="align-items-center justify-content-center browse">
+      <Row className="align-items-top justify-content-center browse">
         {
           // eslint-disable-next-line arrow-parens
           topBooks.map((book, index) => (
@@ -85,13 +85,13 @@ export const LandingPage = () => {
           ))
         }
       </Row>
-      <Row className="align-items-center justify-content-center browse">
+      <Row className="align-items-top justify-content-center browse">
         {
           // eslint-disable-next-line arrow-parens
           topRecs.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
             <div className="col-2" key={index}>
-              <BookDisplay url={book.url} title={book.title} author={book.author}/>
+              <BookDisplay url={book.image_m} title={book.title} author={book.author}/>
             </div>
           ))
         }

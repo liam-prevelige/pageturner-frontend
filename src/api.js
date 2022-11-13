@@ -73,7 +73,7 @@ export const getTopRecs = async () => {
     throw new Error('Call to /toprecs failed');
   }
 
-  return body.data;
+  return body.recs;
 };
 
 // Search for a book
