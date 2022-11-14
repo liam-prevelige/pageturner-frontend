@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import ReactLoading from 'react-loading';
-import {BookDisplay} from './BookDisplay';
+import {BookDisplay} from '../BookDisplay';
 import {ScrollMenu} from 'react-horizontal-scrolling-menu';
 import {getRecs, updateBookmarks, updateRead} from '../../api';
 import {FaBookmark, FaRegBookmark} from 'react-icons/fa';
