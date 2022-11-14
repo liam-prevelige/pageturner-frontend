@@ -25,6 +25,7 @@ export const searchUsers = async (query) => {
     headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
     },
     cache: 'default',
   });
