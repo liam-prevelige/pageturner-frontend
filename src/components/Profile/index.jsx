@@ -3,11 +3,14 @@
  * Adapted from https://mdbootstrap.com/docs/react/extended/profiles/#example6
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {MDBRow, MDBCard, MDBCardText, MDBCardImage, MDBTypography} from 'mdb-react-ui-kit';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import {Row, Col, Button} from 'react-bootstrap';
+import {getBookmarks, getRead} from '../../api';
+import ReactLoading from 'react-loading';
+import {BookDisplay} from '../LandingPage/BookDisplay';
 import './profile.css';
 import 'chart.js/auto';
 import {Chart} from 'react-chartjs-2';
@@ -47,32 +50,43 @@ const state = {
  * @return {JSX} for landing page component
  */
 export const Profile = () => {
-  // const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-  // const options = {
-  //   theme: 'light2',
-  //   title: {
-  //     text: 'Stock Price of NIFTY 50',
-  //   },
-  //   axisY: {
-  //     title: 'Price in USD',
-  //     prefix: '$',
-  //   },
-  //   data: [{
-  //     type: 'line',
-  //     xValueFormatString: 'MMM YYYY',
-  //     yValueFormatString: '$#,##0.00',
-  //     dataPoints: dataPoints,
-  //   }],
-  // };
-  // const [tabIndex, setTabIndex] = useState(0);
+  const [loaded, hasLoaded] = useState(false);
+  const [userInfo, setUserInfo] = useState(JSON.parse(sessionStorage.getItem('profile')));
 
-  // const handleSliderChange = (event) => {
-  //   setTabIndex(parseInt(event.target.value, 10));
-  // };
+  const [bookmarks, setBookmarks] = useState([]);
+  const [read, setRead] = useState([]);
 
-  // const handleTabsChange = (index) => {
-  //   setTabIndex(index);
-  // };
+  const emptyListFiller = [{
+    image_l: 'https://st2.depositphotos.com/2769299/7314/i/450/depositphotos_73146765-stock-photo-a-stack-of-books-on.jpg',
+    title: 'No books currently in this list!',
+    author: '',
+  }];
+
+  const load = async () => {
+    console.log('entering load');
+    setUserInfo(JSON.parse(sessionStorage.getItem('profile')));
+    let foundBookmarks = await getBookmarks(userInfo.email);
+    if (foundBookmarks.length === 0) {
+      foundBookmarks = emptyListFiller;
+    }
+
+    let foundRead = await getRead(userInfo.email);
+    if (foundRead.length === 0) {
+      foundRead = emptyListFiller;
+    }
+
+    setBookmarks(foundBookmarks);
+    setRead(foundRead);
+
+    hasLoaded(true);
+  };
+
+  useEffect(() => {
+    if (!loaded) {
+      load();
+    }
+  }, []);
+
   return (
     <div className="gradient-custom-2" style={{backgroundColor: '#D4F1F4'}} >
       <Row className='justify-content-center align-items-center'>
@@ -81,24 +95,27 @@ export const Profile = () => {
             <MDBCard style={{margin: '50px'}}>
               <div className="rounded-top text-white d-flex flex-row" style={{backgroundColor: '#000', height: '200px'}}>
                 <div className="ms-4 mt-5 d-flex flex-column" style={{width: '150px'}}>
-                  <MDBCardImage src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                    alt="Generic placeholder image" className="mt-4 mb-2 img-thumbnail" fluid style={{width: '150px', zIndex: '1'}} />
+                  <MDBCardImage src={userInfo.picture}
+                    alt="Profile picture" referrerPolicy="no-referrer" className="mt-4 mb-2 img-thumbnail" fluid style={{width: '150px', zIndex: '1'}} />
                   <Button variant='outline-dark' size='sm' style={{overflow: 'visible', zIndex: '1'}}>Edit Profile</Button>
                 </div>
                 <div className="ms-3" style={{marginTop: '130px'}}>
-                  <MDBTypography tag="h5">Andy Horwitz</MDBTypography>
-                  <MDBCardText>New York</MDBCardText>
+                  <MDBTypography tag="h5">{userInfo.name}</MDBTypography>
+                  <MDBCardText>{userInfo.email}</MDBCardText>
                 </div>
               </div>
               <div className="p-4 text-black" style={{backgroundColor: '#f8f9fa'}}>
                 <div className="d-flex justify-content-end text-center py-1">
                   <div>
-                    <MDBCardText className="mb-1 h5" style={{marginRight: '15px'}}>253</MDBCardText>
-                    <MDBCardText className="small text-muted mb-0" style={{marginRight: '15px'}}>Books Read</MDBCardText>
+                    <MDBCardText className="mb-1 h5" style={{marginRight: '15px'}}>{bookmarks.length}</MDBCardText>
+                    <MDBCardText className="small text-muted mb-0" style={{marginRight: '15px'}}>Bookmarks</MDBCardText>
                   </div>
-
                   <div>
-                    <MDBCardText className="mb-1 h5">478</MDBCardText>
+                    <MDBCardText className="mb-1 h5" style={{marginRight: '15px'}}>{read.length}</MDBCardText>
+                    <MDBCardText className="small text-muted mb-0" style={{marginRight: '15px'}}>Read</MDBCardText>
+                  </div>
+                  <div>
+                    <MDBCardText className="mb-1 h5">0</MDBCardText>
                     <MDBCardText className="small text-muted mb-0">Friends</MDBCardText>
                   </div>
                 </div>
@@ -106,53 +123,31 @@ export const Profile = () => {
               <ChakraProvider>
                 <Tabs variant='line' colorScheme='blue'>
                   <TabList>
+                    <Tab>Bookmarks</Tab>
                     <Tab>Recently Read</Tab>
-                    <Tab>My List</Tab>
                     <Tab>Friends</Tab>
                   </TabList>
                   <TabPanels>
                     <TabPanel>
                       <ScrollMenu style={{overflowX: 'auto'}}>
-                        <div className="card" style={{width: '18rem'}}>
-                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp" className="card-img-top" alt="Book Photo" />
-                          <div className="card-body">
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card&aposs content.</p>
-                          </div>
-                        </div>
-                        <div className="card" style={{width: '18rem'}}>
-                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp" className="card-img-top" alt="Book Photo" />
-                          <div className="card-body">
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card&aposs content.</p>
-                          </div>
-                        </div>
-                        <div className="card" style={{width: '18rem'}}>
-                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp" className="card-img-top" alt="Book Photo" />
-                          <div className="card-body">
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card&aposs content.</p>
-                          </div>
-                        </div>
+                        {console.log(bookmarks.length)}
+                        {bookmarks.length === 0 ? <ReactLoading type="spin" color="black" /> : bookmarks.map((book, index) => (
+                          <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
+                            <BookDisplay url={book.image_l} title={book.title} author={book.author} />
+                          </Col>
+                        ))
+                        }
                       </ScrollMenu>
                     </TabPanel>
                     <TabPanel>
                       <ScrollMenu style={{overflowX: 'auto'}}>
-                        <div className="card" style={{width: '18rem'}}>
-                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp" className="card-img-top" alt="Book Photo" />
-                          <div className="card-body">
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card&aposs content.</p>
-                          </div>
-                        </div>
-                        <div className="card" style={{width: '18rem'}}>
-                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp" className="card-img-top" alt="Book Photo" />
-                          <div className="card-body">
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card&aposs content.</p>
-                          </div>
-                        </div>
-                        <div className="card" style={{width: '18rem'}}>
-                          <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp" className="card-img-top" alt="Book Photo" />
-                          <div className="card-body">
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card&aposs content.</p>
-                          </div>
-                        </div>
+                        {console.log(read.length)}
+                        {read.length === 0 ? <ReactLoading type="spin" color="black" /> : read.map((book, index) => (
+                          <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
+                            <BookDisplay url={book.image_l} title={book.title} author={book.author} />
+                          </Col>
+                        ))
+                        }
                       </ScrollMenu>
                     </TabPanel>
                     <TabPanel>

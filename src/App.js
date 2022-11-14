@@ -14,7 +14,7 @@ import {People} from './components/People';
 import {Feed} from './components/Feed';
 import {Profile} from './components/Profile';
 import Auth from './components/Auth/Auth';
-
+import {BookInfo} from './components/BookInfo';
 
 /**
  * Core React component
@@ -57,6 +57,7 @@ const App = () => {
         <Route path="/feed" element={<Feed />} />
         <Route path="/people" element={<People />} />
         {loggedIn && <Route path="/profile" element={<Profile />}/>}
+        <Route path="/book-info/*" element={<BookInfo />} />
       </Routes>
     </Router >
   );
