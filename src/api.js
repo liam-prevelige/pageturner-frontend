@@ -94,8 +94,8 @@ export async function removeFriend(email) {
   return body.success;
 }
 
-export const getFeed = async () => {
-  const response = await fetch(`${API_URL}/feed/get`, {
+export const getFeed = async (query) => {
+  const response = await fetch(`${API_URL}/feed/get/${query}`, {
     method: 'GET',
     headers: {
       'Accept': 'application.json',
