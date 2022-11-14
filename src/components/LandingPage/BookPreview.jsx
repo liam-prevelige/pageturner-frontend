@@ -11,7 +11,7 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
   const [recs, setRecs] = useState([]);
   const [loaded, hasLoaded] = useState(false);
   const [userInfo, setUserInfo] = useState(JSON.parse(sessionStorage.getItem('profile')));
-  let loggedIn = userInfo != null && userInfo[0] != null;
+  let loggedIn = userInfo != null;
   let bookmarked = false;
   let read = false;
 
@@ -28,7 +28,8 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
   const load = async () => {
     setRecs([]);
     setUserInfo(JSON.parse(sessionStorage.getItem('profile')));
-    loggedIn = userInfo != null && userInfo[0] != null;
+    console.log(userInfo);
+    loggedIn = userInfo != null;
     await loadRecs();
     hasLoaded(true);
   };
