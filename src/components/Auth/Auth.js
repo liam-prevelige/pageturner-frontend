@@ -16,7 +16,7 @@ import jwt_decode from 'jwt-decode';
 import {onLogin} from '../../api';
 import {Button} from 'react-bootstrap';
 
-const Auth = () => {
+const Auth = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -30,6 +30,8 @@ const Auth = () => {
     sessionStorage.removeItem('auth_token');
     sessionStorage.removeItem('profile');
     setUser(null);
+    navigate('/');
+    props.triggerReload();
   };
 
   const googleSuccess = async (res) => {
@@ -41,6 +43,7 @@ const Auth = () => {
       sessionStorage.setItem('profile', JSON.stringify(userObject));
       onLogin();
       navigate('/');
+      props.triggerReload();
     } catch (error) {
       console.log(error);
     }
