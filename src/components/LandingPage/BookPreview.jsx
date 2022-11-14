@@ -11,7 +11,7 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
   const [recs, setRecs] = useState([]);
   const [loaded, hasLoaded] = useState(false);
   const [userInfo, setUserInfo] = useState(JSON.parse(sessionStorage.getItem('profile')));
-  let loggedIn = userInfo[0] != null;
+  let loggedIn = userInfo != null && userInfo[0] != null;
   let bookmarked = false;
   let read = false;
 
@@ -28,7 +28,7 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
   const load = async () => {
     setRecs([]);
     setUserInfo(JSON.parse(sessionStorage.getItem('profile')));
-    loggedIn = userInfo[0] != null;
+    loggedIn = userInfo != null && userInfo[0] != null;
     await loadRecs();
     hasLoaded(true);
   };
@@ -62,16 +62,16 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
         <Row><h5>{publisher}&nbsp;{year}</h5></Row>
         <Row>
           <Col>
-            <button onClick={changeBookmark}>{ {bookmarked} ?
+            {loggedIn && <button onClick={changeBookmark}>{ {bookmarked} ?
               <FaBookmark style={{height: '50px', width: '50px', margin: '5px'}}/> :
               <FaRegBookmark style={{height: '50px', width: '50px', margin: '5px'}}/>
-            }</button>
+            }</button>}
           </Col>
           <Col>
-            <button onClick={changeRead}>{ {read} ?
+            {loggedIn && <button onClick={changeRead}>{ {read} ?
             <AiFillRead style={{height: '50px', width: '50px', margin: '5px'}}/> :
             <AiOutlineRead style={{height: '50px', width: '50px', margin: '5px'}}/>
-            }</button>
+            }</button>}
           </Col>
         </Row>
       </Col>
