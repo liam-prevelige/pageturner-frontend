@@ -14,7 +14,7 @@ export const BookDisplay = ({url, title, author}) => {
       <img src={url} style={{height: '250px'}}/>
       <nav className="info">
         <center>
-          <Link to=''>{title} <br/> {author}</Link>
+          <Link to=''><b>{title}</b> <br/> {author}</Link>
         </center>
       </nav>
     </div>
