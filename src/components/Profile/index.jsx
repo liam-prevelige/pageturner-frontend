@@ -10,7 +10,7 @@ import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs
 import {Row, Col, Button} from 'react-bootstrap';
 import {getBookmarks, getRead} from '../../api';
 import ReactLoading from 'react-loading';
-import {BookDisplay} from '../LandingPage/BookDisplay';
+import {BookDisplay} from '../BookDisplay';
 import './profile.css';
 import 'chart.js/auto';
 import {Chart} from 'react-chartjs-2';
