@@ -65,6 +65,7 @@ export const LandingPage = () => {
         <Card className="book m-4">
           <Card.Body>
             <BookPreview
+              isbn={book.ISBN}
               title={book.title}
               author={book.author}
               coverImg={book.image_m}

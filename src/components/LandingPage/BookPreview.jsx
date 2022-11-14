@@ -3,13 +3,13 @@ import {Container, Row, Col} from 'react-bootstrap';
 import ReactLoading from 'react-loading';
 import {getRecs} from '../../api';
 
-export const BookPreview = ({title, author, coverImg, publisher, year}) => {
+export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) => {
   const [recs, setRecs] = useState([]);
 
   // Get recommendations from the database
   const loadRecs = async () => {
-    if (title) {
-      const newRecs = await getRecs(title);
+    if (isbn) {
+      const newRecs = await getRecs(isbn);
       console.log(newRecs);
       setRecs(newRecs);
     }

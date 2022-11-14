@@ -79,7 +79,6 @@ export const getSearch = async (query) => {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    // body: JSON.stringify({'Authorization': sessionStorage.getItem('auth_token')}),
     cache: 'default',
   });
   const body = await response.json();
@@ -91,14 +90,13 @@ export const getSearch = async (query) => {
 };
 
 // Get recommendations for a book (given its title)
-export const getRecs = async (title) => {
-  const response = await fetch(`${API_URL}/recommendations/${title}`, {
+export const getRecs = async (isbn) => {
+  const response = await fetch(`${API_URL}/recommendations/${isbn}`, {
     method: 'GET',
     headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
     },
-    body: {},
     cache: 'default',
   });
   const body = await response.json();
