@@ -14,7 +14,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 // eslint-disable-next-line
 import jwt_decode from 'jwt-decode';
 import {onLogin} from '../../api';
-import {Button} from 'react-bootstrap';
+import {Button, Row, Col} from 'react-bootstrap';
 
 const Auth = () => {
   const location = useLocation();
@@ -51,12 +51,16 @@ const Auth = () => {
     console.log('Google Sign In was unsuccessful. Try again later');
   };
 
-  return (<div>
-    {user ? <div>
-      <div>{user.name}</div>
-      <Button onClick={logout}>Log Out</Button>
-    </div> : <GoogleLogin onSuccess={googleSuccess} onError={googleFailure}/>}
-  </div>);
+  return (
+    <div>
+      {user ? <div>
+        <Row>
+          <Col>{user.name}</Col>
+          <Col><Button onClick={logout}>Log Out</Button></Col>
+        </Row>
+      </div> : <GoogleLogin onSuccess={googleSuccess} onError={googleFailure}/>}
+    </div>
+  );
 };
 
 export default Auth;

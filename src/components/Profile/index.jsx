@@ -74,7 +74,7 @@ export const Profile = () => {
   //   setTabIndex(index);
   // };
   return (
-    <div className="gradient-custom-2" style={{backgroundColor: '#9de2ff'}} >
+    <div className="gradient-custom-2" style={{backgroundColor: '#D4F1F4'}} >
       <Row className='justify-content-center align-items-center'>
         <Col className='col-5' style={{marginRight: '1%'}}>
           <MDBRow className="justify-content-center align-items-center">
