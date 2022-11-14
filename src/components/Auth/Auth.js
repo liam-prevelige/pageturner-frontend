@@ -58,7 +58,7 @@ const Auth = (props) => {
     <div>
       {user ? <div>
         <Row>
-          <Col>{user.name}</Col>
+          <Col style={{marginTop: '5px'}}><i>Welcome, {user.name}!</i></Col>
           <Col><Button onClick={logout}>Log Out</Button></Col>
         </Row>
       </div> : <GoogleLogin onSuccess={googleSuccess} onError={googleFailure}/>}

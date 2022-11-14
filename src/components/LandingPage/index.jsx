@@ -75,7 +75,8 @@ export const LandingPage = () => {
           </Card.Body>
         </Card>
       </Row>}
-      <Row className="align-items-top justify-content-center browse">
+      <Row className="justify-content-left h3" style={{margin: '10px', marginTop: '30px'}}>Trending Now</Row>
+      <Row className="align-items-top justify-content-center browse" style={{paddingTop: '0px'}}>
         {
           // eslint-disable-next-line arrow-parens
           topBooks.map((book, index) => (
@@ -86,7 +87,8 @@ export const LandingPage = () => {
           ))
         }
       </Row>
-      <Row className="align-items-top justify-content-center browse">
+      <Row className="justify-content-left h3" style={{margin: '10px', marginTop: '30px'}}>Top Rated</Row>
+      <Row className="align-items-top justify-content-center browse" style={{paddingTop: '0px'}}>
         {
           // eslint-disable-next-line arrow-parens
           topRecs.map((book, index) => (

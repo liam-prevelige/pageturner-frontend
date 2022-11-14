@@ -43,7 +43,7 @@ const App = () => {
             <Nav.Link href="/feed">Feed</Nav.Link>
             {loggedIn && <Nav.Link href="/profile">My Profile</Nav.Link>}
           </Nav>
-          <Nav className="navbar-right navbar-custom1">
+          <Nav className="navbar-right navbar-custom1" style={{marginTop: '0px'}}>
             <Auth triggerReload = {() => {
               reloadPageFunc();
             }}/>
