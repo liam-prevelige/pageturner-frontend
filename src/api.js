@@ -106,3 +106,39 @@ export const getRecs = async (isbn) => {
 
   return body;
 };
+
+// Add a book to a user's list of bookmarks (saved)
+export const updateBookmarks = async (userEmail, isbn, exists) => {
+  const response = await fetch(`${API_URL}/user/update_bookmarks/${userEmail}/${isbn}/${exists}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/update_bookmarks failed');
+  }
+
+  return body;
+};
+
+// Add a book to a user's list of read books
+export const updateRead = async (userEmail, isbn, exists) => {
+  const response = await fetch(`${API_URL}/user/update_read/${userEmail}/${isbn}/${exists}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/update_read failed');
+  }
+
+  return body;
+};
