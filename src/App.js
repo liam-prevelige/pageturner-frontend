@@ -27,15 +27,23 @@ const App = () => {
   };
   return (
     <Router>
-      <Navbar className="p-2" bg="light" expand="lg">
-        <Navbar.Brand href="/">Pageturner</Navbar.Brand>
+      {/* <Navbar className="p-2" bg="light" variant="light" expand="lg" navbar-custom> */}
+      <Navbar className="variant-light expand-lg navbar-custom">
+        <Navbar.Brand href="/">
+          {/* <img
+            alt="image"
+            src="/logo.png"
+            width="100"
+            height="100"
+          />{' '} */}
+          Pageturner</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/feed">Feed</Nav.Link>
             {loggedIn && <Nav.Link href="/profile">My Profile</Nav.Link>}
           </Nav>
-          <Nav className="nav navbar-nav navbar-right">
+          <Nav className="navbar-right navbar-custom1">
             <Auth triggerReload = {() => {
               reloadPageFunc();
             }}/>
