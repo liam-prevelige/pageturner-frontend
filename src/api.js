@@ -125,6 +125,24 @@ export const updateBookmarks = async (userEmail, isbn, exists) => {
   return body;
 };
 
+// Gets a user's list of bookmarked books' content (saved)
+export const getBookmarks = async (userEmail) => {
+  const response = await fetch(`${API_URL}/user/get_bookmarks/${userEmail}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_bookmarks failed');
+  }
+
+  return body;
+};
+
 // Add a book to a user's list of read books
 export const updateRead = async (userEmail, isbn, exists) => {
   const response = await fetch(`${API_URL}/user/update_read/${userEmail}/${isbn}/${exists}`, {
@@ -138,6 +156,24 @@ export const updateRead = async (userEmail, isbn, exists) => {
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /user/update_read failed');
+  }
+
+  return body;
+};
+
+// Gets a user's list of read books' content
+export const getRead = async (userEmail) => {
+  const response = await fetch(`${API_URL}/user/get_read/${userEmail}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_read failed');
   }
 
   return body;
