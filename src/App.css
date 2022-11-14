@@ -5,8 +5,27 @@
     scroll-behavior: smooth;
 }
 
+.navbar-custom {
+    background-color: #94BFCD;
+    height: 90px;
+    padding:15px;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar-custom1 {
+    align-items: center;
+    white-space: nowrap;
+    display: inline-block;
+    text-align: center;
+    margin-top: 1rem;
+}
+
 body {
     background: var(--color-bg);
+    color: var(--color-text);
 }
 
 a {
