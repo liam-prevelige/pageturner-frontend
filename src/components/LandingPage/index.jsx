@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {DynamicSearch} from '../DynamicSearch';
 import {getSearch, getTopBooks, getTopRecs} from '../../api';
-import {BookDisplay} from './BookDisplay'; // TODO: switch to BookInfo
+import {BookDisplay} from '../BookDisplay'; // TODO: switch to BookInfo
 import Card from 'react-bootstrap/Card';
 import './LandingPage.css';
 import {BookPreview} from './BookPreview';
