@@ -1,29 +1,39 @@
 import React, {useEffect, useState} from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import ReactLoading from 'react-loading';
+import {BookDisplay} from './BookDisplay';
+import {ScrollMenu} from 'react-horizontal-scrolling-menu';
 import {getRecs} from '../../api';
 
-export const BookPreview = ({title, author, coverImg, publisher, year}) => {
+export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) => {
   const [recs, setRecs] = useState([]);
+  const [loaded, hasLoaded] = useState(false);
 
   // Get recommendations from the database
   const loadRecs = async () => {
-    if (title) {
-      const newRecs = await getRecs(title);
+    if (isbn) {
+      const newRecs = await getRecs(isbn);
       console.log(newRecs);
       setRecs(newRecs);
     }
   };
 
   // When a book is selected, get recommendations
-  useEffect(() => {
+  const load = async () => {
     setRecs([]);
-    loadRecs();
-  }, [title]);
+    await loadRecs();
+    hasLoaded(true);
+  };
+
+  useEffect(() => {
+    if (!loaded) {
+      load();
+    }
+  }, []);
 
   return (<Container>
     <Row>
-      <Col md={3}><img src={coverImg} alt={title}/></Col>
+      <Col md={3}><img src={coverImg} alt={title} style={{height: '275px'}} /></Col>
       <Col md={9}>
         <Row><h2>{title}</h2></Row>
         <Row><h3>{author}</h3></Row>
@@ -31,11 +41,15 @@ export const BookPreview = ({title, author, coverImg, publisher, year}) => {
       </Col>
     </Row>
     <hr />
-    <Row className="justify-content-center">
-      <h3>More Like This:</h3>
-      {recs.length == 0 ? <ReactLoading type="spin" color="black" /> : recs.map((rec, index) => {
-        return <div key={index}>TODO: add bookinfo for this recommendation</div>;
-      })}
-    </Row>
+    <h3>More Like This:</h3>
+    <ScrollMenu style={{overflowX: 'auto'}}>
+      {console.log(recs.length)}
+      {recs.length === 0 ? <ReactLoading type="spin" color="black" /> : recs.map((book, index) => (
+        <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
+          <BookDisplay url={book.image_l} title={book.title} author={book.author}/>
+        </Col>
+      ))
+      }
+    </ScrollMenu>
   </Container>);
 };

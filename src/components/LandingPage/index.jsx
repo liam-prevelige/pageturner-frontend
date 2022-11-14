@@ -65,9 +65,10 @@ export const LandingPage = () => {
         <Card className="book m-4">
           <Card.Body>
             <BookPreview
+              isbn={book.ISBN}
               title={book.title}
               author={book.author}
-              coverImg={book.image_m}
+              coverImg={book.image_l}
               publisher={book.publisher}
               year={book.year}
             />
@@ -80,7 +81,7 @@ export const LandingPage = () => {
           topBooks.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
             <div className="col-2" key={index}>
-              <BookDisplay url={book.image_m} title={book.title} author={book.author}/>
+              <BookDisplay url={book.image_l} title={book.title} author={book.author}/>
             </div>
           ))
         }
@@ -91,7 +92,7 @@ export const LandingPage = () => {
           topRecs.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
             <div className="col-2" key={index}>
-              <BookDisplay url={book.image_m} title={book.title} author={book.author}/>
+              <BookDisplay url={book.image_l} title={book.title} author={book.author}/>
             </div>
           ))
         }
