@@ -14,12 +14,15 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import {postBookReview} from '../../api';
+
+
 // const emptyStar = 'empty-star';
 // const filledStar = 'filled-star';
 
 
-export const BookInfo = () => {
-  const [, setTextReview] = useState('');
+export const BookInfo = (props) => {
+  const [textReview, setTextReview] = useState('');
   // TODO: all fields below are just dummy variables and should be replaced
   //       with real information from the GET request mentioned above
   const [title] = useState('Harry Potter and the Goblet of Fire');
@@ -69,10 +72,11 @@ export const BookInfo = () => {
  * handles submitting a text review
  * @param {*} event
  */
-  function handleSubmit(event) {
-  }
-
-  console.log('we made it');
+  const handleSubmit = async () => {
+    // await postBookReview(props.user, props.isbn, textReview);
+    await postBookReview('alex2', '0613496744', textReview);
+    console.log('reached frontend event function');
+  };
 
   return (
     <div className="App">
