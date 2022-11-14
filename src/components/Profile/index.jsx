@@ -47,32 +47,6 @@ const state = {
  * @return {JSX} for landing page component
  */
 export const Profile = () => {
-  // const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-  // const options = {
-  //   theme: 'light2',
-  //   title: {
-  //     text: 'Stock Price of NIFTY 50',
-  //   },
-  //   axisY: {
-  //     title: 'Price in USD',
-  //     prefix: '$',
-  //   },
-  //   data: [{
-  //     type: 'line',
-  //     xValueFormatString: 'MMM YYYY',
-  //     yValueFormatString: '$#,##0.00',
-  //     dataPoints: dataPoints,
-  //   }],
-  // };
-  // const [tabIndex, setTabIndex] = useState(0);
-
-  // const handleSliderChange = (event) => {
-  //   setTabIndex(parseInt(event.target.value, 10));
-  // };
-
-  // const handleTabsChange = (index) => {
-  //   setTabIndex(index);
-  // };
   return (
     <div className="gradient-custom-2" style={{backgroundColor: '#D4F1F4'}} >
       <Row className='justify-content-center align-items-center'>
