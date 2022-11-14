@@ -33,7 +33,7 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
 
   return (<Container>
     <Row>
-      <Col md={3}><img src={coverImg} alt={title} /></Col>
+      <Col md={3}><img src={coverImg} alt={title} style={{height: '275px'}} /></Col>
       <Col md={9}>
         <Row><h2>{title}</h2></Row>
         <Row><h3>{author}</h3></Row>
@@ -45,8 +45,8 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
     <ScrollMenu style={{overflowX: 'auto'}}>
       {console.log(recs.length)}
       {recs.length === 0 ? <ReactLoading type="spin" color="black" /> : recs.map((book, index) => (
-        <Col key={index} style={{marginLeft: '10px', marginRight: '10px'}}>
-          <BookDisplay url={book.image_m} title={book.title} author={book.author} style={{margin: '30px', marginRight: '4px'}}/>
+        <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
+          <BookDisplay url={book.image_l} title={book.title} author={book.author}/>
         </Col>
       ))
       }
