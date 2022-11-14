@@ -56,11 +56,24 @@ export const Profile = () => {
   const [bookmarks, setBookmarks] = useState([]);
   const [read, setRead] = useState([]);
 
+  const emptyListFiller = [{
+    image_l: 'https://st2.depositphotos.com/2769299/7314/i/450/depositphotos_73146765-stock-photo-a-stack-of-books-on.jpg',
+    title: 'No books currently in this list!',
+    author: '',
+  }];
+
   const load = async () => {
     console.log('entering load');
     setUserInfo(JSON.parse(sessionStorage.getItem('profile')));
-    const foundBookmarks = await getBookmarks(userInfo.email);
-    const foundRead = await getRead(userInfo.email);
+    let foundBookmarks = await getBookmarks(userInfo.email);
+    if (foundBookmarks.length === 0) {
+      foundBookmarks = emptyListFiller;
+    }
+
+    let foundRead = await getRead(userInfo.email);
+    if (foundRead.length === 0) {
+      foundRead = emptyListFiller;
+    }
 
     setBookmarks(foundBookmarks);
     setRead(foundRead);
