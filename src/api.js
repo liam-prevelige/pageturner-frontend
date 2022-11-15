@@ -191,6 +191,24 @@ export const getSearch = async (query) => {
   return body;
 };
 
+// Search for a book
+export const getBookInfo = async (query) => {
+  const response = await fetch(`${API_URL}/book-info/${query}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /search failed');
+  }
+
+  return body;
+};
+
 // Get recommendations for a book (given its title)
 export const getRecs = async (isbn) => {
   const response = await fetch(`${API_URL}/recommendations/${isbn}`, {

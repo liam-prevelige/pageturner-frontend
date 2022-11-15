@@ -82,7 +82,7 @@ export const LandingPage = () => {
           topBooks.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
             <div className="col-2" key={index}>
-              <BookDisplay url={book.image_l} title={book.title} author={book.author}/>
+              <BookDisplay url={book.image_l} title={book.title} author={book.author} isbn={book.ISBN}/>
             </div>
           ))
         }

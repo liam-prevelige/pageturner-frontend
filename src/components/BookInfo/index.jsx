@@ -16,6 +16,8 @@ import Col from 'react-bootstrap/Col';
 
 import {postBookReview} from '../../api';
 
+import {useLocation} from 'react-router-dom';
+
 
 // const emptyStar = 'empty-star';
 // const filledStar = 'filled-star';
@@ -25,7 +27,6 @@ export const BookInfo = (props) => {
   const [textReview, setTextReview] = useState('');
   // TODO: all fields below are just dummy variables and should be replaced
   //       with real information from the GET request mentioned above
-  const [title] = useState('Harry Potter and the Goblet of Fire');
   const [yearPublished] = useState(2000);
   const [genre] = useState('Fantasy/Adventure/Mystery');
   const [authorBooks] = useState([
@@ -46,7 +47,6 @@ export const BookInfo = (props) => {
     },
   ]);
   const [numberReviews] = useState(44359);
-  const defaultImage = 'http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg';
 
   /**
 * TODO: api call for removing a book from the user's recommendations
@@ -74,19 +74,22 @@ export const BookInfo = (props) => {
  */
   const handleSubmit = async () => {
     // await postBookReview(props.user, props.isbn, textReview);
-    await postBookReview('alex2', '0613496744', textReview);
+    await postBookReview('alex2', queryParams.get('ISBN'), textReview);
     console.log('reached frontend event function');
   };
+
+  const search = useLocation().search;
+  const queryParams = new URLSearchParams(search);
 
   return (
     <div className="App">
       <div className='gradient_bg'>
         <Container>
           <Row>
-            <Col><img src={defaultImage} alt='...' /></Col>
+            <Col><img src={queryParams.get('url')} alt='...' /></Col>
             <Col>
               <Row>
-                <h1>{title}</h1>
+                <h1>{queryParams.get('title')}</h1>
               </Row>
               <Row>
                 <h3>{yearPublished} - {genre}</h3>
