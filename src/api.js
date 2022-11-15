@@ -280,3 +280,22 @@ export const getRead = async (userEmail) => {
 
   return body;
 };
+
+// Gets a user's friend list
+export const getFriends = async () => {
+  const response = await fetch(`${API_URL}/user/friends`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/friends failed');
+  }
+
+  return body.friends;
+};

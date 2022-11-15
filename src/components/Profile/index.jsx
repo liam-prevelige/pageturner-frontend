@@ -8,7 +8,7 @@ import {MDBRow, MDBCard, MDBCardText, MDBCardImage, MDBTypography} from 'mdb-rea
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import {Row, Col, Button} from 'react-bootstrap';
-import {getBookmarks, getRead} from '../../api';
+import {getBookmarks, getRead, getFriends} from '../../api';
 import ReactLoading from 'react-loading';
 import {BookDisplay} from '../BookDisplay';
 import './profile.css';
@@ -56,6 +56,8 @@ export const Profile = () => {
   const [bookmarks, setBookmarks] = useState([]);
   const [read, setRead] = useState([]);
 
+  const [friends, setFriends] = useState([]);
+
   const emptyListFiller = [{
     image_l: 'https://st2.depositphotos.com/2769299/7314/i/450/depositphotos_73146765-stock-photo-a-stack-of-books-on.jpg',
     title: 'No books currently in this list!',
@@ -65,6 +67,10 @@ export const Profile = () => {
   const load = async () => {
     console.log('entering load');
     setUserInfo(JSON.parse(sessionStorage.getItem('profile')));
+
+    const friends = await getFriends();
+    setFriends(friends);
+
     let foundBookmarks = await getBookmarks(userInfo.email);
     if (foundBookmarks.length === 0) {
       foundBookmarks = emptyListFiller;
@@ -150,8 +156,7 @@ export const Profile = () => {
                         }
                       </ScrollMenu>
                     </TabPanel>
-                    <TabPanel>
-                      <p>Test</p>
+                    <TabPanel>{friends.map((f, index) => <div key={index}>{f}</div>)}
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
