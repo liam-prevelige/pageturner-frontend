@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import './LandingPage.css';
 import {BookPreview} from './BookPreview';
 import {Container, Row} from 'react-bootstrap';
+import ReactLoading from 'react-loading';
 
 /**
  * Component containing the landing page
@@ -78,6 +79,7 @@ export const LandingPage = () => {
       <Row className="justify-content-left h3" style={{margin: '10px', marginTop: '30px'}}>Trending Now</Row>
       <Row className="align-items-top justify-content-center browse" style={{paddingTop: '0px'}}>
         {
+          topBooks.length == 0 ? <ReactLoading type="spin" color="black" />:
           // eslint-disable-next-line arrow-parens
           topBooks.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
@@ -90,6 +92,7 @@ export const LandingPage = () => {
       <Row className="justify-content-left h3" style={{margin: '10px', marginTop: '30px'}}>Top Rated</Row>
       <Row className="align-items-top justify-content-center browse" style={{paddingTop: '0px'}}>
         {
+          topRecs.length == 0 ? <ReactLoading type="spin" color="black" />:
           // eslint-disable-next-line arrow-parens
           topRecs.map((book, index) => (
             // eslint-disable-next-line react/jsx-key
