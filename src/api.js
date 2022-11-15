@@ -211,6 +211,7 @@ export const getBookInfo = async (query) => {
 
 // Get recommendations for a book (given its title)
 export const getRecs = async (isbn) => {
+  isbn = isbn.replace('$', '');
   const response = await fetch(`${API_URL}/recommendations/${isbn}`, {
     method: 'GET',
     headers: {
