@@ -9,7 +9,6 @@ import {AiFillRead, AiOutlineRead} from 'react-icons/ai';
 
 export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) => {
   const [recs, setRecs] = useState([]);
-  const [loaded, hasLoaded] = useState(false);
   const [userInfo, setUserInfo] = useState(JSON.parse(sessionStorage.getItem('profile')));
   let loggedIn = userInfo != null;
   let bookmarked = false;
@@ -31,14 +30,11 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
     console.log(userInfo);
     loggedIn = userInfo != null;
     await loadRecs();
-    hasLoaded(true);
   };
 
   useEffect(() => {
-    if (!loaded) {
-      load();
-    }
-  }, []);
+    load();
+  }, [title]);
 
   const changeBookmark = () => {
     console.log(bookmarked);
