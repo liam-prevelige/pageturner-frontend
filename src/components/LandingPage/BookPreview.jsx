@@ -6,7 +6,7 @@ import {ScrollMenu} from 'react-horizontal-scrolling-menu';
 import {getRecs, updateBookmarks, updateRead} from '../../api';
 import {FaBookmark, FaRegBookmark} from 'react-icons/fa';
 import {AiFillRead, AiOutlineRead} from 'react-icons/ai';
-
+import {Link} from 'react-router-dom';
 export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) => {
   const [recs, setRecs] = useState([]);
   const [userInfo, setUserInfo] = useState(JSON.parse(sessionStorage.getItem('profile')));
@@ -52,22 +52,29 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
 
   return (<Container>
     <Row>
-      <Col md={3}><img src={coverImg} alt={title} style={{height: '275px'}} /></Col>
+      <Col md={3}>
+        <Link to={{
+          pathname: '../book-info',
+          search: '?isbn=$' + isbn + '&url=' + coverImg + '&title=' + title + '&author=' + author,
+        }}>
+          <img src={coverImg} alt={title} style={{height: '275px'}} />
+        </Link>
+      </Col>
       <Col md={9}>
         <Row><h2>{title}</h2></Row>
         <Row><h3>{author}</h3></Row>
         <Row><h5>{publisher}&nbsp;{year}</h5></Row>
         <Row>
           <Col>
-            {loggedIn && <button onClick={changeBookmark}>{ {bookmarked} ?
-              <FaBookmark style={{height: '50px', width: '50px', margin: '5px'}}/> :
-              <FaRegBookmark style={{height: '50px', width: '50px', margin: '5px'}}/>
+            {loggedIn && <button onClick={changeBookmark}>{{bookmarked} ?
+              <FaBookmark style={{height: '50px', width: '50px', margin: '5px'}} /> :
+              <FaRegBookmark style={{height: '50px', width: '50px', margin: '5px'}} />
             }</button>}
           </Col>
           <Col>
-            {loggedIn && <button onClick={changeRead}>{ {read} ?
-            <AiFillRead style={{height: '50px', width: '50px', margin: '5px'}}/> :
-            <AiOutlineRead style={{height: '50px', width: '50px', margin: '5px'}}/>
+            {loggedIn && <button onClick={changeRead}>{{read} ?
+              <AiFillRead style={{height: '50px', width: '50px', margin: '5px'}} /> :
+              <AiOutlineRead style={{height: '50px', width: '50px', margin: '5px'}} />
             }</button>}
           </Col>
         </Row>
@@ -79,7 +86,7 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
       {console.log(recs.length)}
       {recs.length === 0 ? <ReactLoading type="spin" color="black" /> : recs.map((book, index) => (
         <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
-          <BookDisplay url={book.image_l} title={book.title} author={book.author}/>
+          <BookDisplay url={book.image_l} title={book.title} author={book.author} />
         </Col>
       ))
       }
