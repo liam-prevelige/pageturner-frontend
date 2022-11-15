@@ -16,7 +16,7 @@ export const BookDisplay = ({url, title, author, isbn}) => {
         <center>
           <Link to={{
             pathname: '../book-info',
-            search: '?isbn=$' + isbn + '&url=' + url + '&title=' + title + '&author=' + author,
+            search: '?isbn=' + isbn + '&url=' + url + '&title=' + title + '&author=' + author,
           }}
           >
             <b>{title}</b> <br/> {author}

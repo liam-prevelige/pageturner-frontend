@@ -121,7 +121,7 @@ export const Profile = () => {
                     <MDBCardText className="small text-muted mb-0" style={{marginRight: '15px'}}>Read</MDBCardText>
                   </div>
                   <div>
-                    <MDBCardText className="mb-1 h5">0</MDBCardText>
+                    <MDBCardText className="mb-1 h5">{friends.length}</MDBCardText>
                     <MDBCardText className="small text-muted mb-0">Friends</MDBCardText>
                   </div>
                 </div>

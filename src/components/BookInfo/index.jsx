@@ -33,7 +33,7 @@ export const BookInfo = () => {
   // TODO: all fields below are just dummy variables and should be replaced
   //       with real information from the GET request mentioned above
   const [author] = useState(queryParams.get('author'));
-  const [isbn] = useState(queryParams.get('isbn').replace('$', ''));
+  const [isbn] = useState(queryParams.get('isbn'));
   const [recs, setRecs] = useState([]);
 
   // Get recommendations from the database
