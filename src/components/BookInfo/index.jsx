@@ -5,60 +5,49 @@
  * author: Alex Kruger
  */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './bookInfo.css';
 
 import Container from 'react-bootstrap/Container';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import {ScrollMenu} from 'react-horizontal-scrolling-menu';
+import {BookDisplay} from '../BookDisplay';
+import ReactLoading from 'react-loading';
 import {postBookReview} from '../../api';
+import {getRecs} from '../../api';
+
+import {useLocation} from 'react-router-dom';
 
 
 // const emptyStar = 'empty-star';
 // const filledStar = 'filled-star';
 
 
-export const BookInfo = (props) => {
+export const BookInfo = () => {
+  const search = useLocation().search;
+  const queryParams = new URLSearchParams(search);
+  const loggedIn = useState(JSON.parse(sessionStorage.getItem('profile')))[0] != null;
   const [textReview, setTextReview] = useState('');
   // TODO: all fields below are just dummy variables and should be replaced
   //       with real information from the GET request mentioned above
-  const [title] = useState('Harry Potter and the Goblet of Fire');
-  const [yearPublished] = useState(2000);
-  const [genre] = useState('Fantasy/Adventure/Mystery');
-  const [authorBooks] = useState([
-    {
-      url: 'http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg',
-      title: 'Harry Potter and the Goblet of Fire',
-    },
-  ]);
-  const [reviews] = useState([
-    {
-      review: 'review 1 info',
-    },
-    {
-      review: 'review 2 info',
-    },
-    {
-      review: 'review 3 info',
-    },
-  ]);
-  const [numberReviews] = useState(44359);
-  const defaultImage = 'http://images.amazon.com/images/P/0889652015.01.LZZZZZZZ.jpg';
+  const [author] = useState(queryParams.get('author'));
+  const [isbn] = useState(queryParams.get('isbn').replace('$', ''));
+  const [recs, setRecs] = useState([]);
 
-  /**
-* TODO: api call for removing a book from the user's recommendations
-*/
-  function onRemove() {
-  }
+  // Get recommendations from the database
+  const loadRecs = async () => {
+    if (queryParams.get('isbn')) {
+      const newRecs = await getRecs(queryParams.get('isbn'));
+      console.log(newRecs);
+      setRecs(newRecs);
+    }
+  };
 
-  /**
-* TODO: api call for adding a book to the user's read books
-*/
-  function onAdd() {
-  }
+  useEffect(() => {
+    loadRecs();
+  }, []);
 
   /**
 * handles updating the text the user enters as a text review
@@ -74,7 +63,7 @@ export const BookInfo = (props) => {
  */
   const handleSubmit = async () => {
     // await postBookReview(props.user, props.isbn, textReview);
-    await postBookReview('alex2', '0613496744', textReview);
+    await postBookReview('alex2', queryParams.get('isbn'), textReview);
     console.log('reached frontend event function');
   };
 
@@ -83,24 +72,24 @@ export const BookInfo = (props) => {
       <div className='gradient_bg'>
         <Container>
           <Row>
-            <Col><img src={defaultImage} alt='...' /></Col>
+            <Col><img src={queryParams.get('url')} alt='...' /></Col>
             <Col>
               <Row>
-                <h1>{title}</h1>
+                <h1>{queryParams.get('title')}</h1>
               </Row>
               <Row>
-                <h3>{yearPublished} - {genre}</h3>
+                <h3>{author}</h3>
               </Row>
               <Row>
-                {/* <Col><RatingSystem starCount={5}/></Col> */}
-                <Col>Number of Reviews: {numberReviews}</Col>
+                <h3>ISBN - {isbn}</h3>
               </Row>
+              {/* <Row>
+                <button type="button" className="btn btn-danger">Remove from recommendations</button>
+                <button type="button" className="btn btn-success">Add to list</button>
+              </Row> */}
               <Row>
-                <button type="button" className="btn btn-danger" onClick={onAdd}>Remove from recommendations</button>
-                <button type="button" className="btn btn-success" onClick={onRemove}>Add to list</button>
-              </Row>
-              <Row>
-                <form onSubmit={handleSubmit}>
+                {!loggedIn && <p>Sign in to write and post a review!</p>}
+                {loggedIn && <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label htmlFor="bookReviewTextArea">Add a review:</label>
                     <textarea
@@ -110,34 +99,21 @@ export const BookInfo = (props) => {
                       onChange={handleTextChange}></textarea>
                     <button type="submit" className="btn btn-primary">Post review</button>
                   </div>
-                </form>
+                </form>}
               </Row>
             </Col>
           </Row>
-          <h3>Other books by this author:</h3>
           <Row>
-            <ListGroup horizontal>
-              {
-                authorBooks.map((authorBook) => (
-                // eslint-disable-next-line react/jsx-key
-                  <ListGroup.Item>
-                    <img src={authorBook.url} width="150" height="210" alt='...' />
-                    {authorBook.title}
-                  </ListGroup.Item>
-                ))
+            <h3>More like this:</h3>
+            <ScrollMenu style={{overflowX: 'auto'}}>
+              {console.log(recs.length)}
+              {recs.length === 0 ? <ReactLoading type="spin" color="black" /> : recs.map((book, index) => (
+                <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
+                  <BookDisplay url={book.image_l} title={book.title} author={book.author} />
+                </Col>
+              ))
               }
-            </ListGroup>
-          </Row>
-          <Row>
-            <h3>What your friends think:</h3>
-            <ListGroup vertical>
-              {
-                reviews.map((review) => (
-                // eslint-disable-next-line react/jsx-key
-                  <ListGroup.Item>{review.review}</ListGroup.Item>
-                ))
-              }
-            </ListGroup>
+            </ScrollMenu>
           </Row>
         </Container>
       </div>
