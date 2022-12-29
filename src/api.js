@@ -224,7 +224,7 @@ export const getRecs = async (isbn) => {
   if (!response.ok) {
     throw new Error('Call to /recommendations failed');
   }
-
+  console.log(body);
   return body;
 };
 
