@@ -13,6 +13,7 @@ import ReactLoading from 'react-loading';
 import {BookDisplay} from '../BookDisplay';
 import './profile.css';
 import 'chart.js/auto';
+import {PersonDisplay} from './PersonDisplay';
 import {Chart} from 'react-chartjs-2';
 import {
   HStack,
@@ -156,7 +157,15 @@ export const Profile = () => {
                         }
                       </ScrollMenu>
                     </TabPanel>
-                    <TabPanel>{friends.map((f, index) => <div key={index}>{f}</div>)}
+                    <TabPanel>
+                      <ScrollMenu style={{overflowX: 'auto'}}>
+                        {friends.length === 0 ? <ReactLoading type="spin" color="black" /> : friends.map((f, index) => (
+                          <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
+                            <PersonDisplay key={index} personName={f} />
+                          </Col>
+                        ))
+                        }
+                      </ScrollMenu>
                     </TabPanel>
                   </TabPanels>
                 </Tabs>

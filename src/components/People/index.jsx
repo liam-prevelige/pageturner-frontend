@@ -86,6 +86,10 @@ export const People = () => {
           </Card.Body>
         </Card>
       </Row>}
+      <Row>
+        Placeholder. Todo add top people/influencers
+        {/** Add top people page here*/}
+      </Row>
     </Container>
   );
 };

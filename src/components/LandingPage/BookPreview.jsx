@@ -84,6 +84,7 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
     <h3>More Like This:</h3>
     <ScrollMenu style={{overflowX: 'auto'}}>
       {console.log(recs.length)}
+      {console.log(recs)}
       {recs.length === 0 ? <ReactLoading type="spin" color="black" /> : recs.map((book, index) => (book && book != 'null' &&
         <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
           <BookDisplay url={book.image_l} title={book.title} author={book.author} />

@@ -18,7 +18,7 @@ export async function onLogin() {
   // We don't care about the result here
 }
 
-// Search for a user
+// Search for a user based on a given query
 export const searchUsers = async (query) => {
   const response = await fetch(`${API_URL}/user/search/${query}`, {
     method: 'GET',
@@ -29,6 +29,7 @@ export const searchUsers = async (query) => {
     },
     cache: 'default',
   });
+
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /search failed');
@@ -37,7 +38,8 @@ export const searchUsers = async (query) => {
   return body.result;
 };
 
-// Get a user's books
+// Get a user's books given their email
+// This gives both their bookshelf and their read books
 export const getUserBooks = async (email) => {
   const response = await fetch(`${API_URL}/user/books/${email}`, {
     method: 'GET',
@@ -47,8 +49,8 @@ export const getUserBooks = async (email) => {
     },
     cache: 'default',
   });
-  const body = await response.json();
 
+  const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /feed/get failed');
   }
@@ -71,13 +73,14 @@ export async function addFriend(email) {
     },
     body: JSON.stringify({friend_email: email}),
   });
+
   const body = await response.json();
   return body.success;
 }
 
 /**
  * Remove a friend
- * @param {string} email - email of user to add as a friend
+ * @param {string} email - email of user to remove as a friend
  * @return {boolean} success
  */
 export async function removeFriend(email) {
@@ -90,10 +93,12 @@ export async function removeFriend(email) {
     },
     body: JSON.stringify({friend_email: email}),
   });
+
   const body = await response.json();
   return body.success;
 }
 
+// Returns list of posts, which represent the feed to be displayed
 export const getFeed = async (query) => {
   const response = await fetch(`${API_URL}/feed/get/${query}`, {
     method: 'GET',
@@ -103,12 +108,11 @@ export const getFeed = async (query) => {
     },
     cache: 'default',
   });
-  const body = await response.json();
 
+  const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /feed/get failed');
   }
-
   return body;
 };
 
@@ -138,7 +142,7 @@ export const postBookReview = async (user, isbn, text) => {
   console.log('reached api');
 };
 
-// Returns the top rated books
+// Returns the top rated books stored in the database
 export const getTopBooks = async () => {
   const response = await fetch(`${API_URL}/topbooks`, {
     method: 'GET',
@@ -148,6 +152,7 @@ export const getTopBooks = async () => {
     },
     cache: 'default',
   });
+
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /topbooks failed');
@@ -155,7 +160,8 @@ export const getTopBooks = async () => {
   return body.top;
 };
 
-// Returns the top recommended books
+// Currently: Returns the books with the most ratings
+// Eventually, we hope to return an individual user's top recommendations from the algorithm
 export const getTopRecs = async () => {
   const response = await fetch(`${API_URL}/toprecs`, {
     method: 'GET',
@@ -165,6 +171,7 @@ export const getTopRecs = async () => {
     },
     cache: 'default',
   });
+
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /toprecs failed');
@@ -173,7 +180,7 @@ export const getTopRecs = async () => {
   return body.recs;
 };
 
-// Search for a book
+// Search for a book given a query
 export const getSearch = async (query) => {
   const response = await fetch(`${API_URL}/search/${query}`, {
     method: 'GET',
@@ -183,6 +190,7 @@ export const getSearch = async (query) => {
     },
     cache: 'default',
   });
+
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /search failed');
@@ -192,6 +200,7 @@ export const getSearch = async (query) => {
 };
 
 // Search for a book
+// Does this funtion only work if the query is submit-post? How is it different from getSearch?
 export const getBookInfo = async (query) => {
   const response = await fetch(`${API_URL}/book-info/${query}`, {
     method: 'GET',
@@ -201,6 +210,7 @@ export const getBookInfo = async (query) => {
     },
     cache: 'default',
   });
+
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /search failed');
@@ -220,11 +230,12 @@ export const getRecs = async (isbn) => {
     },
     cache: 'default',
   });
+
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /recommendations failed');
   }
-
+  console.log(body);
   return body;
 };
 
@@ -238,11 +249,11 @@ export const updateBookmarks = async (userEmail, isbn, exists) => {
     },
     cache: 'default',
   });
+
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /user/update_bookmarks failed');
   }
-
   return body;
 };
 

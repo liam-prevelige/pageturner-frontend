@@ -1,6 +1,6 @@
 import {PostContainer} from './PostContainer';
-import {PreferenceList} from './PreferenceList';
-import {ProfileCard} from './ProfileCard';
+// import {PreferenceList} from './PreferenceList';
+// import {ProfileCard} from './ProfileCard';
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
@@ -12,19 +12,19 @@ export const Feed = () => {
     <div>
       <Container fluid>
         <Row>
-          <Col> {/** fixed */}
+          {/** <Col>
             <div className='disable-scroll'>
               <PreferenceList name='Darrell'/>
             </div>
-          </Col>
+          </Col> */}
           <Col> {/** scrollable - Alex's work goes in this column */}
             <PostContainer />
           </Col>
-          <Col> {/** fixed */}
+          {/* <Col>
             <div className='disable-scroll'>
               <ProfileCard profileImgUrl='genericprofilepic.jpg' name='Darrell Steward' userComment='I love Goblet of Fire so much! Check it out!'/>
             </div>
-          </Col>
+          </Col> */}
         </Row>
       </Container>
     </div>
