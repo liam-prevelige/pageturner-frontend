@@ -3,7 +3,8 @@ import {Container, Row, Col} from 'react-bootstrap';
 import ReactLoading from 'react-loading';
 import {BookDisplay} from '../BookDisplay';
 import {ScrollMenu} from 'react-horizontal-scrolling-menu';
-import {getRecs, updateBookmarks, updateRead} from '../../api';
+// import {getRecs} from '../../api'; // Removed for Google Books API
+import {updateBookmarks, updateRead} from '../../api';
 import {FaBookmark, FaRegBookmark} from 'react-icons/fa';
 import {AiFillRead, AiOutlineRead} from 'react-icons/ai';
 import {Link} from 'react-router-dom';
@@ -16,11 +17,12 @@ export const BookPreview = ({isbn, title, author, coverImg, publisher, year}) =>
 
   // Get recommendations from the database
   const loadRecs = async () => {
-    if (isbn) {
-      const newRecs = await getRecs(isbn);
-      console.log(newRecs);
-      setRecs(newRecs);
-    }
+    setRecs([]); // Current recommendations don't work if using Google Books API
+    // if (isbn) {
+    //   // const newRecs = await getRecs(isbn);
+    //   // console.log(newRecs);
+    //   // setRecs(newRecs);
+    // }
   };
 
   // When a book is selected, get recommendations

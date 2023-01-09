@@ -23,10 +23,11 @@ export const LandingPage = () => {
   const [books, setBooks] = useState([]);
   const searchFn = async (query) => {
     const results = await getSearch(query);
+    console.log(results);
     const newBooks = results.map((res) => {
       return {
-        id: res.ISBN,
-        label: res.title,
+        id: res.volumeInfo.industryIdentifiers[0].identifier,
+        label: res.volumeInfo.title,
         rest: res,
       };
     });
@@ -34,6 +35,7 @@ export const LandingPage = () => {
     return newBooks;
   };
   const onSelect = (isbn) => {
+    console.log(isbn);
     books.forEach((b) => {
       if (b.id === isbn) {
         setBook(b.rest);
@@ -63,15 +65,16 @@ export const LandingPage = () => {
         <DynamicSearch searchFn={searchFn} onSelect={onSelect} placeholder="Enter the title of a book you enjoyed" />
       </Row>
       {book && <Row className="justify-content-center">
+        {console.log(book)};
         <Card className="book m-4">
           <Card.Body>
             <BookPreview
-              isbn={book.ISBN}
-              title={book.title}
-              author={book.author}
-              coverImg={book.image_l}
-              publisher={book.publisher}
-              year={book.year}
+              isbn={book.volumeInfo.industryIdentifiers[0].identifier}
+              title={book.volumeInfo.title}
+              author={book.volumeInfo.authors[0]}
+              coverImg={book.volumeInfo.imageLinks.thumbnail}
+              publisher={book.volumeInfo.publisher}
+              year={book.volumeInfo.publishedDate}
             />
           </Card.Body>
         </Card>
