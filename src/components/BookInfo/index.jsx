@@ -17,7 +17,7 @@ import {BookDisplay} from '../BookDisplay';
 import ReactLoading from 'react-loading';
 import {postBookReview} from '../../api';
 import {getRecs} from '../../api';
-
+import {useNavigate} from 'react-router-dom';
 import {useLocation} from 'react-router-dom';
 
 
@@ -35,6 +35,7 @@ export const BookInfo = () => {
   const [author] = useState(queryParams.get('author'));
   const [isbn] = useState(queryParams.get('isbn'));
   const [recs, setRecs] = useState([]);
+  const navigate = useNavigate();
 
   // Get recommendations from the database
   const loadRecs = async () => {
@@ -65,6 +66,7 @@ export const BookInfo = () => {
     // await postBookReview(props.user, props.isbn, textReview);
     await postBookReview('alex2', queryParams.get('isbn'), textReview);
     console.log('reached frontend event function');
+    navigate('/');
   };
 
   return (
