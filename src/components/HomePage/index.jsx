@@ -2,35 +2,39 @@ import {React} from 'react';
 import './HomePage.css';
 import {TopTIcon} from '../../assets/Icons';
 import {ShareBox} from '../ShareBox/ShareBox';
-import {Comment} from '../Comment/Comment';
+import {ThreadView} from '../ThreadView/ThreadView';
 
 export const HomePage = () => {
-  const topLevelCommentData = {
-    uid: '1',
-    displayName: 'John Doe',
-    username: 'johndoe',
-    avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
-    text: 'This is a post about my favorite reading list.',
-    metadata: {
-      likes: 52,
-      replies: 102,
-      retweets: 10,
-      timestamp: '2021-05-01T00:00:00.000Z',
-    },
-    parentData: {
-      uid: '1',
-      displayName: 'John Doe',
-      username: 'johndoe',
-      avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
-      text: 'This is a post about my favorite reading list.',
-      metadata: {
-        likes: 52,
-        replies: 102,
-        retweets: 10,
-        timestamp: '2021-05-01T00:00:00.000Z',
-      },
-    },
-  };
+  // const topLevelCommentData = {
+  //   commentId: 'a',
+  //   uid: '1',
+  //   displayName: 'John Doe',
+  //   username: 'johndoe',
+  //   avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
+  //   text: 'This is a post about my favorite reading list.',
+  //   metadata: {
+  //     likes: 52,
+  //     replies: 102,
+  //     retweets: 10,
+  //     timestamp: '2021-05-01T00:00:00.000Z',
+  //   },
+  //   pid: 'b',
+  //   parentData: {
+  //     commentId: 'b',
+  //     uid: '2',
+  //     displayName: 'Not John Doe',
+  //     username: 'notjohndoe',
+  //     avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
+  //     text: 'Second post: this is a post about my least favorite reading list.',
+  //     metadata: {
+  //       likes: 10,
+  //       replies: 20,
+  //       retweets: 30,
+  //       timestamp: '2021-05-01T00:00:00.000Z',
+  //     },
+  //     pid: 'c',
+  //   },
+  // };
 
   return (
     <>
@@ -49,10 +53,7 @@ export const HomePage = () => {
               <img className="rounded-full h-11 w-11 mt-1" src="https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600" />
               <ShareBox />
             </div>
-            <div>
-              <Comment commentData={topLevelCommentData} depth={1} />
-              <div style={{borderTop: '1px solid'}}></div>
-            </div>
+            <ThreadView commentId={'a'}/>
           </>
         </main>
       </div>
