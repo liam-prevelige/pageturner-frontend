@@ -18,6 +18,7 @@ import {Profile} from './components/Profile';
 import {BookInfo} from './components/BookInfo';
 import {HomePage} from './components/HomePage';
 import {ThreadView} from './components/ThreadView/ThreadView';
+import {RightBar} from './components/RightBar';
 
 /**
  * Core React component
@@ -46,6 +47,7 @@ const App = () => {
         </Router>
       </main>
       <aside className="w-350">
+        <RightBar/>
       </aside>
       {/* <Router>
         <Navbar className="variant-light expand-lg navbar-custom">
