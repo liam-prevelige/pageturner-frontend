@@ -5,37 +5,6 @@ import {ShareBox} from '../ShareBox/ShareBox';
 import {ThreadView} from '../ThreadView/ThreadView';
 
 export const HomePage = () => {
-  // const topLevelCommentData = {
-  //   commentId: 'a',
-  //   uid: '1',
-  //   displayName: 'John Doe',
-  //   username: 'johndoe',
-  //   avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
-  //   text: 'This is a post about my favorite reading list.',
-  //   metadata: {
-  //     likes: 52,
-  //     replies: 102,
-  //     retweets: 10,
-  //     timestamp: '2021-05-01T00:00:00.000Z',
-  //   },
-  //   pid: 'b',
-  //   parentData: {
-  //     commentId: 'b',
-  //     uid: '2',
-  //     displayName: 'Not John Doe',
-  //     username: 'notjohndoe',
-  //     avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
-  //     text: 'Second post: this is a post about my least favorite reading list.',
-  //     metadata: {
-  //       likes: 10,
-  //       replies: 20,
-  //       retweets: 30,
-  //       timestamp: '2021-05-01T00:00:00.000Z',
-  //     },
-  //     pid: 'c',
-  //   },
-  // };
-
   return (
     <>
       <div className="min-h-screen mx-auto max-w-7xl flex">

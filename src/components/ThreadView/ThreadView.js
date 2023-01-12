@@ -57,10 +57,9 @@ export const ThreadView = ({commentId}) => {
     commentId = queryParams.get('commentId');
   }
 
-  console.log(comments[comments[commentId].pid]);
   return (
     <div>
-      <Comment commentData={comments[commentId]} parentData={comments[comments[commentId].pid]} depth={1}/>
+      <Comment commentData={comments[commentId]} parentData={comments[comments[commentId].pid]}/>
       <div style={{borderTop: '1px solid'}}></div>
     </div>
   );
