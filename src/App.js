@@ -15,6 +15,7 @@ import {Feed} from './components/Feed';
 import {Profile} from './components/Profile';
 import Auth from './components/Auth/Auth';
 import {BookInfo} from './components/BookInfo';
+import {HomePage} from './components/HomePage';
 
 /**
  * Core React component
@@ -43,6 +44,7 @@ const App = () => {
           <Nav className="me-auto">
             <Nav.Link href="/feed">Feed</Nav.Link>
             <Nav.Link href="/people">People</Nav.Link>
+            <Nav.Link href="/home">Home</Nav.Link>
             {loggedIn && <Nav.Link href="/profile">My Profile</Nav.Link>}
           </Nav>
           <Nav className="navbar-right navbar-custom1" style={{marginTop: '0px'}}>
@@ -56,6 +58,7 @@ const App = () => {
         <Route exact path="/" element={<LandingPage />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/people" element={<People />} />
+        <Route path="/home" element={<HomePage />} />
         {loggedIn && <Route path="/profile" element={<Profile />}/>}
         <Route path="/book-info/*" element={<BookInfo />} />
       </Routes>
