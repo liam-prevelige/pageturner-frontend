@@ -1,15 +1,19 @@
 import {React} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {Reply, Retweet, Like, Share} from '../../assets/Icons';
 
 export const Comment = ({commentData, depth}) => {
+  const navigate = useNavigate();
   const loadThread = (commentData) => {
+    const path = `/thread/${commentData.uid}`;
+    navigate(path);
     console.log('Loading thread for comment: ', commentData);
   };
   const bgColor = depth<2 ? 'bg-white' : 'bg-slate-200';
   console.log(bgColor);
   return (
     <>
-      <div className={`flex space-x-3 px-4 py-3 border-primary-container_border_color ${bgColor}`} onClick={loadThread(commentData)}>
+      <div className={`flex space-x-3 px-4 py-3 border-primary-container_border_color ${bgColor}`} onClick={() => loadThread(commentData)}>
         {depth<2 && <img src={commentData.avatar} className="w-11 h-11 rounded-full" />}
         <div className="flex-1">
           <div className="flex items-center text-sm space-x-2">
@@ -18,13 +22,13 @@ export const Comment = ({commentData, depth}) => {
             <span className="text-primary-gray_colors">2h</span>
           </div>
           <div className="ml-1">
-            <p className="items-center text-black overflow-hidden">
+            <div className="items-center text-black overflow-hidden">
               {commentData.text}
               {/* Parent comment: */}
               {depth<2 &&
-                <Comment commentData={commentData.parentData} depth={2} onClick={loadThread(commentData.parentData)}/>
+                <Comment commentData={commentData.parentData} depth={2} onClick={() => loadThread(commentData.parentData)}/>
               }
-            </p>
+            </div>
             {depth<2 && <ul className="flex justify-between mt-2">
               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-reply group cursor-pointer">
                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-reply_hover">

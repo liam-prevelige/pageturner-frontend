@@ -16,6 +16,7 @@ import {Profile} from './components/Profile';
 import Auth from './components/Auth/Auth';
 import {BookInfo} from './components/BookInfo';
 import {HomePage} from './components/HomePage';
+import {ThreadView} from './components/ThreadView/ThreadView';
 
 /**
  * Core React component
@@ -61,6 +62,7 @@ const App = () => {
         <Route path="/home" element={<HomePage />} />
         {loggedIn && <Route path="/profile" element={<Profile />}/>}
         <Route path="/book-info/*" element={<BookInfo />} />
+        <Route path="/thread/*" element={<ThreadView />} />
       </Routes>
     </Router >
   );
