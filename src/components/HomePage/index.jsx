@@ -1,5 +1,4 @@
 import {React} from 'react';
-import './HomePage.css';
 import {TopTIcon} from '../../assets/Icons';
 import {ShareBox} from '../ShareBox/ShareBox';
 import {ThreadView} from '../ThreadView/ThreadView';
