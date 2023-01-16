@@ -1,6 +1,5 @@
 import {React} from 'react';
-import './HomePage.css';
-import {TopTIcon} from '../../assets/Icons';
+import {Search} from '../../assets/Icons';
 import {ShareBox} from '../ShareBox/ShareBox';
 import {ThreadView} from '../ThreadView/ThreadView';
 
@@ -10,12 +9,16 @@ export const HomePage = () => {
       <div className="min-h-screen mx-auto max-w-7xl flex">
         <main className="flex-1 flex flex-col border-r border-l border-b border-primary-container_border_color">
           <>
+            <div className="flex items-center space-x-5 p-3 m-3 rounded-full bg-slate-200 text-black focus-within:ring-2 focus-within:ring-primary-button focus:ring-1">
+              <Search />
+              <div>
+                <input className="focus:outline-none bg-transparent w-full" type="text" placeholder="Search PageTurner"/>
+              </div>
+            </div>
+            <div style={{borderTop: '1px solid'}}></div>
             <header className="sticky-top flex justify-between items-center p-4 border-b border-primary-container_border_color bg-white">
               <span className="font-bold text-xl text-black">Home</span>
               <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-gray-700 hover:bg-opacity-70 cursor-pointer">
-                <a title="Top Tweets">
-                  <TopTIcon />
-                </a>
               </div>
             </header>
             <div className="flex space-x-4 px-5 py-2 border-b border-primary-container_border_color">
