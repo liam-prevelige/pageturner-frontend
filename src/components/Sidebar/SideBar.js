@@ -1,13 +1,13 @@
 import React from 'react';
-import {TwitterIcon, HomeIcon, GroupIcon, BookMarksIcon, ListIcon, NotificationsIcon, ProfileIcon} from '../../assets/Icons';
+import {BookIcon, HomeIcon, GroupIcon, BookMarksIcon, ListIcon, NotificationsIcon, ProfileIcon} from '../../assets/Icons';
 
 export const SideBar = () => {
   return (
     <>
       <div className="flex flex-col w-275 justify-between px-3 bg-white">
         <div className='sticky top-0'>
-          <div className="flex items-center justify-center w-12 h-12 rounded-full transform transition-colors duration-2 hover:bg-primary-twıtter_ıcon hover:bg-opacity-70 mt-1 mb-5 cursor-pointer">
-            <TwitterIcon />
+          <div className="flex items-center justify-center w-20 h-20 rounded-full transform transition-colors duration-2 hover:bg-primary-twıtter_ıcon hover:bg-opacity-70 mt-3 mb-3 cursor-pointer">
+            <BookIcon />
           </div>
           <nav className="mb-5 text-xl text-black">
             <ul>
