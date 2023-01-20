@@ -13,7 +13,7 @@ import {SideBar} from './components/Sidebar/SideBar';
 import {LandingPage} from './components/LandingPage';
 import {People} from './components/People';
 import {Feed} from './components/Feed';
-import {Profile} from './components/Profile';
+import {ProfilePage} from './components/ProfilePage';
 // import Auth from './components/Auth/Auth';
 import {BookInfo} from './components/BookInfo';
 import {HomePage} from './components/HomePage';
@@ -40,7 +40,7 @@ const App = () => {
             <Route path="/feed" element={<Feed />} />
             <Route path="/people" element={<People />} />
             <Route path="/home" element={<LandingPage />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/book-info/*" element={<BookInfo />} />
             <Route path="/thread/*" element={<ThreadView />} />
           </Routes>
