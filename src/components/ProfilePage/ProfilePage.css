@@ -1,0 +1,7 @@
+/* TODO: Convert into .jsx file */
+.profile-head {
+	/* width: 105%; */
+	display: grid;
+	grid-template-columns: 0.5fr 1fr 9fr;
+	border-bottom: 1px var(--accent);
+}
