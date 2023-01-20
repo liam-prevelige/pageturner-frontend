@@ -3,7 +3,7 @@ import {React} from 'react';
 import {BackNav} from '../BackNav/BackNav';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
-import {Col} from 'react-bootstrap';
+import {ThreadView} from '../ThreadView/ThreadView';
 
 // export const Banner = styled.div`
 //   flex-shrink: 0;
@@ -54,26 +54,22 @@ export const ProfilePage = () => {
                     <TabPanels>
                       <TabPanel>
                         <ScrollMenu style={{overflowY: 'auto'}}>
-                          <Col>
-                          </Col>
+                          <ThreadView commentId={'a'}/>
                         </ScrollMenu>
                       </TabPanel>
                       <TabPanel>
                         <ScrollMenu style={{overflowX: 'auto'}}>
-                          <Col style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
-                          </Col>
+                          <ThreadView commentId={'a'}/>
                         </ScrollMenu>
                       </TabPanel>
                       <TabPanel>
                         <ScrollMenu style={{overflowX: 'auto'}}>
-                          <Col style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
-                          </Col>
+                          <ThreadView commentId={'a'}/>
                         </ScrollMenu>
                       </TabPanel>
                       <TabPanel>
                         <ScrollMenu style={{overflowX: 'auto'}}>
-                          <Col style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
-                          </Col>
+                          <ThreadView commentId={'a'}/>
                         </ScrollMenu>
                       </TabPanel>
                     </TabPanels>
