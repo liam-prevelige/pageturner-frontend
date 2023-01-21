@@ -12,7 +12,7 @@ export const Parent = ({commentData}) => {
 
   return (
     <>
-      <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color bg-slate-200' onClick={(e) => loadParentThread(e, commentData)}>
+      <div className='flex space-x-3 px-4 py-3 mt-2 rounded border-primary-container_border_color bg-slate-200' onClick={(e) => loadParentThread(e, commentData)}>
         <div className="flex-1">
           <div className="flex items-center text-sm space-x-2">
             <span className="ml-1 font-bold text-black">{commentData.displayName}</span>
