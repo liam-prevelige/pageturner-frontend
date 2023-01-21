@@ -1,5 +1,5 @@
 import {React} from 'react';
-import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon, ProfileIcon} from '../../assets/Icons';
+import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon} from '../../assets/Icons';
 
 export const SideBar = () => {
   const path = sessionStorage.getItem('path');
@@ -43,7 +43,9 @@ export const SideBar = () => {
               </a>
               <a href={profilePath}>
                 <div className={path===profilePath ? activeClassName : notActiveClassName} onClick={() => setPath('/profile')}>
-                  <ProfileIcon />
+                  <div className="h-7 w-7">
+                    <img className="rounded-full" src="https://www.billionsinstitute.com/wp-content/uploads/2014/10/Jennifer-Circle-Headshot-300X300.png" />
+                  </div>
                   <li className="ml-4 sidebar-text">Profile</li>
                 </div>
               </a>
@@ -52,21 +54,6 @@ export const SideBar = () => {
           <button className="bg-primary-button text-white rounded-full text-xl shadow-lg py-3 px-8 w-90 transform transition-colors duration-500 hover:bg-primary-button_hover font-bold sidebar-text-bold">
                         Share
           </button>
-          <div className="flex justify-between items-center mb-7 mt-40 hover:bg-primary-navi_hover hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2">
-            <div className="h-11 w-11">
-              <img className="rounded-full" src="https://www.billionsinstitute.com/wp-content/uploads/2014/10/Jennifer-Circle-Headshot-300X300.png" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-md text-black">Adem Can Certel</span>
-              <span className="text-primary-profile_color text-sm">@ademcancertell</span>
-            </div>
-
-            <div className="flex space-x-1">
-              <div className="w-1 h-1 bg-white rounded-full" />
-              <div className="w-1 h-1 bg-white rounded-full" />
-              <div className="w-1 h-1 bg-white rounded-full" />
-            </div>
-          </div>
         </div>
       </div>
     </>

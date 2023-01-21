@@ -15,7 +15,7 @@ export const Comment = ({commentData, parentData}) => {
 
   return (
     <>
-      <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color bg-white' onClick={(e) => loadThread(e, commentData)}>
+      <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color bg-white'>
         <img src={commentData.avatar} className="w-11 h-11 rounded-full" />
         <div className="flex-1">
           <div className="flex items-center text-sm space-x-2">
@@ -23,7 +23,7 @@ export const Comment = ({commentData, parentData}) => {
             <span className="ml-2 text-primary-gray_colors">@{commentData.username}</span>
             <span className="text-primary-gray_colors">2h</span>
           </div>
-          <div className="ml-1">
+          <div className="ml-1" onClick={(e) => loadThread(e, commentData)}>
             <div className="items-center text-black overflow-hidden">
               {commentData.text}
               {/* Created parent class vs using comment again to prevent issues with recursive calls */}
