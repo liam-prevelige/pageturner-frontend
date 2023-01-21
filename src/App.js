@@ -31,25 +31,26 @@ const App = () => {
   //   window.location.reload();
   // };
   return (
-    <div className="min-h-screen mx-auto max-w-7xl flex">
-      <SideBar/>
-      <main className="flex-1 flex flex-col border-r border-l border-b border-primary-container_border_color bg-white">
-        <Router>
-          <Routes>
-            <Route exact path="/" element={<HomePage />} />
-            <Route path="/feed" element={<Feed />} />
-            <Route path="/people" element={<People />} />
-            <Route path="/home" element={<LandingPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/book-info/*" element={<BookInfo />} />
-            <Route path="/thread/*" element={<ThreadView />} />
-          </Routes>
-        </Router>
-      </main>
-      <aside className="w-350">
-        <RightBar/>
-      </aside>
-      {/* <Router>
+    <div className="bg-white">
+      <div className="min-h-screen mx-auto max-w-7xl flex bg-white">
+        <SideBar/>
+        <main className="flex-1 flex flex-col bg-white">
+          <Router>
+            <Routes>
+              <Route exact path="/" element={<HomePage />} />
+              <Route path="/feed" element={<Feed />} />
+              <Route path="/people" element={<People />} />
+              <Route path="/home" element={<LandingPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/book-info/*" element={<BookInfo />} />
+              <Route path="/thread/*" element={<ThreadView />} />
+            </Routes>
+          </Router>
+        </main>
+        <aside className="w-350">
+          <RightBar/>
+        </aside>
+        {/* <Router>
         <Navbar className="variant-light expand-lg navbar-custom">
           <Navbar.Brand href="/">
           Pageturner</Navbar.Brand>
@@ -69,6 +70,7 @@ const App = () => {
           </Navbar.Collapse>
         </Navbar>
       </Router > */}
+      </div>
     </div>
   );
 };

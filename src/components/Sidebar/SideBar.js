@@ -1,5 +1,5 @@
 import React from 'react';
-import {BookIcon, HomeIcon, GroupIcon, BookMarksIcon, ListIcon, NotificationsIcon, ProfileIcon} from '../../assets/Icons';
+import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon, ProfileIcon} from '../../assets/Icons';
 
 export const SideBar = () => {
   return (
@@ -21,18 +21,6 @@ export const SideBar = () => {
                 <div className="flex items-center hover:bg-primary-navi_hover hover:bg-opacity-70 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2">
                   <GroupIcon />
                   <li className="ml-4 sidebar-text font-regular">Book Clubs</li>
-                </div>
-              </a>
-              <a href="">
-                <div className="flex items-center hover:bg-primary-navi_hover hover:bg-opacity-70 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2">
-                  <ListIcon />
-                  <li className="ml-4 sidebar-text font-regular">Reading Lists</li>
-                </div>
-              </a>
-              <a href="">
-                <div className="flex items-center hover:bg-primary-navi_hover hover:bg-opacity-70 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2">
-                  <BookMarksIcon />
-                  <li className="ml-4 sidebar-text font-regular">Bookmarks</li>
                 </div>
               </a>
               <a href="">

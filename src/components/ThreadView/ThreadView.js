@@ -60,7 +60,7 @@ export const ThreadView = ({commentId}) => {
   return (
     <div>
       <Comment commentData={comments[commentId]} parentData={comments[comments[commentId].pid]}/>
-      <div style={{borderTop: '1px solid'}}></div>
+      <div className="border-b ml-3 mr-3 border-slate-300"></div>
     </div>
   );
 };

@@ -12,8 +12,8 @@ import {ProfileTabs} from './ProfileTabs';
 
 export const ProfilePage = () => {
   return (
-    <div className="min-h-screen mx-auto max-w-7xl flex">
-      <main className="flex flex-col border-r border-l border-b border-primary-container_border_color">
+    <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+      <main className="flex flex-col">
         <>
           <div className="profile">
             <div className="profile-info">
