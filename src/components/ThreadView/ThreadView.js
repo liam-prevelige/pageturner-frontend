@@ -1,7 +1,7 @@
 import {React} from 'react';
 import {Comment} from '../Comment/Comment';
 import {useLocation} from 'react-router-dom';
-import {getComments} from '../../api';
+import {getComments, getComment} from '../../api';
 import ReactLoading from 'react-loading';
 
 // const comments = {
@@ -67,13 +67,19 @@ export const ThreadView = ({commentId}) => {
     const queryParams = new URLSearchParams(search);
     commentId = queryParams.get('commentId');
   }
+
+  // TODO should also be able to get the original comment from the backend, not just its children
+  // Would be of form const parent = getComment(commentId);
   const comments = getComments(commentId);
+  const parent = getComment(commentId);
 
   // Currently displays one comment, including the "parent" aka what is being replied to
   // SOMETIMES I want to display the replied comment at the TOP, with many children underneath
   // OTHER TIMES (homepage) I want to display a variety of comments, with their parents done within them
+  // Ensure "data" works and we don't need to unwrap and rewrap
   return (
     <div>
+      <Comment commentData={parent[0]}/>
       {comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data) =>
         (<Comment key={index} commentData={data}/>
         ))

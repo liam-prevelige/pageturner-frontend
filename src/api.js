@@ -350,3 +350,24 @@ export const getComments = async (pid) => {
 
   return body.comments;
 };
+
+// Given a certain id, I want to get all *children* of that comment (and the original comment)
+export const getComment = async (id) => {
+  const response = await fetch(`${API_URL}/coomments/get_comment`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: {id: id},
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/friends failed');
+  }
+
+  return body.comment;
+};
