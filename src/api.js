@@ -18,6 +18,25 @@ export async function onLogin() {
   // We don't care about the result here
 }
 
+/**
+ * /comments/get_comments
+ *
+ * Gets all comments on the requested parent object
+ *
+ * @param {string} pid - ID of parent
+ */
+export const getComments = async (pid) => {
+  await fetch(`${API_URL}/comments/get_comments`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({pid}),
+  });
+};
+
 // Search for a user based on a given query
 export const searchUsers = async (query) => {
   const response = await fetch(`${API_URL}/user/search/${query}`, {
