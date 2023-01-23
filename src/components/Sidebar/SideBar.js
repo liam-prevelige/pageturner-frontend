@@ -1,14 +1,16 @@
-import {React} from 'react';
+import {React, useState} from 'react';
 import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon} from '../../assets/Icons';
+import {Auth} from '../Auth/Auth';
 
 export const SideBar = () => {
-  const path = sessionStorage.getItem('path');
+  const path = window.location.pathname;
 
   const homePath = '/';
   const profilePath = '/profile';
-
-  const setPath = (path) => {
-    sessionStorage.setItem('path', path);
+  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  console.log(profile);
+  const reloadPageFunc = () => {
+    window.location.reload();
   };
 
   const notActiveClassName = 'flex items-center text-xl text-black font-semibold hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2';
@@ -24,7 +26,7 @@ export const SideBar = () => {
           <nav className="mb-5 text-xl text-black font-semibold">
             <ul>
               <a href={homePath}>
-                <div className={path===homePath ? activeClassName : notActiveClassName} onClick={() => setPath('/')}>
+                <div className={path===homePath ? activeClassName : notActiveClassName}>
                   <HomeIcon />
                   <li className="ml-4 sidebar-text">Home</li>
                 </div>
@@ -42,9 +44,9 @@ export const SideBar = () => {
                 </div>
               </a>
               <a href={profilePath}>
-                <div className={path===profilePath ? activeClassName : notActiveClassName} onClick={() => setPath('/profile')}>
+                <div className={path===profilePath ? activeClassName : notActiveClassName}>
                   <div className="h-7 w-7">
-                    <img className="rounded-full" src="https://www.billionsinstitute.com/wp-content/uploads/2014/10/Jennifer-Circle-Headshot-300X300.png" />
+                    <img className="rounded-full" src={profile.picture} />
                   </div>
                   <li className="ml-4 sidebar-text">Profile</li>
                 </div>
@@ -54,6 +56,11 @@ export const SideBar = () => {
           <button className="bg-primary-button text-white rounded-full text-xl shadow-lg py-3 px-8 w-90 transform transition-colors duration-500 hover:bg-primary-button_hover font-bold sidebar-text-bold">
                         Share
           </button>
+          <div className="mt-5">
+            <Auth triggerReload = {() => {
+              reloadPageFunc();
+            }}/>
+          </div>
         </div>
       </div>
     </>

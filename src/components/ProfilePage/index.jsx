@@ -11,6 +11,13 @@ import {ProfileTabs} from './ProfileTabs';
 // `;
 
 export const ProfilePage = () => {
+  const logout = () => {
+    sessionStorage.removeItem('auth_token');
+    sessionStorage.removeItem('profile');
+    setUser(null);
+    navigate('/');
+    props.triggerReload();
+  };
   return (
     <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
       <main className="flex flex-col">
@@ -25,9 +32,14 @@ export const ProfilePage = () => {
               <div className="relative ml-10">
                 <img className="rounded-full absolute h-40 w-40 -top-20 border-4 border-white" src="https://www.billionsinstitute.com/wp-content/uploads/2014/10/Jennifer-Circle-Headshot-300X300.png" />
               </div>
-              <button className="float-right font-bold wrap-text justify-between mt-3 mr-3 text-primary-button rounded-full shadow-lg justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
-                    Edit Profile
-              </button>
+              <div className="flex flex-col float-right font-bold">
+                <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
+                  Edit Profile
+                </button>
+                <button className="w-24 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={logout}>
+                  Log Out
+                </button>
+              </div>
 
               <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
                 <span className="text-xl font-bold">Adem Can Certel</span>

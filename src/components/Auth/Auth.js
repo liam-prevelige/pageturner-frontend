@@ -14,9 +14,8 @@ import {useLocation, useNavigate} from 'react-router-dom';
 // eslint-disable-next-line
 import jwt_decode from 'jwt-decode';
 import {onLogin} from '../../api';
-import {Button, Row, Col} from 'react-bootstrap';
 
-const Auth = (props) => {
+export const Auth = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -25,14 +24,6 @@ const Auth = (props) => {
   useEffect(() => {
     setUser(JSON.parse(sessionStorage.getItem('profile')));
   }, [location]);
-
-  const logout = () => {
-    sessionStorage.removeItem('auth_token');
-    sessionStorage.removeItem('profile');
-    setUser(null);
-    navigate('/');
-    props.triggerReload();
-  };
 
   const googleSuccess = async (res) => {
     const token = res.credential;
@@ -56,14 +47,7 @@ const Auth = (props) => {
 
   return (
     <div>
-      {user ? <div>
-        <Row>
-          <Col style={{marginTop: '5px'}}><i>Welcome, {user.name}!</i></Col>
-          <Col><Button onClick={logout}>Log Out</Button></Col>
-        </Row>
-      </div> : <GoogleLogin onSuccess={googleSuccess} onError={googleFailure}/>}
+      {!user && <GoogleLogin onSuccess={googleSuccess} onError={googleFailure}/>}
     </div>
   );
 };
-
-export default Auth;
