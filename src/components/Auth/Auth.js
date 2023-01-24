@@ -45,7 +45,7 @@ export const Auth = (props) => {
       console.log('profile', profile);
       sessionStorage.setItem('profile', JSON.stringify(profile));
       navigate('/');
-      props.triggerReload();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
