@@ -27,7 +27,7 @@ export const ProfilePage = () => {
     cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
   };
 
-  const profile = userProfile || fakeProfile;
+  let profile = userProfile || fakeProfile;
   const [newProfile, setNewProfile] = useState(userProfile);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -35,6 +35,11 @@ export const ProfilePage = () => {
   const profilePicInput = useRef(null);
 
   const handleEditProfile = () => {
+    if (isEditMode) {
+      // Save changes
+      sessionStorage.setItem('profile', JSON.stringify(newProfile));
+      profile = newProfile;
+    }
     setIsEditMode(!isEditMode);
   };
 
