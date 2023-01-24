@@ -10,8 +10,24 @@ import {ProfileTabs} from './ProfileTabs';
 //   position: relative;
 // `;
 
+// Fake cover: https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg
+// Fake profile: https://www.billionsinstitute.com/wp-content/uploads/2014/10/Jennifer-Circle-Headshot-300X300.png
+
 export const ProfilePage = () => {
-  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  const userProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+
+  const fakeProfile = {
+    id: 1,
+    tag: 'barackobama',
+    name: 'Barack Obama',
+    bio: 'Hey there, it\'s Barack. Former POTUS, dad, and grandfather. I love books, wrote a couple (you may have heard of \'em), and believe in the power of stories to change the world. Let\'s chat about what we\'re reading!',
+    friends: 1000,
+    following: 100,
+    profilePicture: 'https://mastersofscale.com/wp-content/uploads/sites/2/2021/05/barack_obama-1.jpg',
+    cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
+  };
+
+  const profile = userProfile || fakeProfile;
 
   return (
     <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
@@ -20,12 +36,12 @@ export const ProfilePage = () => {
           <div className="profile">
             <div className="profile-info">
               <div className="profile-head">
-                <BackNav />
+                <BackNav profile={profile}/>
               </div>
-              <img className="h-64 w-full object-cover" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg" />
+              <img className="h-64 w-full object-cover" src={profile.cover} />
 
               <div className="relative ml-10">
-                <img className="rounded-full absolute h-40 w-40 -top-20 border-4 border-white" src="https://www.billionsinstitute.com/wp-content/uploads/2014/10/Jennifer-Circle-Headshot-300X300.png" />
+                <img className="rounded-full absolute h-40 w-40 -top-20 border-4 border-white" src={profile.profilePicture} />
               </div>
               {profile && <div className="flex flex-col float-right font-bold">
                 <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
@@ -34,12 +50,12 @@ export const ProfilePage = () => {
               </div>}
 
               <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
-                <span className="text-xl font-bold">Adem Can Certel</span>
-                <span className="text-base text-slate-500">@ademcancertell</span>
-                <span className="text-base text-black mt-2">{`Hey there, it's Barack. Former POTUS, dad, and grandfather. I love books, wrote a couple (you may have heard of 'em), and believe in the power of stories to change the world. Let's chat about what we're reading!`}</span>
+                <span className="text-xl font-bold">{profile.name}</span>
+                <span className="text-base text-slate-500">@{profile.tag}</span>
+                <span className="text-base text-black mt-2">{profile.description}</span>
                 <div className="flex flex-row space-x-5">
-                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">10</strong> Friends</button>
-                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">30</strong> Following</button>
+                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.friends.length}</strong> Friends</button>
+                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.following.length}</strong> Following</button>
                 </div>
               </div>
             </div>
