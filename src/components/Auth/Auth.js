@@ -20,19 +20,30 @@ export const Auth = (props) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('profile')));
-
+  console.log(user);
   useEffect(() => {
     setUser(JSON.parse(sessionStorage.getItem('profile')));
   }, [location]);
 
+  const logout = () => {
+    sessionStorage.removeItem('auth_token');
+    sessionStorage.removeItem('profile');
+    setUser(null);
+    navigate('/');
+    window.location.reload();
+    console.log(user);
+  };
+
   const googleSuccess = async (res) => {
     const token = res.credential;
-    const userObject = jwt_decode(res.credential);
-
+    // const userObject = jwt_decode(res.credential);
+    // console.log(userObject);
     try {
       sessionStorage.setItem('auth_token', token);
-      sessionStorage.setItem('profile', JSON.stringify(userObject));
-      onLogin();
+
+      const profile = await onLogin();
+      console.log('profile', profile);
+      sessionStorage.setItem('profile', JSON.stringify(profile));
       navigate('/');
       props.triggerReload();
     } catch (error) {
@@ -47,7 +58,12 @@ export const Auth = (props) => {
 
   return (
     <div>
-      {!user && <GoogleLogin onSuccess={googleSuccess} onError={googleFailure}/>}
+      {!user ?
+      <GoogleLogin onSuccess={googleSuccess} onError={googleFailure}/> :
+      <button className="font-bold w-24 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={logout}>
+        Log Out
+      </button>
+      }
     </div>
   );
 };

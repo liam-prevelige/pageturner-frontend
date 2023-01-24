@@ -7,7 +7,7 @@ const API_URL = 'http://localhost:5001';
  * TODO
  */
 export async function onLogin() {
-  await fetch(`${API_URL}/user/on_login`, {
+  const response = await fetch(`${API_URL}/user/on_login`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -15,7 +15,13 @@ export async function onLogin() {
       'Authorization': sessionStorage.getItem('auth_token'),
     },
   });
-  // We don't care about the result here
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /search failed');
+  }
+  console.log(body);
+  return body.result;
 }
 
 // Search for a user based on a given query

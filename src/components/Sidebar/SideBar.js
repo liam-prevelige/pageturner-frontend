@@ -46,7 +46,9 @@ export const SideBar = () => {
               <a href={profilePath}>
                 <div className={path===profilePath ? activeClassName : notActiveClassName}>
                   <div className="h-7 w-7">
-                    <img className="rounded-full" src={profile.picture} />
+                    {profile ? <img className="rounded-full" src={profile.profilePicture} /> :
+                    <img className="rounded-full" src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" />
+                    }
                   </div>
                   <li className="ml-4 sidebar-text">Profile</li>
                 </div>
