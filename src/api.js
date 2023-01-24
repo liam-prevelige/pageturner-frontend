@@ -18,11 +18,36 @@ export async function onLogin() {
 
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to /search failed');
+    throw new Error('Call to /on_login failed');
   }
   console.log(body);
   return body.result;
 }
+
+/**
+ * Updates a profile after being edited
+ *
+ * @param {dict} newProfile - new profile to be set as current user's profile
+ */
+export const updateProfile = async (newProfile) => {
+  console.log('new profile', newProfile);
+  const response = await fetch(`${API_URL}/user/update_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({newProfile}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  console.log('End updateProfile', body.result);
+  return body.result;
+};
 
 /**
  * /comments/get_comments

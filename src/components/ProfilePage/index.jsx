@@ -3,6 +3,7 @@ import {React, useState, useRef} from 'react';
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
+import {updateProfile} from '../../api';
 // export const Banner = styled.div`
 //   flex-shrink: 0;
 //   width: 100%;
@@ -34,11 +35,13 @@ export const ProfilePage = () => {
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
 
-  const handleEditProfile = () => {
+  const handleEditProfile = async () => {
     if (isEditMode) {
-      // Save changes
-      sessionStorage.setItem('profile', JSON.stringify(newProfile));
-      profile = newProfile;
+      const updatedProfile = await updateProfile(newProfile);
+      sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
+      profile = updatedProfile;
+      setNewProfile(updatedProfile);
+      window.location.reload();
     }
     setIsEditMode(!isEditMode);
   };
@@ -53,6 +56,7 @@ export const ProfilePage = () => {
 
   const handleCoverPicChange = (newImage) => {
     const newURL = URL.createObjectURL(newImage);
+    console.log(newURL);
     setNewProfile({...newProfile, cover: newURL});
   };
 
