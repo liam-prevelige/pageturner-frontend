@@ -1,10 +1,15 @@
-import {React} from 'react';
+import {React, useState} from 'react';
 import {ListIcon, Media, Emoji} from '../../assets/Icons';
 
 
 export const ShareBox = () => {
+  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+
   return (
     <>
+      {profile ? <img className="rounded-full h-11 w-11 border border-slate-300 mt-1" src={profile.profilePicture} /> :
+        <img className="rounded-full h-11 w-11 mt-1" src="https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600" />
+      }
       <div className="flex flex-1 flex-col mt-2 text-black">
         <textarea type="text" rows="1" className="bg-white tweet-box w-full outline-none overflow-y-auto flex-1 rounded-xl text-m p-2 resize-none" placeholder="What have you been reading?"/>
         <div className="items-center flex justify-between">
