@@ -23,7 +23,7 @@ export const HomePage = () => {
                 <img className="rounded-full h-11 w-11 mt-1" src="https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600" />
                 <ShareBox />
               </div>
-              <ThreadView commentId={'a'}/>
+              <ThreadView commentId={'63cef967b83ed8c71f06be01'}/>
             </div>
           </>
         </main>
