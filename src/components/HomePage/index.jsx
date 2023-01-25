@@ -20,7 +20,6 @@ export const HomePage = () => {
                 <span className="font-bold text-3xl text-black">Home</span>
               </header>
               <div className="flex space-x-4 px-4 py-2 border-b border-slate-300">
-                <img className="rounded-full h-11 w-11 mt-1" src="https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600" />
                 <ShareBox />
               </div>
               <ThreadView commentId={'a'}/>
