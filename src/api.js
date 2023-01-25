@@ -7,7 +7,7 @@ const API_URL = 'http://localhost:5001';
  * TODO
  */
 export async function onLogin() {
-  await fetch(`${API_URL}/user/on_login`, {
+  const response = await fetch(`${API_URL}/user/on_login`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -15,8 +15,80 @@ export async function onLogin() {
       'Authorization': sessionStorage.getItem('auth_token'),
     },
   });
-  // We don't care about the result here
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /on_login failed');
+  }
+  console.log(body);
+  return body.result;
 }
+
+/**
+ * Updates a profile after being edited
+ *
+ * @param {dict} newProfile - new profile to be set as current user's profile
+ */
+export const updateProfile = async (newProfile) => {
+  console.log('new profile', newProfile);
+  const response = await fetch(`${API_URL}/user/update_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({newProfile}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  console.log('End updateProfile', body.result);
+  return body.result;
+};
+
+/**
+ * /comments/get_comments
+ *
+ * Gets all comments on the requested parent object
+ *
+ * @param {string} pid - ID of parent
+ */
+export const getComments = async (pid) => {
+  await fetch(`${API_URL}/comments/get_comments`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({pid}),
+  });
+};
+
+/**
+ * /comments/postComment
+ *
+ * Gets all comments on the requested parent object
+ * Requires user is logged in
+ *
+ * @param {string} pType - type of parent object to comment on
+ * @param {string} pid - ID of parent object to comment on
+ * @param {string} text - Content of the comment
+ */
+export const postComment = async (pType, pid, text) => {
+  await fetch(`${API_URL}/comments/post_comment`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({pid, pType, text}),
+  });
+};
 
 // Search for a user based on a given query
 export const searchUsers = async (query) => {
