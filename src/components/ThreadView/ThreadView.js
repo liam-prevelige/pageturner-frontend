@@ -5,6 +5,7 @@ import {getComments, getComment} from '../../api';
 import ReactLoading from 'react-loading';
 import {useEffect, useState} from 'react';
 
+import {BackNav} from '../BackNav/BackNav';
 
 // Is this just a single view, or is it the whole feed
 // If whole feed, I want the parent to be "commentId." Right now that is the child
@@ -48,6 +49,7 @@ export const ThreadView = ({commentId}) => {
   // Ensure "data" works and we don't need to unwrap and rewrap
   return (
     <div>
+      <BackNav />
       {(!parent || !comments) ? <ReactLoading type="spin" color="black" /> : <Comment commentData={comments[0]} parentData={parent.comments[0]}/>}
       {/* {!comments || comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data, index) =>
         (<div key={index}>
