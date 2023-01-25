@@ -8,7 +8,7 @@ export const SideBar = () => {
   const homePath = '/';
   const profilePath = '/profile';
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-  console.log(profile);
+
   const reloadPageFunc = () => {
     window.location.reload();
   };
@@ -45,9 +45,9 @@ export const SideBar = () => {
               </a>
               <a href={profilePath}>
                 <div className={path===profilePath ? activeClassName : notActiveClassName}>
-                  <div className="h-7 w-7">
-                    {profile ? <img className="rounded-full" src={profile.profilePicture} /> :
-                    <img className="rounded-full" src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" />
+                  <div className="rounded-full h-7 w-7 border border-slate-300">
+                    {profile ? <img className="rounded-full h-7 w-7" src={profile.profilePicture} /> :
+                    <img className="rounded-full h-7 w-7" src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" />
                     }
                   </div>
                   <li className="ml-4 sidebar-text">Profile</li>

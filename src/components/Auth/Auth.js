@@ -20,7 +20,6 @@ export const Auth = (props) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('profile')));
-  console.log(user);
   useEffect(() => {
     setUser(JSON.parse(sessionStorage.getItem('profile')));
   }, [location]);
@@ -31,7 +30,6 @@ export const Auth = (props) => {
     setUser(null);
     navigate('/');
     window.location.reload();
-    console.log(user);
   };
 
   const googleSuccess = async (res) => {
@@ -42,7 +40,6 @@ export const Auth = (props) => {
       sessionStorage.setItem('auth_token', token);
 
       const profile = await onLogin();
-      console.log('profile', profile);
       sessionStorage.setItem('profile', JSON.stringify(profile));
       navigate('/');
       window.location.reload();
@@ -52,8 +49,8 @@ export const Auth = (props) => {
   };
 
   const googleFailure = (error) => {
-    console.log(error);
     console.log('Google Sign In was unsuccessful. Try again later');
+    console.log(error);
   };
 
   return (

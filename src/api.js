@@ -20,7 +20,6 @@ export async function onLogin() {
   if (!response.ok) {
     throw new Error('Call to /on_login failed');
   }
-  console.log(body);
   return body.result;
 }
 
@@ -30,7 +29,6 @@ export async function onLogin() {
  * @param {dict} newProfile - new profile to be set as current user's profile
  */
 export const updateProfile = async (newProfile) => {
-  console.log('new profile', newProfile);
   const response = await fetch(`${API_URL}/user/update_profile`, {
     method: 'POST',
     headers: {
@@ -45,7 +43,29 @@ export const updateProfile = async (newProfile) => {
   if (!response.ok) {
     throw new Error('Call to /update_profile failed');
   }
-  console.log('End updateProfile', body.result);
+  return body.result;
+};
+
+/**
+ * Fetches profile information
+ *
+ * @param {string} uid - new profile to be set as current user's profile
+ */
+export const getProfile = async (uid) => {
+  const response = await fetch(`${API_URL}/user/get_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_profile failed');
+  }
   return body.result;
 };
 
@@ -191,8 +211,6 @@ export const postBookReview = async (user, isbn, text) => {
       .catch((error) => {
         console.error('Error:', error);
       });
-
-  console.log('reached api');
 };
 
 // Returns the top rated books stored in the database
@@ -288,7 +306,6 @@ export const getRecs = async (isbn) => {
   if (!response.ok) {
     throw new Error('Call to /recommendations failed');
   }
-  console.log(body);
   return body;
 };
 
@@ -385,7 +402,6 @@ export const getFriends = async () => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComments = async (pid) => {
-  console.log('pid', pid);
   const response = await fetch(`${API_URL}/comments/get_comments`, {
     method: 'POST',
     headers: {
@@ -401,14 +417,11 @@ export const getComments = async (pid) => {
   if (!response.ok) {
     throw new Error('Call to /user/friends failed');
   }
-  console.log('body', body.comments);
   return body.comments;
 };
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComment = async (id) => {
-  console.log('id', id);
-
   const response = await fetch(`${API_URL}/comments/get_comment`, {
     method: 'POST',
     headers: {

@@ -1,9 +1,11 @@
-import {React, useState, useRef} from 'react';
+import {React, useState, useRef, useEffect} from 'react';
 
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
 import {updateProfile} from '../../api';
+import {getProfile} from '../../api';
+
 // export const Banner = styled.div`
 //   flex-shrink: 0;
 //   width: 100%;
@@ -16,7 +18,10 @@ import {updateProfile} from '../../api';
 // Fake profile: https://www.billionsinstitute.com/wp-content/uploads/2014/10/Jennifer-Circle-Headshot-300X300.png
 
 export const ProfilePage = () => {
-  const userProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  const search = window.location.search;
+  const queryParams = new URLSearchParams(search);
+  const isMyProfile = !queryParams.has('uid');
+
   const fakeProfile = {
     id: 1,
     tag: 'barackobama',
@@ -28,8 +33,34 @@ export const ProfilePage = () => {
     cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
   };
 
-  let profile = userProfile || fakeProfile;
-  const [newProfile, setNewProfile] = useState(userProfile);
+  const [profile, setProfile] = useState(fakeProfile);
+
+  // let profile = fakeProfile;
+
+  // If we're on our own profile tab and the user is logged in, retrieve profile data from storage
+  // Otherwise, use fake profile for display purposes
+  if (isMyProfile) {
+    const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+    if (storedProfile) { // If storedProfile isn't null, use profile from storage
+      setProfile(storedProfile);
+    }
+  }
+
+  const retrieveProfileFromUid = async () => {
+    const uid = queryParams.get('uid');
+    const retrievedProfile = await getProfile(uid);
+    if (retrievedProfile) {
+      setProfile(retrievedProfile);
+    }
+  };
+
+  useEffect(() => {
+    if (!isMyProfile) {
+      retrieveProfileFromUid();
+    }
+  }, []);
+
+  const [newProfile, setNewProfile] = useState(profile);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const coverPicInput = useRef(null);
@@ -42,6 +73,8 @@ export const ProfilePage = () => {
       profile = updatedProfile;
       setNewProfile(updatedProfile);
       window.location.reload();
+    } else {
+      setNewProfile(profile);
     }
     setIsEditMode(!isEditMode);
   };
@@ -110,7 +143,6 @@ export const ProfilePage = () => {
                         className='invisible'
                         ref={coverPicInput}
                         onChange={(event) => {
-                          console.log(event.target.files[0]);
                           handleCoverPicChange(event.target.files[0]);
                         }}
                       />
@@ -133,7 +165,6 @@ export const ProfilePage = () => {
                         className='invisible'
                         ref={profilePicInput}
                         onChange={(event) => {
-                          console.log(event.target.files[0]);
                           handleProfilePicChange(event.target.files[0]);
                         }}
                       />
@@ -141,10 +172,15 @@ export const ProfilePage = () => {
                   )
                 }
               </div>
-              {profile && <div className="flex flex-col float-right font-bold">
-                <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+              {profile &&
+              <div className="flex flex-col float-right font-bold">
+                {isMyProfile ?
+                (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
                   {isEditMode ? 'Save Changes' : 'Edit Profile'}
-                </button>
+                </button>) :
+                (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
+                  Add Friend
+                </button>)}
               </div>}
 
               <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">

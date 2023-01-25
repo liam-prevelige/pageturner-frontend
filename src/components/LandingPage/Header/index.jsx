@@ -18,7 +18,6 @@ export const Header = () => {
   const [search, setSearch] = useState('');
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
-    console.log('value is:', event.target.value);
   };
 
   const navigate = useNavigate();
