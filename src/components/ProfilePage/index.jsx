@@ -54,6 +54,10 @@ export const ProfilePage = () => {
     setNewProfile({...newProfile, tag: e.target.value});
   };
 
+  const handleDescriptionChange = (e) => {
+    setNewProfile({...newProfile, description: e.target.value});
+  };
+
   // TODO: Use variable to remove duplicate code for both images
   const handleCoverPicChange = (newImage) => {
     // Convert image to base64 encoded binary data and save in newProfile
@@ -62,7 +66,6 @@ export const ProfilePage = () => {
     reader.onloadend = () => {
       const base64Image = reader.result;
       setNewProfile({...newProfile, cover: base64Image});
-      console.log(newProfile);
     };
     reader.readAsDataURL(file);
   };
@@ -161,7 +164,15 @@ export const ProfilePage = () => {
                     value={newProfile.tag}
                     onChange={handleTagChange}/>
                 }
-                <span className="text-base text-black mt-2">{profile.description}</span>
+                {!isEditMode ?
+                  <span className="text-base text-black mt-2">{profile.description}</span> :
+                  <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                    type="text"
+                    placeholder={profile.description}
+                    value={newProfile.description}
+                    onChange={handleDescriptionChange}/>
+                }
+
                 <div className="flex flex-row space-x-5">
                   <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.friends.length}</strong> Friends</button>
                   <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.following.length}</strong> Following</button>
