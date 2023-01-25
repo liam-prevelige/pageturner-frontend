@@ -1,21 +1,37 @@
-import {React} from 'react';
+import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Reply, Retweet, Like, Share} from '../../assets/Icons';
 import {Parent} from './Parent';
+import {getProfile} from '../../api';
 
-export const Comment = ({commentData, parentData}) => {
+export const Comment = ({parentData, commentData}) => {
   console.log('In Comment.js with commentData: ', commentData);
   const navigate = useNavigate();
+
+  const [commentProfileData, setProfileData] = useState({
+    profilePicture: 'whatever',
+  });
 
   const loadThread = (e, clickedCommentData) => {
     const path = `/thread?commentId=${clickedCommentData.commentId}`;
     navigate(path);
   };
 
+  const getUserData = async (uid) => {
+    const profile = await getProfile(uid);
+    console.log('profile', profile);
+    setProfileData(profile);
+  };
+
+  useEffect(() => {
+    console.log('commentData!', commentData);
+    getUserData(commentData.uid);
+  }, []);
+
   return (
     <>
       <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color bg-white'>
-        <img src={commentData.avatar} className="w-11 h-11 rounded-full" />
+        <img src={commentProfileData.profilePicture} className="w-11 h-11 rounded-full" />
         <div className="flex-1">
           <div className="flex items-center text-sm space-x-2">
             <span className="ml-1 font-bold text-black">{commentData.displayName}</span>

@@ -7,7 +7,7 @@ export const ShareBox = () => {
 
   return (
     <>
-      {profile ? <img className="rounded-full h-11 w-11 mt-1" src={profile.profilePicture} /> :
+      {profile ? <img className="rounded-full h-11 w-11 border border-slate-300 mt-1" src={profile.profilePicture} /> :
         <img className="rounded-full h-11 w-11 mt-1" src="https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600" />
       }
       <div className="flex flex-1 flex-col mt-2 text-black">

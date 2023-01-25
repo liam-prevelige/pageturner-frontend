@@ -4,6 +4,7 @@ import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
 import {updateProfile} from '../../api';
+
 // export const Banner = styled.div`
 //   flex-shrink: 0;
 //   width: 100%;

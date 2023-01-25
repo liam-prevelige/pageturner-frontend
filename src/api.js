@@ -50,6 +50,29 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
+ * Fetches profile information
+ *
+ * @param {string} uid - new profile to be set as current user's profile
+ */
+export const getProfile = async (uid) => {
+  const response = await fetch(`${API_URL}/user/get_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_profile failed');
+  }
+  return body.result;
+};
+
+/**
  * /comments/postComment
  *
  * Gets all comments on the requested parent object
