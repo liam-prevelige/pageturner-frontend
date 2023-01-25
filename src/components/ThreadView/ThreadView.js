@@ -1,56 +1,10 @@
 import {React} from 'react';
 import {Comment} from '../Comment/Comment';
-import {useLocation} from 'react-router-dom';
+// import {useLocation} from 'react-router-dom';
 import {getComments, getComment} from '../../api';
 import ReactLoading from 'react-loading';
+import {useEffect, useState} from 'react';
 
-// const comments = {
-//   'a': {
-//     commentId: 'a',
-//     uid: '1',
-//     displayName: 'John Doe',
-//     username: 'johndoe',
-//     avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
-//     text: 'First post: this is a post about my favorite reading list.',
-//     metadata: {
-//       likes: 52,
-//       replies: 102,
-//       retweets: 10,
-//       timestamp: '2021-05-01T00:00:00.000Z',
-//     },
-//     pid: 'b',
-//   },
-//   'b': {
-//     commentId: 'b',
-//     uid: '2',
-//     displayName: 'Not John Doe',
-//     username: 'notjohndoe',
-//     avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
-//     text: 'Second post: this is a post about my least favorite reading list.',
-//     metadata: {
-//       likes: 10,
-//       replies: 20,
-//       retweets: 30,
-//       timestamp: '2021-05-01T00:00:00.000Z',
-//     },
-//     pid: 'c',
-//   },
-//   'c': {
-//     commentId: 'c',
-//     uid: '3',
-//     displayName: 'Not Not John Doe',
-//     username: 'notnotjohndoe',
-//     avatar: 'https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600',
-//     text: 'Third post: this is a post about my middle favorite reading list.',
-//     metadata: {
-//       likes: 50,
-//       replies: 30,
-//       retweets: 20,
-//       timestamp: '2021-05-01T00:00:00.000Z',
-//     },
-//     pid: 'a',
-//   },
-// };
 
 // Is this just a single view, or is it the whole feed
 // If whole feed, I want the parent to be "commentId." Right now that is the child
@@ -61,17 +15,27 @@ import ReactLoading from 'react-loading';
 // TODO: Include that child comment at the top of the feed
 // getComments on the backend returns all children of a given object
 // TODO: Right now, getComments won't return the parent comment with the others
-export const ThreadView = ({commentId}) => {
+export const ThreadView = async ({commentId}) => {
   if (!commentId) {
-    const search = useLocation().search;
+    const search = window.location.search;
     const queryParams = new URLSearchParams(search);
     commentId = queryParams.get('commentId');
   }
 
-  // TODO should also be able to get the original comment from the backend, not just its children
-  // Would be of form const parent = getComment(commentId);
-  const comments = getComments(commentId);
-  const parent = getComment(commentId);
+  const [comments, setComments] = useState([]);
+  const [parent, setParent] = useState(null);
+
+  const retrieveComments = async () => {
+    setParent(await getComment(commentId));
+    setComments(await getComments(commentId));
+  };
+
+  useEffect(() => {
+    retrieveComments();
+  }, []);
+
+  console.log(comments);
+  console.log(parent);
 
   // Currently displays one comment, including the "parent" aka what is being replied to
   // SOMETIMES I want to display the replied comment at the TOP, with many children underneath
@@ -79,12 +43,14 @@ export const ThreadView = ({commentId}) => {
   // Ensure "data" works and we don't need to unwrap and rewrap
   return (
     <div>
-      <Comment commentData={parent[0]}/>
-      {comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data) =>
-        (<Comment key={index} commentData={data}/>
+      {!parent ? <ReactLoading type="spin" color="black" /> : <Comment commentData={parent}/>}
+      {!comments || comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data) =>
+        (<div key={index}>
+          <Comment commentData={data}/>
+          <div className="border-b ml-3 mr-3 border-slate-300"></div>
+        </div>
         ))
       }
-      <div className="border-b ml-3 mr-3 border-slate-300"></div>
     </div>
 
   );

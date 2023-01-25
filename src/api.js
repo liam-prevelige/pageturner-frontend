@@ -50,25 +50,6 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
- * /comments/get_comments
- *
- * Gets all comments on the requested parent object
- *
- * @param {string} pid - ID of parent
- */
-export const getComments = async (pid) => {
-  await fetch(`${API_URL}/comments/get_comments`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
-    },
-    body: JSON.stringify({pid}),
-  });
-};
-
-/**
  * /comments/postComment
  *
  * Gets all comments on the requested parent object
@@ -404,7 +385,7 @@ export const getFriends = async () => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComments = async (pid) => {
-  const response = await fetch(`${API_URL}/coomments/get_comments`, {
+  const response = await fetch(`${API_URL}/comments/get_comments`, {
     method: 'POST',
     headers: {
       'Accept': 'application.json',
@@ -412,7 +393,7 @@ export const getComments = async (pid) => {
       'Authorization': sessionStorage.getItem('auth_token'),
     },
     cache: 'default',
-    body: {pid: pid},
+    body: JSON.stringify({pid: pid}),
   });
 
   const body = await response.json();
@@ -425,7 +406,7 @@ export const getComments = async (pid) => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComment = async (id) => {
-  const response = await fetch(`${API_URL}/coomments/get_comment`, {
+  const response = await fetch(`${API_URL}/comments/get_comment`, {
     method: 'POST',
     headers: {
       'Accept': 'application.json',
@@ -433,7 +414,7 @@ export const getComment = async (id) => {
       'Authorization': sessionStorage.getItem('auth_token'),
     },
     cache: 'default',
-    body: {id: id},
+    body: JSON.stringify({_id: id}),
   });
 
   const body = await response.json();
