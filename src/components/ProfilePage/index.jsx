@@ -54,15 +54,28 @@ export const ProfilePage = () => {
     setNewProfile({...newProfile, tag: e.target.value});
   };
 
+  // TODO: Use variable to remove duplicate code for both images
   const handleCoverPicChange = (newImage) => {
-    const newURL = URL.createObjectURL(newImage);
-    console.log(newURL);
-    setNewProfile({...newProfile, cover: newURL});
+    // Convert image to base64 encoded binary data and save in newProfile
+    const file = newImage;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      setNewProfile({...newProfile, cover: base64Image});
+      console.log(newProfile);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleProfilePicChange = (newImage) => {
-    const newURL = URL.createObjectURL(newImage);
-    setNewProfile({...newProfile, profilePicture: newURL});
+    // Convert image to base64 encoded binary data and save in newProfile
+    const file = newImage;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      setNewProfile({...newProfile, profilePicture: base64Image});
+    };
+    reader.readAsDataURL(file);
   };
 
   const triggerClick = (input) => {
