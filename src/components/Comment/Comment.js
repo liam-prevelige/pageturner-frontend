@@ -3,22 +3,26 @@ import {useNavigate} from 'react-router-dom';
 import {Reply, Retweet, Like, Share} from '../../assets/Icons';
 import {Parent} from './Parent';
 import {getProfile} from '../../api';
+import {getComment} from '../../api';
 
-export const Comment = ({parentData, commentData}) => {
+export const Comment = ({commentId, parentData}) => {
   const navigate = useNavigate();
 
-  const [commentProfileData, setProfileData] = useState({
-    profilePicture: 'whatever',
-  });
+  const [commentProfileData, setProfileData] = useState(null);
+  const [commentData, setCommentData] = useState(null);
 
   const loadThread = (e, clickedCommentData) => {
-    const path = `/thread?commentId=${clickedCommentData.commentId}`;
+    const path = `/thread?commentId=${clickedCommentData._id}`;
     navigate(path);
   };
 
-  const getUserData = async (uid) => {
-    const profile = await getProfile(uid);
+  const getData = async (uid) => {
+    const comment = await getComment(commentId);
+    console.log(comment);
+    const profile = await getProfile(comment.uid);
+
     setProfileData(profile);
+    setCommentData(comment);
   };
 
   const loadUserProfile = (uid) => {
@@ -27,12 +31,12 @@ export const Comment = ({parentData, commentData}) => {
   };
 
   useEffect(() => {
-    getUserData(commentData.uid);
+    getData(commentId);
   }, []);
 
   return (
     <>
-      <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color bg-white'>
+      {commentProfileData && commentData && (<div className='flex space-x-3 px-4 py-3 border-primary-container_border_color bg-white'>
         <img src={commentProfileData.profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(commentProfileData._id)} />
         <div className="flex-1">
           <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadUserProfile(commentProfileData._id)}>
@@ -77,7 +81,7 @@ export const Comment = ({parentData, commentData}) => {
             </ul>
           </div>
         </div>
-      </div>
+      </div>)}
     </>
   );
 };

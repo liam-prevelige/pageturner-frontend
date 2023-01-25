@@ -20,7 +20,7 @@ export const Parent = ({commentData}) => {
 
   const loadParentThread = (e, clickedCommentData) => {
     e.stopPropagation(); // otherwise comment component registers a click as it's own
-    const path = `/thread?commentId=${clickedCommentData.commentId}`;
+    const path = `/thread?commentId=${clickedCommentData._id}`;
     navigate(path);
   };
 

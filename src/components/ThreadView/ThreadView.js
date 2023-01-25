@@ -44,7 +44,7 @@ export const ThreadView = ({commentId}) => {
   return (
     <div>
       <BackNav />
-      {(!parent || !comments) ? <ReactLoading type="spin" color="black" /> : <Comment commentData={comments[0]} parentData={parent.comments[0]}/>}
+      {(!parent || !comments) ? <ReactLoading type="spin" color="black" /> : <Comment commentId={commentId} parentData={parent.comments[0]}/>}
       {/* {!comments || comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data, index) =>
         (<div key={index}>
           <Comment commentData={data}/>
