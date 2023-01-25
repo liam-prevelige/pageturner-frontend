@@ -49,11 +49,9 @@ export const ProfilePage = () => {
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
     const retrievedProfile = await getProfile(uid);
-    console.log('retrievedProfile: ', retrievedProfile);
     if (retrievedProfile) {
       setProfile(retrievedProfile);
     }
-    console.log('profile: ', profile);
   };
 
   useEffect(() => {
