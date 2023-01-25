@@ -5,7 +5,6 @@ import {FaArrowLeft} from 'react-icons/fa';
 
 export const BackNav = ({profile}) => {
   const navigate = useNavigate();
-  console.log((window.location.pathname!='/'));
   return (
     <>
       {(window.location.pathname!='/') && (<div className="flex flex-row m-2">

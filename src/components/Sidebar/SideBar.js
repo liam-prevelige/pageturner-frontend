@@ -8,7 +8,7 @@ export const SideBar = () => {
   const homePath = '/';
   const profilePath = '/profile';
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-  console.log(profile);
+
   const reloadPageFunc = () => {
     window.location.reload();
   };

@@ -5,7 +5,6 @@ import {Parent} from './Parent';
 import {getProfile} from '../../api';
 
 export const Comment = ({parentData, commentData}) => {
-  console.log('In Comment.js with commentData: ', commentData);
   const navigate = useNavigate();
 
   const [commentProfileData, setProfileData] = useState({
@@ -19,26 +18,29 @@ export const Comment = ({parentData, commentData}) => {
 
   const getUserData = async (uid) => {
     const profile = await getProfile(uid);
-    console.log('profile', profile);
     setProfileData(profile);
   };
 
+  const loadUserProfile = (uid) => {
+    const path = `/profile?uid=${uid}`;
+    navigate(path);
+  };
+
   useEffect(() => {
-    console.log('commentData!', commentData);
     getUserData(commentData.uid);
   }, []);
 
   return (
     <>
       <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color bg-white'>
-        <img src={commentProfileData.profilePicture} className="w-11 h-11 rounded-full" />
+        <img src={commentProfileData.profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(commentProfileData._id)} />
         <div className="flex-1">
-          <div className="flex items-center text-sm space-x-2">
-            <span className="ml-1 font-bold text-black">{commentData.displayName}</span>
-            <span className="ml-2 text-primary-gray_colors">@{commentData.username}</span>
+          <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadUserProfile(commentProfileData._id)}>
+            <span className="ml-1 font-bold text-black">{commentProfileData.name}</span>
+            <span className="ml-2 text-primary-gray_colors">@{commentProfileData.tag}</span>
             <span className="text-primary-gray_colors">2h</span>
           </div>
-          <div className="ml-1" onClick={(e) => loadThread(e, commentData)}>
+          <div className="ml-1 cursor-pointer" onClick={(e) => loadThread(e, commentData)}>
             <div className="items-center text-black overflow-hidden">
               {commentData.text}
               {/* Created parent class vs using comment again to prevent issues with recursive calls */}

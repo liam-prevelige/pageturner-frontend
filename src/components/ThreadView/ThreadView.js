@@ -29,9 +29,6 @@ export const ThreadView = ({commentId}) => {
   const retrieveComments = async () => {
     const parent = await getComment(commentId);
     const comments = await getComments(commentId);
-    console.log('parenthere', parent);
-    console.log('commentshere', comments);
-
     setParent(parent);
     setComments(comments);
   };
@@ -39,9 +36,6 @@ export const ThreadView = ({commentId}) => {
   useEffect(() => {
     retrieveComments();
   }, []);
-
-  console.log('In ThreadView comments', comments);
-  console.log('In ThreadView parent', parent);
 
   // Currently displays one comment, including the "parent" aka what is being replied to
   // SOMETIMES I want to display the replied comment at the TOP, with many children underneath
