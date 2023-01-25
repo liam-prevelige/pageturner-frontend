@@ -33,20 +33,27 @@ export const ProfilePage = () => {
     cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
   };
 
-  let profile = fakeProfile;
+  const [profile, setProfile] = useState(fakeProfile);
+
+  // let profile = fakeProfile;
 
   // If we're on our own profile tab and the user is logged in, retrieve profile data from storage
   // Otherwise, use fake profile for display purposes
   if (isMyProfile) {
     const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-    profile = storedProfile || fakeProfile; // If storedProfile is null, use fakeProfile
+    if (storedProfile) { // If storedProfile isn't null, use profile from storage
+      setProfile(storedProfile);
+    }
   }
 
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
-    console.log(uid);
     const retrievedProfile = await getProfile(uid);
-    profile = retrievedProfile || fakeProfile;
+    console.log('retrievedProfile: ', retrievedProfile);
+    if (retrievedProfile) {
+      setProfile(retrievedProfile);
+    }
+    console.log('profile: ', profile);
   };
 
   useEffect(() => {
