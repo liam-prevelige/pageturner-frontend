@@ -1,6 +1,37 @@
+/* eslint-disable valid-jsdoc */
 // api.js: wrappers for all API endpoints
 
 const API_URL = 'http://localhost:5001';
+
+
+/**
+ * /:user/get_feed
+ *
+ * Gets all comments of user and user's following list
+ * Requires user is logged in
+ *
+ */
+export const getFeed = async (user) => {
+  if (!user) {
+    console.log('user not provided');
+    return;
+  }
+  const response = await fetch(`${API_URL}/${user._id}/get_feed`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_feed failed');
+  }
+  return body.comments;
+};
 
 
 /**
@@ -150,24 +181,6 @@ export async function removeFriend(email) {
   const body = await response.json();
   return body.success;
 }
-
-// Returns list of posts, which represent the feed to be displayed
-export const getFeed = async (query) => {
-  const response = await fetch(`${API_URL}/feed/get/${query}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application.json',
-      'Content-Type': 'application/json',
-    },
-    cache: 'default',
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /feed/get failed');
-  }
-  return body;
-};
 
 // endpoint to add a new post to the database from the book-info page
 export const postBookReview = async (user, isbn, text) => {
