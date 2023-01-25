@@ -15,27 +15,32 @@ import {useEffect, useState} from 'react';
 // TODO: Include that child comment at the top of the feed
 // getComments on the backend returns all children of a given object
 // TODO: Right now, getComments won't return the parent comment with the others
-export const ThreadView = async ({commentId}) => {
+export const ThreadView = ({commentId}) => {
   if (!commentId) {
     const search = window.location.search;
     const queryParams = new URLSearchParams(search);
     commentId = queryParams.get('commentId');
   }
 
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState(null);
   const [parent, setParent] = useState(null);
 
   const retrieveComments = async () => {
-    setParent(await getComment(commentId));
-    setComments(await getComments(commentId));
+    const parent = await getComment(commentId);
+    const comments = await getComments(commentId);
+    console.log('parenthere', parent);
+    console.log('commentshere', comments);
+
+    setParent(parent);
+    setComments(comments);
   };
 
   useEffect(() => {
     retrieveComments();
   }, []);
 
-  console.log(comments);
-  console.log(parent);
+  console.log('In ThreadView comments', comments);
+  console.log('In ThreadView parent', parent);
 
   // Currently displays one comment, including the "parent" aka what is being replied to
   // SOMETIMES I want to display the replied comment at the TOP, with many children underneath
@@ -43,14 +48,14 @@ export const ThreadView = async ({commentId}) => {
   // Ensure "data" works and we don't need to unwrap and rewrap
   return (
     <div>
-      {!parent ? <ReactLoading type="spin" color="black" /> : <Comment commentData={parent}/>}
-      {!comments || comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data) =>
+      {(!parent || !comments) ? <ReactLoading type="spin" color="black" /> : <Comment commentData={comments[0]} parentData={parent.comments[0]}/>}
+      {/* {!comments || comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data, index) =>
         (<div key={index}>
           <Comment commentData={data}/>
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
         </div>
         ))
-      }
+      } */}
     </div>
 
   );

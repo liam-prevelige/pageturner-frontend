@@ -4,6 +4,8 @@ import {useNavigate} from 'react-router-dom';
 export const Parent = ({commentData}) => {
   const navigate = useNavigate();
 
+  console.log('parentData', commentData);
+
   const loadParentThread = (e, clickedCommentData) => {
     e.stopPropagation(); // otherwise comment component registers a click as it's own
     const path = `/thread?commentId=${clickedCommentData.commentId}`;

@@ -385,6 +385,7 @@ export const getFriends = async () => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComments = async (pid) => {
+  console.log('pid', pid);
   const response = await fetch(`${API_URL}/comments/get_comments`, {
     method: 'POST',
     headers: {
@@ -400,12 +401,14 @@ export const getComments = async (pid) => {
   if (!response.ok) {
     throw new Error('Call to /user/friends failed');
   }
-
+  console.log('body', body.comments);
   return body.comments;
 };
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComment = async (id) => {
+  console.log('id', id);
+
   const response = await fetch(`${API_URL}/comments/get_comment`, {
     method: 'POST',
     headers: {
@@ -414,7 +417,7 @@ export const getComment = async (id) => {
       'Authorization': sessionStorage.getItem('auth_token'),
     },
     cache: 'default',
-    body: JSON.stringify({_id: id}),
+    body: JSON.stringify({id: id}),
   });
 
   const body = await response.json();
@@ -422,5 +425,5 @@ export const getComment = async (id) => {
     throw new Error('Call to /user/friends failed');
   }
 
-  return body.comment;
+  return body;
 };

@@ -18,22 +18,22 @@ export const ProfileTabs = () => {
         <TabPanels>
           <TabPanel>
             <ScrollMenu style={{overflowY: 'auto'}}>
-              <ThreadView commentId={'a'}/>
+              <ThreadView commentId={'63cef967b83ed8c71f06be01'}/>
             </ScrollMenu>
           </TabPanel>
           <TabPanel>
             <ScrollMenu style={{overflowX: 'auto'}}>
-              <ThreadView commentId={'a'}/>
+              <ThreadView commentId={'63cef967b83ed8c71f06be01'}/>
             </ScrollMenu>
           </TabPanel>
           <TabPanel>
             <ScrollMenu style={{overflowX: 'auto'}}>
-              <ThreadView commentId={'a'}/>
+              <ThreadView commentId={'63cef967b83ed8c71f06be01'}/>
             </ScrollMenu>
           </TabPanel>
           <TabPanel>
             <ScrollMenu style={{overflowX: 'auto'}}>
-              <ThreadView commentId={'a'}/>
+              <ThreadView commentId={'63cef967b83ed8c71f06be01'}/>
             </ScrollMenu>
           </TabPanel>
         </TabPanels>
