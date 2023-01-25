@@ -21,6 +21,7 @@ export const ProfilePage = () => {
   const search = window.location.search;
   const queryParams = new URLSearchParams(search);
   const isMyProfile = !queryParams.has('uid');
+  const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
 
   const fakeProfile = {
     id: 1,
@@ -33,18 +34,7 @@ export const ProfilePage = () => {
     cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
   };
 
-  const [profile, setProfile] = useState(fakeProfile);
-
-  // let profile = fakeProfile;
-
-  // If we're on our own profile tab and the user is logged in, retrieve profile data from storage
-  // Otherwise, use fake profile for display purposes
-  if (isMyProfile) {
-    const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-    if (storedProfile) { // If storedProfile isn't null, use profile from storage
-      setProfile(storedProfile);
-    }
-  }
+  const [profile, setProfile] = useState((isMyProfile && storedProfile) ? storedProfile : fakeProfile);
 
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
