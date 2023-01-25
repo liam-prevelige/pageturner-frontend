@@ -4,6 +4,7 @@ import {Reply, Retweet, Like, Share} from '../../assets/Icons';
 import {Parent} from './Parent';
 
 export const Comment = ({commentData, parentData}) => {
+  console.log('In Comment.js with commentData: ', commentData);
   const navigate = useNavigate();
 
   const loadThread = (e, clickedCommentData) => {

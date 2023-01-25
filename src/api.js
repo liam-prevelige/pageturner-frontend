@@ -50,25 +50,6 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
- * /comments/get_comments
- *
- * Gets all comments on the requested parent object
- *
- * @param {string} pid - ID of parent
- */
-export const getComments = async (pid) => {
-  await fetch(`${API_URL}/comments/get_comments`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
-    },
-    body: JSON.stringify({pid}),
-  });
-};
-
-/**
  * /comments/postComment
  *
  * Gets all comments on the requested parent object
@@ -400,4 +381,49 @@ export const getFriends = async () => {
   }
 
   return body.friends;
+};
+
+// Given a certain id, I want to get all *children* of that comment (and the original comment)
+export const getComments = async (pid) => {
+  console.log('pid', pid);
+  const response = await fetch(`${API_URL}/comments/get_comments`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({pid: pid}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/friends failed');
+  }
+  console.log('body', body.comments);
+  return body.comments;
+};
+
+// Given a certain id, I want to get all *children* of that comment (and the original comment)
+export const getComment = async (id) => {
+  console.log('id', id);
+
+  const response = await fetch(`${API_URL}/comments/get_comment`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({id: id}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/friends failed');
+  }
+
+  return body;
 };
