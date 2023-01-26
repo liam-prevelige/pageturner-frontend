@@ -2,6 +2,7 @@ import {React, useEffect, useState} from 'react';
 import {Comment} from '../Comment/Comment';
 import {BackNav} from '../BackNav/BackNav';
 import {getReplies} from '../../api';
+import {ReplyBox} from '../ShareBox/ReplyBox';
 
 
 export const ThreadView = () => {
@@ -21,13 +22,18 @@ export const ThreadView = () => {
 
   useEffect(() => {
     loadReplies(commentId);
-  }, []);
+  }, [commentId]);
 
   return (
-    <div className="h-full">
-      <BackNav />
-      <Comment commentId={commentId}/>
-      <div className="border-b ml-3 mr-3 border-slate-300"></div>
+    <div className="flex relative flex-col bg-slate-100">
+      <div className="bg-white">
+        <BackNav />
+        <Comment commentId={commentId}/>
+      </div>
+      <div className="border-b ml-3 mr-3 border-slate-500"></div>
+      <div className="relative flex bg-white space-x-4 px-4 py-2 border-b border-slate-300">
+        <ReplyBox />
+      </div>
       <div className="bg-slate-100 h-full">
         {replies.map((replyData, index) =>
           (<div key={index}>
@@ -36,14 +42,6 @@ export const ThreadView = () => {
           </div>
           ))}
       </div>
-      {/* {(!parent || !comments) ? <ReactLoading type="spin" color="black" /> : } */}
-      {/* {!comments || comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data, index) =>
-        (<div key={index}>
-          <Comment commentData={data}/>
-          <div className="border-b ml-3 mr-3 border-slate-300"></div>
-        </div>
-        ))
-      } */}
     </div>
 
   );
