@@ -47,29 +47,6 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
- * Fetches profile information
- *
- * @param {string} uid - new profile to be set as current user's profile
- */
-export const getProfile = async (uid) => {
-  const response = await fetch(`${API_URL}/user/get_profile`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
-    },
-    body: JSON.stringify({uid: uid}),
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /get_profile failed');
-  }
-  return body.result;
-};
-
-/**
  * /comments/postComment
  *
  * Gets all comments on the requested parent object
@@ -437,6 +414,53 @@ export const getComment = async (id) => {
   if (!response.ok) {
     throw new Error('Call to /user/friends failed');
   }
+  return body.comment;
+};
 
-  return body;
+/**
+ * Fetches profile information
+ *
+ * @param {string} uid - new profile to be set as current user's profile
+ */
+export const getProfile = async (uid) => {
+  const response = await fetch(`${API_URL}/user/get_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_profile failed');
+  }
+  return body.result;
+};
+
+/**
+ * Fetches replies to a comment, given the comment's id
+ *
+ * @param {string} id - new profile to be set as current user's profile
+ * @return {array} replies - array of comment IDs replying to the comment
+ */
+export const getReplies = async (id) => {
+  const response = await fetch(`${API_URL}/comments/get_replies`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({id: id}),
+  });
+
+  const body = await response.json();
+
+  if (!response.ok) {
+    throw new Error('Call to /get_replies failed');
+  }
+  return body.replies;
 };

@@ -39,7 +39,7 @@ const App = () => {
             <Route path="/home" element={<LandingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/book-info/*" element={<BookInfo />} />
-            <Route path="/thread/*" element={<ThreadView commentId={'63cef967b83ed8c71f06be01'} />} />
+            <Route path="/thread" element={<ThreadView />} />
           </Routes>
         </main>
         <aside className="w-350">
