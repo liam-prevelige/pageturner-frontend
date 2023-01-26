@@ -24,16 +24,18 @@ export const ThreadView = () => {
   }, []);
 
   return (
-    <div>
+    <div className="h-full">
       <BackNav />
       <Comment commentId={commentId}/>
       <div className="border-b ml-3 mr-3 border-slate-300"></div>
-      {replies.map((replyData, index) =>
-        (<div key={index}>
-          <Comment commentId={replyData._id} noParent={true}/>
-          <div className="border-b ml-3 mr-3 border-slate-300"></div>
-        </div>
-        ))}
+      <div className="bg-slate-100 h-full">
+        {replies.map((replyData, index) =>
+          (<div key={index}>
+            <Comment commentId={replyData._id} noParent={true}/>
+            <div className="border-b ml-3 mr-3 border-slate-300"></div>
+          </div>
+          ))}
+      </div>
       {/* {(!parent || !comments) ? <ReactLoading type="spin" color="black" /> : } */}
       {/* {!comments || comments.length == 0 ? <ReactLoading type="spin" color="black" /> : comments.map((data, index) =>
         (<div key={index}>

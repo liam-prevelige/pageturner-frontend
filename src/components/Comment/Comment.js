@@ -36,7 +36,7 @@ export const Comment = ({commentId, noParent}) => {
   return (
     <>
       {!(profileData && commentData) ? <ReactLoading type="spin" color="black" /> :
-       <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color bg-white'>
+       <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color'>
          <img src={profileData.profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(profileData._id)} />
          <div className="flex-1">
            <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadUserProfile(profileData._id)}>
