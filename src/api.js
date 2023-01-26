@@ -399,6 +399,9 @@ export const getComments = async (pid) => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComment = async (id) => {
+  if (!id) {
+    throw new Error('No id provided');
+  }
   const response = await fetch(`${API_URL}/comments/get_comment`, {
     method: 'POST',
     headers: {
@@ -447,6 +450,9 @@ export const getProfile = async (uid) => {
  * @return {array} replies - array of comment IDs replying to the comment
  */
 export const getReplies = async (id) => {
+  if (!id) {
+    throw new Error('No id provided');
+  }
   const response = await fetch(`${API_URL}/comments/get_replies`, {
     method: 'POST',
     headers: {

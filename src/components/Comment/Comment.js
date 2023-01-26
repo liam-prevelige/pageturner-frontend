@@ -13,11 +13,15 @@ export const Comment = ({commentId, noParent}) => {
 
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
-    const path = `/thread?commentId=${clickedCommentData._id}`;
+    const path = `/thread/${clickedCommentData._id}`;
     navigate(path);
   };
 
   const getData = async (cId) => {
+    if (!cId) return;
+    // Turn on loading state while waiting for API
+    setProfileData(null);
+    setCommentData(null);
     const comment = await getComment(cId);
     const profile = await getProfile(comment.uid);
     setProfileData(profile);
@@ -31,7 +35,7 @@ export const Comment = ({commentId, noParent}) => {
 
   useEffect(() => {
     getData(commentId);
-  }, []);
+  }, [commentId]);
 
   return (
     <>

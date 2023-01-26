@@ -10,6 +10,10 @@ export const Parent = ({commentId}) => {
   const [commentData, setCommentData] = useState(null);
 
   const getData = async (cId) => {
+    if (!cId) return;
+    // Turn on loading state while waiting for API
+    setProfileData(null);
+    setCommentData(null);
     const comment = await getComment(cId);
     const profile = await getProfile(comment.uid);
     setProfileData(profile);
@@ -18,11 +22,11 @@ export const Parent = ({commentId}) => {
 
   useEffect(() => {
     getData(commentId);
-  }, []);
+  }, [commentId]);
 
   const loadParentThread = (e, clickedCommentData) => {
     e.stopPropagation(); // otherwise comment component registers a click as it's own
-    const path = `/thread?commentId=${clickedCommentData._id}`;
+    const path = `/thread/${clickedCommentData._id}`;
     navigate(path);
   };
 
