@@ -12,7 +12,7 @@ export async function refreshToken() {
   if (!expiryDate) return;
 
   const diff = expiryDate - Date.now();
-  if (diff < 300000) {
+  if (diff < 300000) { // 5 minutes
     const response = await fetch(`${API_URL}/user/refresh_token`, {
       method: 'POST',
       headers: {
@@ -27,8 +27,8 @@ export async function refreshToken() {
     if (!response.ok) {
       throw new Error('Call to /refresh_token failed');
     }
-    console.log('api.js tokenBody: ', body);
-    if (body.result.tokens.id_token != sessionStorage.getItem('auth_token')) {
+
+    if (body.result.tokens && body.result.tokens.id_token != sessionStorage.getItem('auth_token')) {
       sessionStorage.setItem('auth_token', body.result.tokens.id_token);
       sessionStorage.setItem('expiry_date', body.result.tokens.expiry_date);
     }
@@ -85,28 +85,6 @@ export const updateProfile = async (newProfile) => {
   }
   return body.result;
 };
-
-// /**
-//  * Updates a profile after being edited
-//  *
-//  */
-// export const refreshToken = async () => {
-//   const response = await fetch(`${API_URL}/user/refresh_token`, {
-//     method: 'POST',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json',
-//       'Authorization': sessionStorage.getItem('auth_token'),
-//     },
-//   });
-
-//   const body = await response.json();
-//   if (!response.ok) {
-//     throw new Error('Call to /update_profile failed');
-//   }
-//   console.log('api.js body: ', body);
-//   return body.result;
-// };
 
 /**
  * /comments/postComment
