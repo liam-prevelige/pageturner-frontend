@@ -5,6 +5,7 @@ import {Parent} from './Parent';
 import {getProfile} from '../../api';
 import {getComment} from '../../api';
 import ReactLoading from 'react-loading';
+import {formatDistance} from 'date-fns';
 
 export const Comment = ({commentId, noParent}) => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export const Comment = ({commentId, noParent}) => {
            <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadUserProfile(profileData._id)}>
              <span className="ml-1 font-bold text-black">{profileData.name}</span>
              <span className="ml-2 text-primary-gray_colors">@{profileData.tag}</span>
-             <span className="text-primary-gray_colors">2h</span>
+             <span className="text-primary-gray_colors">{formatDistance(new Date(commentData.metadata.timestamp), new Date())}</span>
            </div>
            <div className="ml-1 cursor-pointer" onClick={(e) => loadThread(e, commentData)}>
              <div className="items-center text-black overflow-hidden">
