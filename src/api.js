@@ -12,7 +12,7 @@ export async function onLogin() {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
+      'authorizationCode': sessionStorage.getItem('authorizationCode'),
     },
   });
 
@@ -20,6 +20,8 @@ export async function onLogin() {
   if (!response.ok) {
     throw new Error('Call to /on_login failed');
   }
+  sessionStorage.setItem('auth_token', body.result.access_token);
+  console.log('found auth token', body.result.access_token);
   return body.result;
 }
 
@@ -43,6 +45,28 @@ export const updateProfile = async (newProfile) => {
   if (!response.ok) {
     throw new Error('Call to /update_profile failed');
   }
+  return body.result;
+};
+
+/**
+ * Updates a profile after being edited
+ *
+ */
+export const refreshToken = async () => {
+  const response = await fetch(`${API_URL}/user/refresh_token`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  console.log('api.js body: ', body);
   return body.result;
 };
 
