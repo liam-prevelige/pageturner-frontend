@@ -11,12 +11,8 @@ const API_URL = 'http://localhost:5001';
  * Requires user is logged in
  *
  */
-export const getFeed = async (user) => {
-  if (!user) {
-    console.log('user not provided');
-    return;
-  }
-  const response = await fetch(`${API_URL}/${user._id}/get_feed`, {
+export const getFeed = async () => {
+  const response = await fetch(`${API_URL}/user/get_feed`, {
     method: 'GET',
     headers: {
       'Accept': 'application.json',
@@ -73,29 +69,6 @@ export const updateProfile = async (newProfile) => {
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /update_profile failed');
-  }
-  return body.result;
-};
-
-/**
- * Fetches profile information
- *
- * @param {string} uid - new profile to be set as current user's profile
- */
-export const getProfile = async (uid) => {
-  const response = await fetch(`${API_URL}/user/get_profile`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
-    },
-    body: JSON.stringify({uid: uid}),
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /get_profile failed');
   }
   return body.result;
 };
@@ -435,6 +408,9 @@ export const getComments = async (pid) => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComment = async (id) => {
+  if (!id) {
+    throw new Error('No id provided');
+  }
   const response = await fetch(`${API_URL}/comments/get_comment`, {
     method: 'POST',
     headers: {
@@ -450,6 +426,56 @@ export const getComment = async (id) => {
   if (!response.ok) {
     throw new Error('Call to /user/friends failed');
   }
+  return body.comment;
+};
 
-  return body;
+/**
+ * Fetches profile information
+ *
+ * @param {string} uid - new profile to be set as current user's profile
+ */
+export const getProfile = async (uid) => {
+  const response = await fetch(`${API_URL}/user/get_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_profile failed');
+  }
+  return body.result;
+};
+
+/**
+ * Fetches replies to a comment, given the comment's id
+ *
+ * @param {string} id - new profile to be set as current user's profile
+ * @return {array} replies - array of comment IDs replying to the comment
+ */
+export const getReplies = async (id) => {
+  if (!id) {
+    throw new Error('No id provided');
+  }
+  const response = await fetch(`${API_URL}/comments/get_replies`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({id: id}),
+  });
+
+  const body = await response.json();
+
+  if (!response.ok) {
+    throw new Error('Call to /get_replies failed');
+  }
+  return body.replies;
 };
