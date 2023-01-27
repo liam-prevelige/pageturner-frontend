@@ -1,9 +1,9 @@
-import {React, useState} from 'react';
+import {React, useState, useEffect} from 'react';
 import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon} from '../../assets/Icons';
 import {Auth} from '../Auth/Auth';
 
 export const SideBar = () => {
-  const path = window.location.pathname;
+  const [path, setPath] = useState(window.location.pathname);
 
   const homePath = '/';
   const profilePath = '/profile';
@@ -15,6 +15,10 @@ export const SideBar = () => {
 
   const notActiveClassName = 'flex items-center text-xl text-black font-semibold hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2';
   const activeClassName = 'flex items-center text-xl text-primary-button font-bold hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2';
+
+  useEffect(() => {
+    setPath(window.location.pathname);
+  }, [window.location.pathname]);
 
   return (
     <>
