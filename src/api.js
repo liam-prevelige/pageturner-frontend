@@ -2,6 +2,38 @@
 
 const API_URL = 'http://localhost:5001';
 
+/**
+ * Checks if auth_code is within 5 minutes of expiration and calls for token refresh if necessary
+ * Essentially middleware for all API calls
+ * TODO: if possible, convert to actual middleware
+ */
+export async function refreshToken() {
+  const expiryDate = sessionStorage.getItem('expiry_date');
+  if (!expiryDate) return;
+
+  const diff = expiryDate - Date.now();
+  if (diff < 300000) {
+    const response = await fetch(`${API_URL}/user/refresh_token`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': sessionStorage.getItem('auth_token'),
+        'refreshrequest': true,
+      },
+    });
+
+    const body = await response.json();
+    if (!response.ok) {
+      throw new Error('Call to /refresh_token failed');
+    }
+    console.log('api.js tokenBody: ', body);
+    if (body.result.tokens.id_token != sessionStorage.getItem('auth_token')) {
+      sessionStorage.setItem('auth_token', body.result.tokens.id_token);
+      sessionStorage.setItem('expiry_date', body.result.tokens.expiry_date);
+    }
+  }
+}
 
 /**
  * TODO
@@ -20,8 +52,13 @@ export async function onLogin() {
   if (!response.ok) {
     throw new Error('Call to /on_login failed');
   }
-  sessionStorage.setItem('auth_token', body.result.access_token);
-  console.log('found auth token', body.result.access_token);
+
+  sessionStorage.setItem('auth_token', body.result.tokens.id_token);
+  sessionStorage.setItem('expiry_date', body.result.tokens.expiry_date);
+  console.log('expiry date', body.result.tokens.expiry_date);
+
+  console.log('onLogin body', body);
+
   return body.result;
 }
 
@@ -31,6 +68,7 @@ export async function onLogin() {
  * @param {dict} newProfile - new profile to be set as current user's profile
  */
 export const updateProfile = async (newProfile) => {
+  await refreshToken();
   const response = await fetch(`${API_URL}/user/update_profile`, {
     method: 'POST',
     headers: {
@@ -48,27 +86,27 @@ export const updateProfile = async (newProfile) => {
   return body.result;
 };
 
-/**
- * Updates a profile after being edited
- *
- */
-export const refreshToken = async () => {
-  const response = await fetch(`${API_URL}/user/refresh_token`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
-    },
-  });
+// /**
+//  * Updates a profile after being edited
+//  *
+//  */
+// export const refreshToken = async () => {
+//   const response = await fetch(`${API_URL}/user/refresh_token`, {
+//     method: 'POST',
+//     headers: {
+//       'Accept': 'application/json',
+//       'Content-Type': 'application/json',
+//       'Authorization': sessionStorage.getItem('auth_token'),
+//     },
+//   });
 
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /update_profile failed');
-  }
-  console.log('api.js body: ', body);
-  return body.result;
-};
+//   const body = await response.json();
+//   if (!response.ok) {
+//     throw new Error('Call to /update_profile failed');
+//   }
+//   console.log('api.js body: ', body);
+//   return body.result;
+// };
 
 /**
  * /comments/postComment
@@ -81,6 +119,7 @@ export const refreshToken = async () => {
  * @param {string} text - Content of the comment
  */
 export const postComment = async (pType, pid, text) => {
+  await refreshToken();
   await fetch(`${API_URL}/comments/post_comment`, {
     method: 'POST',
     headers: {
@@ -94,6 +133,8 @@ export const postComment = async (pType, pid, text) => {
 
 // Search for a user based on a given query
 export const searchUsers = async (query) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/search/${query}`, {
     method: 'GET',
     headers: {
@@ -115,6 +156,8 @@ export const searchUsers = async (query) => {
 // Get a user's books given their email
 // This gives both their bookshelf and their read books
 export const getUserBooks = async (email) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/books/${email}`, {
     method: 'GET',
     headers: {
@@ -138,6 +181,8 @@ export const getUserBooks = async (email) => {
  * @return {boolean} success
  */
 export async function addFriend(email) {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/friend/add`, {
     method: 'POST',
     headers: {
@@ -158,6 +203,8 @@ export async function addFriend(email) {
  * @return {boolean} success
  */
 export async function removeFriend(email) {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/friend/add`, {
     method: 'POST',
     headers: {
@@ -174,6 +221,8 @@ export async function removeFriend(email) {
 
 // Returns list of posts, which represent the feed to be displayed
 export const getFeed = async (query) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/feed/get/${query}`, {
     method: 'GET',
     headers: {
@@ -192,6 +241,8 @@ export const getFeed = async (query) => {
 
 // endpoint to add a new post to the database from the book-info page
 export const postBookReview = async (user, isbn, text) => {
+  await refreshToken();
+
   const data = {
     user: user,
     isbn: isbn,
@@ -216,6 +267,8 @@ export const postBookReview = async (user, isbn, text) => {
 
 // Returns the top rated books stored in the database
 export const getTopBooks = async () => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/topbooks`, {
     method: 'GET',
     headers: {
@@ -235,6 +288,8 @@ export const getTopBooks = async () => {
 // Currently: Returns the books with the most ratings
 // Eventually, we hope to return an individual user's top recommendations from the algorithm
 export const getTopRecs = async () => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/toprecs`, {
     method: 'GET',
     headers: {
@@ -254,6 +309,8 @@ export const getTopRecs = async () => {
 
 // Search for a book given a query
 export const getSearch = async (query) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/search/${query}`, {
     method: 'GET',
     headers: {
@@ -274,6 +331,8 @@ export const getSearch = async (query) => {
 // Search for a book
 // Does this funtion only work if the query is submit-post? How is it different from getSearch?
 export const getBookInfo = async (query) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/book-info/${query}`, {
     method: 'GET',
     headers: {
@@ -293,6 +352,8 @@ export const getBookInfo = async (query) => {
 
 // Get recommendations for a book (given its title)
 export const getRecs = async (isbn) => {
+  await refreshToken();
+
   isbn = isbn.replace('$', '');
   const response = await fetch(`${API_URL}/recommendations/${isbn}`, {
     method: 'GET',
@@ -312,6 +373,8 @@ export const getRecs = async (isbn) => {
 
 // Add a book to a user's list of bookmarks (saved)
 export const updateBookmarks = async (userEmail, isbn, exists) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/update_bookmarks/${userEmail}/${isbn}/${exists}`, {
     method: 'POST',
     headers: {
@@ -330,6 +393,8 @@ export const updateBookmarks = async (userEmail, isbn, exists) => {
 
 // Gets a user's list of bookmarked books' content (saved)
 export const getBookmarks = async (userEmail) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/get_bookmarks/${userEmail}`, {
     method: 'POST',
     headers: {
@@ -348,6 +413,8 @@ export const getBookmarks = async (userEmail) => {
 
 // Add a book to a user's list of read books
 export const updateRead = async (userEmail, isbn, exists) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/update_read/${userEmail}/${isbn}/${exists}`, {
     method: 'POST',
     headers: {
@@ -366,6 +433,8 @@ export const updateRead = async (userEmail, isbn, exists) => {
 
 // Gets a user's list of read books' content
 export const getRead = async (userEmail) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/get_read/${userEmail}`, {
     method: 'GET',
     headers: {
@@ -384,6 +453,8 @@ export const getRead = async (userEmail) => {
 
 // Gets a user's friend list
 export const getFriends = async () => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/friends`, {
     method: 'GET',
     headers: {
@@ -403,6 +474,8 @@ export const getFriends = async () => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComments = async (pid) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/comments/get_comments`, {
     method: 'POST',
     headers: {
@@ -423,6 +496,8 @@ export const getComments = async (pid) => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComment = async (id) => {
+  await refreshToken();
+
   if (!id) {
     throw new Error('No id provided');
   }
@@ -450,6 +525,8 @@ export const getComment = async (id) => {
  * @param {string} uid - new profile to be set as current user's profile
  */
 export const getProfile = async (uid) => {
+  await refreshToken();
+
   const response = await fetch(`${API_URL}/user/get_profile`, {
     method: 'POST',
     headers: {
@@ -474,6 +551,8 @@ export const getProfile = async (uid) => {
  * @return {array} replies - array of comment IDs replying to the comment
  */
 export const getReplies = async (id) => {
+  await refreshToken();
+
   if (!id) {
     throw new Error('No id provided');
   }

@@ -13,7 +13,7 @@ import {useGoogleLogin} from '@react-oauth/google';
 import {useLocation, useNavigate} from 'react-router-dom';
 // eslint-disable-next-line
 // import jwt_decode from 'jwt-decode';
-import {onLogin, refreshToken} from '../../api';
+import {onLogin} from '../../api';
 
 export const Auth = (props) => {
   const location = useLocation();
@@ -45,8 +45,8 @@ export const Auth = (props) => {
       // window.location.reload();
       console.log(res);
 
-      const refreshedToken = await refreshToken();
-      console.log(refreshedToken);
+      // const refreshedToken = await refreshToken();
+      // console.log(refreshedToken);
     } catch (error) {
       console.log(error);
     }
