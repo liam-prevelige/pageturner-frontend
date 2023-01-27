@@ -20,9 +20,11 @@ export const Auth = (props) => {
 
   const logout = () => {
     sessionStorage.removeItem('auth_token');
+    sessionStorage.removeItem('expiry_date');
     sessionStorage.removeItem('profile');
     setUser(null);
     navigate('/');
+    window.location.reload();
   };
 
   const googleSuccess = async (res) => {
@@ -31,6 +33,7 @@ export const Auth = (props) => {
       const profile = await onLogin();
       sessionStorage.setItem('profile', JSON.stringify(profile));
       navigate('/');
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +52,7 @@ export const Auth = (props) => {
   return (
     <div>
       {!user ?
-      <button className="font-bold w-24 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={() => login()}>
+      <button className="font-bold w-40 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={() => login()}>
         Sign In with Google
       </button> :
       <button className="font-bold w-24 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={logout}>
