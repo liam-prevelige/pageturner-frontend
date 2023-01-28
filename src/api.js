@@ -477,7 +477,7 @@ export const getReplies = async (id) => {
  * @return {array} trends - array of trends
  */
 export const getTrends = async () => {
-  const response = await fetch(`${API_URL}/general/get_trends`, {
+  const response = await fetch(`${API_URL}/get_trends`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
