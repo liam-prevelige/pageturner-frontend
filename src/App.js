@@ -10,7 +10,6 @@ import {
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import {SideBar} from './components/Sidebar/SideBar';
-import {LandingPage} from './components/LandingPage';
 import {People} from './components/People';
 import {Feed} from './components/Feed';
 import {ProfilePage} from './components/ProfilePage';
@@ -36,7 +35,6 @@ const App = () => {
             <Route exact path="/" element={<HomePage />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/people" element={<People />} />
-            <Route path="/home" element={<LandingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/book-info/*" element={<BookInfo />} />
             <Route path="/thread/:commentIdParam" element={<ThreadView />}/>
