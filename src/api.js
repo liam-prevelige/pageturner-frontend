@@ -243,26 +243,6 @@ export const postBookReview = async (user, isbn, text) => {
       });
 };
 
-// Returns the top rated books stored in the database
-export const getTopBooks = async () => {
-  await refreshToken();
-
-  const response = await fetch(`${API_URL}/topbooks`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application.json',
-      'Content-Type': 'application/json',
-    },
-    cache: 'default',
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /topbooks failed');
-  }
-  return body.top;
-};
-
 // Currently: Returns the books with the most ratings
 // Eventually, we hope to return an individual user's top recommendations from the algorithm
 export const getTopRecs = async () => {
