@@ -1,5 +1,5 @@
 import {React} from 'react';
-import {Search} from '../../assets/Icons';
+import {Search} from '../Search';
 import {ShareBox} from '../ShareBox/ShareBox';
 import {ThreadView} from '../ThreadView/ThreadView';
 
