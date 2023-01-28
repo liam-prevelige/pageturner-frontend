@@ -1,4 +1,4 @@
-import {React} from 'react';
+import {React, useEffect, useState} from 'react';
 import {TrendingEntry} from './TrendingEntry';
 import {getTrends} from '../../api';
 
@@ -12,7 +12,7 @@ export const Trending = () => {
 
 
   useEffect(() => {
-    loadTrends(); // setState hooks are async, so this is necessary
+    loadTrends();
   }, []);
 
 
