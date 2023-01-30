@@ -2,6 +2,7 @@ import {React} from 'react';
 import {Search} from '../Search';
 import {ShareBox} from '../ShareBox/ShareBox';
 import {ThreadView} from '../ThreadView/ThreadView';
+import {Timeline} from '../Comment/Timeline';
 
 export const HomePage = () => {
   return (
@@ -18,6 +19,7 @@ export const HomePage = () => {
                 <ShareBox />
               </div>
               <ThreadView commentId={'63cef967b83ed8c71f06be01'}/>
+              <Timeline />
             </div>
           </>
         </main>
