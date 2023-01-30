@@ -32,6 +32,38 @@ export const getFeed = async () => {
   return body.feed;
 };
 
+// /**
+//  * /:user/get_feed
+//  *
+//  * Gets all comments of user and user's following list
+//  * Requires user is logged in
+//  *
+//  */
+// export const postComment = async (postText) => {
+//   await refreshToken();
+
+//   const response = await fetch(`${API_URL}/comments/post_comment`, {
+//     method: 'GET',
+//     headers: {
+//       'Accept': 'application.json',
+//       'Content-Type': 'application/json',
+//       'Authorization': sessionStorage.getItem('auth_token'),
+//     },
+//     cache: 'default',
+//     body: JSON.stringify({
+//       text: postText,
+//       pType: 'global',
+//     }),
+//   });
+
+//   const body = await response.json();
+//   if (!response.ok) {
+//     throw new Error('Call to /user/get_feed failed');
+//   }
+//   console.log(body);
+//   return body.feed;
+// };
+
 /**
  * /:user/update_likes
  *
