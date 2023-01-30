@@ -1,15 +1,17 @@
 import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Reply, Retweet, Like, Share} from '../../assets/Icons';
+import {Reply, Retweet, Share} from '../../assets/Icons';
 import {Parent} from './Parent';
 import {getProfile, getComment, updateLikes} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
+import {FaHeart, FaRegHeart} from 'react-icons/fa';
 
 export const Comment = ({commentId, noParent}) => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [commentData, setCommentData] = useState(null);
+  const liked = false;
 
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
@@ -31,7 +33,7 @@ export const Comment = ({commentId, noParent}) => {
   const updateLikesCb = async (e) => {
     e.stopPropagation();
     console.log('updateLikesCb');
-    await updateLikes(commentData._id);
+    const likedPosts = await updateLikes(commentData._id);
   };
 
   const loadUserProfile = (uid) => {
@@ -77,7 +79,8 @@ export const Comment = ({commentId, noParent}) => {
 
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
-                   <Like/>
+                   {liked && <FaHeart className="fill-primary-like w-5 h-5"/>}
+                   {!liked && <FaRegHeart className="stroke-1 w-5 h-5"/>}
                  </div>
                  <span>{commentData.metadata.likes}</span>
                </li>
