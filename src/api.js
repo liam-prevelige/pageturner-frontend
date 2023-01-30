@@ -539,7 +539,7 @@ export const getTrends = async () => {
  */
 export const searchContent = async (searchString) => {
   await refreshToken();
-  const response = await fetch(`${API_URL}/search/${searchString}`, 
+  const response = await fetch(`${API_URL}/search/${searchString}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -549,10 +549,8 @@ export const searchContent = async (searchString) => {
   });
 
   const body = await response.json();
-  {
   if (!response.ok) {
     throw new Error('Call to /search failed');
   }
   return body;
-}
-
+};
