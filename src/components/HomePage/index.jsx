@@ -1,7 +1,7 @@
 import {React} from 'react';
 import {Search} from '../Search';
 import {ShareBox} from '../ShareBox/ShareBox';
-import {ThreadView} from '../ThreadView/ThreadView';
+// import {ThreadView} from '../ThreadView/ThreadView';
 import {Timeline} from '../Comment/Timeline';
 
 export const HomePage = () => {
@@ -18,7 +18,7 @@ export const HomePage = () => {
               <div className="flex space-x-4 px-4 py-2 border-b border-slate-300">
                 <ShareBox />
               </div>
-              <ThreadView commentId={'63cef967b83ed8c71f06be01'}/>
+              {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
               <Timeline />
             </div>
           </>

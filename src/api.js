@@ -28,7 +28,8 @@ export const getFeed = async () => {
   if (!response.ok) {
     throw new Error('Call to /user/get_feed failed');
   }
-  return body.comments;
+  console.log(body);
+  return body.feed;
 };
 
 /**
