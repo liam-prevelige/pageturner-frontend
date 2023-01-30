@@ -5,32 +5,34 @@
 
 import React, {useEffect, useState} from 'react';
 import {getFeed} from '../../api';
-import {Comment} from 'postcss';
+import {Comment} from './Comment';
 
 export const Timeline = () => {
-  const [timeLine, setTimeLine] = useState();
+  const [timeLine, setTimeLine] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const timeLine = await getFeed();
+      console.log(timeLine);
+      setTimeLine(timeLine);
+    } catch (err) {
+      console.log('error', err);
+    }
+  };
 
   useEffect(() => {
     if (!isLoading) {
       setIsLoading(true);
-      const fetchData = async () => {
-        try {
-          const timeLine = await getFeed();
-          setTimeLine(timeLine);
-        } catch (err) {
-          console.log('error', err);
-        }
-      };
       fetchData();
     }
   }, [isLoading]);
 
   return (
-    <div className="bg-slate-100 h-full">
+    <div className="bg-white h-full">
       {timeLine && timeLine.map((commentData, index) =>
         (<div key={index}>
-          <Comment commentId={commentData._id} noParent={true}/>
+          <Comment commentId={commentData} noParent={true}/>
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
         </div>
         ))}

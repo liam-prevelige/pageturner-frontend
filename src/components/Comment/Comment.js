@@ -2,8 +2,7 @@ import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Reply, Retweet, Like, Share} from '../../assets/Icons';
 import {Parent} from './Parent';
-import {getProfile} from '../../api';
-import {getComment} from '../../api';
+import {getProfile, getComment, updateLikes} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
 
@@ -29,6 +28,12 @@ export const Comment = ({commentId, noParent}) => {
     setCommentData(comment);
   };
 
+  const updateLikesCb = async (e) => {
+    e.stopPropagation();
+    console.log('updateLikesCb');
+    await updateLikes(commentData._id);
+  };
+
   const loadUserProfile = (uid) => {
     const path = `/profile?uid=${uid}`;
     navigate(path);
@@ -49,8 +54,8 @@ export const Comment = ({commentId, noParent}) => {
              <span className="ml-2 text-primary-gray_colors">@{profileData.tag}</span>
              <span className="text-primary-gray_colors">{formatDistance(new Date(commentData.metadata.timestamp), new Date())}</span>
            </div>
-           <div className="ml-1 cursor-pointer" onClick={(e) => loadThread(e, commentData)}>
-             <div className="items-center text-black overflow-hidden">
+           <div className="ml-1 cursor-pointer">
+             <div className="items-center text-black overflow-hidden" onClick={(e) => loadThread(e, commentData)}>
                {commentData.text}
                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
                {!noParent && <Parent commentId={commentData.pid}/>}
@@ -71,7 +76,7 @@ export const Comment = ({commentId, noParent}) => {
                </li>
 
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
-                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer">
+                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
                    <Like/>
                  </div>
                  <span>{commentData.metadata.likes}</span>
