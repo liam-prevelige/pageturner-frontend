@@ -33,6 +33,33 @@ export const getFeed = async () => {
 };
 
 /**
+ * /:user/update_likes
+ *
+ * Update the likes on a post. Adds comment ID to user's liked list and updates post's metadata
+ *
+ */
+export const updateLikes = async () => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/comments/update_likes`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/update_likes failed');
+  }
+  console.log(body);
+  return body.likes;
+};
+
+/**
  * Checks if auth_code is within 5 minutes of expiration and calls for token refresh if necessary
  * Essentially middleware for all API calls
  * TODO: if possible, convert to actual middleware
