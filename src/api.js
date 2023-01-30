@@ -509,3 +509,26 @@ export const getReplies = async (id) => {
   }
   return body.replies;
 };
+
+/**
+ * Fetches all trends stored in databse
+ *
+ * @return {array} trends - array of trends
+ */
+export const getTrends = async () => {
+  const response = await fetch(`${API_URL}/get_trends`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+
+  if (!response.ok) {
+    throw new Error('Call to /get_trends failed');
+  }
+  return body.trends;
+};
