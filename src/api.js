@@ -510,15 +510,13 @@ export const getReplies = async (id) => {
   return body.replies;
 };
 
-
 /**
- * Search all PageTurner content
+ * Fetches all trends stored in databse
  *
- * @param {string} searchString - the string to search with
+ * @return {array} trends - array of trends
  */
-export const searchContent = async (searchString) => {
-  await refreshToken();
-  const response = await fetch(`${API_URL}/search/${searchString}`, {
+export const getTrends = async () => {
+  const response = await fetch(`${API_URL}/get_trends`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -529,7 +527,32 @@ export const searchContent = async (searchString) => {
 
   const body = await response.json();
   if (!response.ok) {
+    throw new Error('Call to /get_trends failed');
+  }
+  return body.trends;
+};
+
+/**
+ * Search all PageTurner content
+ *
+ * @param {string} searchString - the string to search with
+ */
+export const searchContent = async (searchString) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/search/${searchString}`, 
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  {
+  if (!response.ok) {
     throw new Error('Call to /search failed');
   }
   return body;
-};
+}
+
