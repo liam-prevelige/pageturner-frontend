@@ -534,9 +534,31 @@ export const getTrends = async () => {
   });
 
   const body = await response.json();
-
   if (!response.ok) {
     throw new Error('Call to /get_trends failed');
   }
   return body.trends;
+};
+
+/**
+ * Search all PageTurner content
+ *
+ * @param {string} searchString - the string to search with
+ */
+export const searchContent = async (searchString) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/search/${searchString}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /search failed');
+  }
+  return body;
 };
