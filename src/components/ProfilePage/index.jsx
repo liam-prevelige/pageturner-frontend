@@ -3,7 +3,7 @@ import {React, useState, useRef, useEffect} from 'react';
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
-import {updateProfile} from '../../api';
+import {updateProfile, updateGroupProfile} from '../../api';
 import {getProfile} from '../../api';
 
 // export const Banner = styled.div`
@@ -63,10 +63,20 @@ export const ProfilePage = () => {
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
 
+  // TODO
+  const handleLeaveGroup = async () => {
+    return;
+  };
+
   const handleEditProfile = async () => {
     if (isEditMode) {
-      const updatedProfile = await updateProfile(newProfile);
-      sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
+      let updatedProfile = null;
+      if (isGroup) {
+        updatedProfile = await updateGroupProfile(newProfile);
+      } else {
+        updatedProfile = await updateProfile(newProfile);
+        sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
+      }
       setNewProfile(updatedProfile);
       window.location.reload();
     } else {
@@ -94,7 +104,11 @@ export const ProfilePage = () => {
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64Image = reader.result;
-      setNewProfile({...newProfile, cover: base64Image});
+      if (isGroup) {
+        setNewProfile({...newProfile, banner_picture: base64Image});
+      } else {
+        setNewProfile({...newProfile, cover: base64Image});
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -128,14 +142,14 @@ export const ProfilePage = () => {
             <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
               {isEditMode ? 'Save Changes' : 'Edit Profile'}
             </button>
-            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleEditProfile}>
+            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleLeaveGroup}>
             Leave Group
             </button>
           </div>
         );
       } else {
         return (
-          <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleEditProfile}>
+          <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleLeaveGroup}>
           Leave Group
           </button>
         );

@@ -87,6 +87,30 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
+ * Updates a group profile after being edited
+ *
+ * @param {dict} newProfile - new group profile to be set as current group's profile
+ */
+export const updateGroupProfile = async (newProfile) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/groups/update_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({newProfile}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  return body.result;
+};
+
+/**
  * /comments/postComment
  *
  * Gets all comments on the requested parent object
