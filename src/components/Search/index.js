@@ -3,6 +3,8 @@ import {SearchIcon} from '../../assets/Icons';
 import {searchContent} from '../../api';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
+import ReactLoading from 'react-loading';
+import {UserSearchResult, BookshelfSearchResult, GroupSearchResult, CommentSearchResult} from './SearchResults';
 
 export const Search = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -40,7 +42,7 @@ export const Search = () => {
         />
       </div>
     </div>
-    {show && <div>
+    {show && (results == null ? <ReactLoading type="spin" color="black" /> : <div>
       <ChakraProvider resetCSS={false}>
         <Tabs isFitted className="m-3" variant='line' colorScheme='cyan'>
           <TabList>
@@ -52,27 +54,27 @@ export const Search = () => {
           <TabPanels>
             <TabPanel>
               <ScrollMenu style={{overflowY: 'auto'}}>
-                {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
+                {results.users.map((user, index) => (<UserSearchResult key={index} userInfo={user}/>))}
               </ScrollMenu>
             </TabPanel>
             <TabPanel>
               <ScrollMenu style={{overflowX: 'auto'}}>
-                {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
+                {results.groups.map((group, index) => (<GroupSearchResult key={index} groupInfo={group}/>))}
               </ScrollMenu>
             </TabPanel>
             <TabPanel>
               <ScrollMenu style={{overflowX: 'auto'}}>
-                {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
+                {results.bookshelves.map((bookshelf, index) => (<BookshelfSearchResult key={index} bookshelfInfo={bookshelf}/>))}
               </ScrollMenu>
             </TabPanel>
             <TabPanel>
               <ScrollMenu style={{overflowX: 'auto'}}>
-                {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
+                {results.comments.map((comment, index) => (<CommentSearchResult key={index} commentInfo={comment}/>))}
               </ScrollMenu>
             </TabPanel>
           </TabPanels>
         </Tabs>
       </ChakraProvider>
-    </div>}
+    </div>)}
   </div>);
 };
