@@ -25,7 +25,6 @@ export const BookClubsPage = () => {
     const uid = storedProfile._id;
     const response = await getBookClubs(uid);
     const retrievedBookClubs = response['result'];
-    console.log(retrievedBookClubs);
     if (retrievedBookClubs) {
       setBookClubs(retrievedBookClubs);
     } else {
@@ -44,7 +43,7 @@ export const BookClubsPage = () => {
       return (
         bookClubs.map((groupData, index) =>
           (<div key={index}>
-            <a href={'/profile?uid=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg"> {/** can delete bg-white to get rid of white background, can delete shadow-lg to be less like a card */}
+            <a href={'/profile?uid=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg">
               <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
               <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">{groupData.name}</div>

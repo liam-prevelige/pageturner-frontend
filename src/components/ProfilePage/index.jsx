@@ -22,6 +22,7 @@ export const ProfilePage = () => {
   const queryParams = new URLSearchParams(search);
   const isMyProfile = !queryParams.has('uid');
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  const [isGroup, setIsGroup] = useState(false);
 
   const fakeProfile = {
     id: 1,
@@ -39,8 +40,14 @@ export const ProfilePage = () => {
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
     const retrievedProfile = await getProfile(uid);
+    console.log(retrievedProfile);
     if (retrievedProfile) {
       setProfile(retrievedProfile);
+      if (profile.members != []) {
+        setIsGroup(true);
+      } else {
+        setIsGroup(false);
+      }
     }
   };
 
@@ -107,107 +114,218 @@ export const ProfilePage = () => {
     input.current.click();
   };
 
-  return (
-    <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
-      <main className="flex flex-col">
-        <>
-          <div className="profile">
-            <div className="profile-info">
-              <div className="profile-head">
-                <BackNav profile={profile}/>
-              </div>
+  /**
+   * renders different button functionality depending on if the user is a group admin, member, non-member
+   * @param {*} groupProfile the group profile with a list of members and admins
+   * @return {jsx} different button layout depending on member status and admin status
+   */
+  const groupButtonOptions = () => {
+    // TODO: add functionality to buttons
+    if (profile.members.includes(storedProfile._id)) {
+      if (profile.admins.includes(storedProfile._id)) {
+        return (
+          <div>
+            <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+              {isEditMode ? 'Save Changes' : 'Edit Profile'}
+            </button>
+            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleEditProfile}>
+            Leave Group
+            </button>
+          </div>
+        );
+      } else {
+        return (
+          <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleEditProfile}>
+          Leave Group
+          </button>
+        );
+      }
+    } else {
+      return (
+        <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
+          Join Group
+        </button>
+      );
+    }
+  };
 
-              {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.cover} /> :
-                  (
-                    <div className="h-64 w-full object-cover">
-                      <img className="h-64 w-full object-cover" src={newProfile.cover} />
+  // returns a different rendering depending on if the profile is a single user or a group profile
+  if (!isGroup) {
+    return (
+      <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+        <main className="flex flex-col">
+          <>
+            <div className="profile">
+              <div className="profile-info">
+                <div className="profile-head">
+                  <BackNav profile={profile}/>
+                </div>
 
-                      <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
-                        <div className="flex flex-col justify-center">
-                          <FaFileUpload className="h-20 w-20"/>
+                {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.cover} /> :
+                    (
+                      <div className="h-64 w-full object-cover">
+                        <img className="h-64 w-full object-cover" src={newProfile.cover} />
+
+                        <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
+                          <div className="flex flex-col justify-center">
+                            <FaFileUpload className="h-20 w-20"/>
+                          </div>
                         </div>
+                        <input
+                          type="file"
+                          className='invisible'
+                          ref={coverPicInput}
+                          onChange={(event) => {
+                            handleCoverPicChange(event.target.files[0]);
+                          }}
+                        />
                       </div>
-                      <input
-                        type="file"
-                        className='invisible'
-                        ref={coverPicInput}
-                        onChange={(event) => {
-                          handleCoverPicChange(event.target.files[0]);
-                        }}
-                      />
-                    </div>
-                  )
-              }
+                    )
+                }
 
-              <div className="relative ml-10">
-                {!isEditMode ? <img className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white" src={profile.profilePicture} /> :
-                  (
-                    <div className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white">
-                      <img className="rounded-full h-40 w-40" src={newProfile.profilePicture} />
-                      <div className="relative flex flex-row justify-center -top-40 -ml-1 h-40 w-40 rounded-full object-cover" onClick={() => triggerClick(profilePicInput)}>
-                        <div className="flex flex-col rounded-full justify-center">
-                          <FaFileUpload className="h-20 w-20"/>
+                <div className="relative ml-10">
+                  {!isEditMode ? <img className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white" src={profile.profilePicture} /> :
+                    (
+                      <div className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white">
+                        <img className="rounded-full h-40 w-40" src={newProfile.profilePicture} />
+                        <div className="relative flex flex-row justify-center -top-40 -ml-1 h-40 w-40 rounded-full object-cover" onClick={() => triggerClick(profilePicInput)}>
+                          <div className="flex flex-col rounded-full justify-center">
+                            <FaFileUpload className="h-20 w-20"/>
+                          </div>
                         </div>
+                        <input
+                          type="file"
+                          className='invisible'
+                          ref={profilePicInput}
+                          onChange={(event) => {
+                            handleProfilePicChange(event.target.files[0]);
+                          }}
+                        />
                       </div>
-                      <input
-                        type="file"
-                        className='invisible'
-                        ref={profilePicInput}
-                        onChange={(event) => {
-                          handleProfilePicChange(event.target.files[0]);
-                        }}
-                      />
-                    </div>
-                  )
-                }
-              </div>
-              {profile &&
-              <div className="flex flex-col float-right font-bold">
-                {isMyProfile ?
-                (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-                  {isEditMode ? 'Save Changes' : 'Edit Profile'}
-                </button>) :
-                (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
-                  Add Friend
-                </button>)}
-              </div>}
+                    )
+                  }
+                </div>
+                {profile &&
+                <div className="flex flex-col float-right font-bold">
+                  {isMyProfile ?
+                  (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+                    {isEditMode ? 'Save Changes' : 'Edit Profile'}
+                  </button>) :
+                  (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
+                    Add Friend
+                  </button>)}
+                </div>}
 
-              <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
-                {!isEditMode ?
-                  <span className="text-xl font-bold">{profile.name}</span> :
-                  <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.name}
-                    value={newProfile.name}
-                    onChange={handleNameChange}/>
-                }
-                {!isEditMode ?
-                  <span className="text-base text-slate-500">@{profile.tag}</span> :
-                  <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.tag}
-                    value={newProfile.tag}
-                    onChange={handleTagChange}/>
-                }
-                {!isEditMode ?
-                  <span className="text-base text-black mt-2">{profile.description}</span> :
-                  <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.description}
-                    value={newProfile.description}
-                    onChange={handleDescriptionChange}/>
-                }
+                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
+                  {!isEditMode ?
+                    <span className="text-xl font-bold">{profile.name}</span> :
+                    <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.name}
+                      value={newProfile.name}
+                      onChange={handleNameChange}/>
+                  }
+                  {!isEditMode ?
+                    <span className="text-base text-slate-500">@{profile.tag}</span> :
+                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.tag}
+                      value={newProfile.tag}
+                      onChange={handleTagChange}/>
+                  }
+                  {!isEditMode ?
+                    <span className="text-base text-black mt-2">{profile.description}</span> :
+                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.description}
+                      value={newProfile.description}
+                      onChange={handleDescriptionChange}/>
+                  }
 
-                <div className="flex flex-row space-x-5">
-                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.friends.length}</strong> Friends</button>
-                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.following.length}</strong> Following</button>
+                  <div className="flex flex-row space-x-5">
+                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.friends.length}</strong> Friends</button>
+                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.following.length}</strong> Following</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <ProfileTabs />
-        </>
-      </main>
-    </div >
-  );
+            <ProfileTabs />
+          </>
+        </main>
+      </div >
+    );
+  } else {
+    return (
+      <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+        <main className="flex flex-col">
+          <>
+            <div className="profile">
+              <div className="profile-info">
+                <div className="profile-head">
+                  <BackNav profile={profile}/>
+                </div>
+
+                {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.banner_picture} /> :
+                    (
+                      <div className="h-64 w-full object-cover">
+                        <img className="h-64 w-full object-cover" src={newProfile.cover} />
+
+                        <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
+                          <div className="flex flex-col justify-center">
+                            <FaFileUpload className="h-20 w-20"/>
+                          </div>
+                        </div>
+                        <input
+                          type="file"
+                          className='invisible'
+                          ref={coverPicInput}
+                          onChange={(event) => {
+                            handleCoverPicChange(event.target.files[0]);
+                          }}
+                        />
+                      </div>
+                    )
+                }
+
+                {groupButtonOptions()}
+
+                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
+                  {!isEditMode ?
+                    <span className="text-xl font-bold">{profile.name}</span> :
+                    <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.name}
+                      value={newProfile.name}
+                      onChange={handleNameChange}/>
+                  }
+                  {!isEditMode ?
+                    <span className="text-base text-slate-500">@{profile.tag}</span> :
+                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.tag}
+                      value={newProfile.tag}
+                      onChange={handleTagChange}/>
+                  }
+                  {!isEditMode ?
+                    <span className="text-base text-black mt-2">{profile.description}</span> :
+                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.description}
+                      value={newProfile.description}
+                      onChange={handleDescriptionChange}/>
+                  }
+
+                  <div className="flex flex-row space-x-5">
+                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.members.length}</strong>{(profile.members.length == 1 ? ' Member' : ' Members')}</button>
+                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.admins.length}</strong>{(profile.members.length == 1 ? ' Admin' : ' Admins')}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ProfileTabs />
+          </>
+        </main>
+      </div >
+    );
+  };
 };
