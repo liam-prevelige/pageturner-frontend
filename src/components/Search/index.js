@@ -1,15 +1,21 @@
 import React, {useState} from 'react';
 import {SearchIcon} from '../../assets/Icons';
 import {searchContent} from '../../api';
+import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
+import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 
 export const Search = () => {
   const [searchInput, setSearchInput] = useState('');
   // eslint-disable-next-line
   const [results, setResults] = useState(null);
+  const [show, setShowing] = useState(false);
 
   const performSearch = async () => {
     const res = await searchContent(searchInput);
     setResults(res);
+    setShowing(true);
+
+    // TODO: Remove this log
     console.log(res);
   };
 
@@ -32,5 +38,39 @@ export const Search = () => {
         onKeyDown={handleKeyDown}
       />
     </div>
+    {show && <div>
+      <ChakraProvider resetCSS={false}>
+        <Tabs isFitted className="m-3" variant='line' colorScheme='cyan'>
+          <TabList>
+            <Tab>People</Tab>
+            <Tab>Groups</Tab>
+            <Tab>Bookshelves</Tab>
+            <Tab>Comments</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <ScrollMenu style={{overflowY: 'auto'}}>
+                {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
+              </ScrollMenu>
+            </TabPanel>
+            <TabPanel>
+              <ScrollMenu style={{overflowX: 'auto'}}>
+                {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
+              </ScrollMenu>
+            </TabPanel>
+            <TabPanel>
+              <ScrollMenu style={{overflowX: 'auto'}}>
+                {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
+              </ScrollMenu>
+            </TabPanel>
+            <TabPanel>
+              <ScrollMenu style={{overflowX: 'auto'}}>
+                {/* <ThreadView commentId={'63cef967b83ed8c71f06be01'}/> */}
+              </ScrollMenu>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </ChakraProvider>
+    </div>}
   </div>);
 };
