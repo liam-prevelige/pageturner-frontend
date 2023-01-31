@@ -111,6 +111,31 @@ export const updateGroupProfile = async (newProfile) => {
 };
 
 /**
+ * Removes a member/admin from a group
+ *
+ * @param {dict} groupProfile - profile of the group that the given user is leaving
+ * @param {string} memberId - Id of member being removed
+ */
+export const removeGroupMember = async (groupProfile, memberId) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/groups/remove_member`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({groupProfile, memberId}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  return body.result;
+};
+
+/**
  * /comments/postComment
  *
  * Gets all comments on the requested parent object

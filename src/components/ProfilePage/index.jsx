@@ -3,7 +3,7 @@ import {React, useState, useRef, useEffect} from 'react';
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
-import {updateProfile, updateGroupProfile} from '../../api';
+import {updateProfile, updateGroupProfile, removeGroupMember} from '../../api';
 import {getProfile} from '../../api';
 
 // export const Banner = styled.div`
@@ -63,9 +63,13 @@ export const ProfilePage = () => {
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
 
-  // TODO
+  /**
+   * removes the user (storedProfile) from this book club
+   */
   const handleLeaveGroup = async () => {
-    return;
+    const updatedProfile = await removeGroupMember(profile, storedProfile._id);
+    setNewProfile(updatedProfile);
+    window.location.reload();
   };
 
   const handleEditProfile = async () => {
