@@ -18,6 +18,7 @@ import {BookInfo} from './components/BookInfo';
 import {HomePage} from './components/HomePage';
 import {ThreadView} from './components/ThreadView/ThreadView';
 import {RightBar} from './components/RightBar';
+import {BookClubsPage} from './components/BookClubsPage';
 
 /**
  * Core React component
@@ -33,6 +34,7 @@ const App = () => {
         <main className="flex-1 flex flex-col bg-white">
           <Routes>
             <Route exact path="/" element={<HomePage />} />
+            <Route path='/book-clubs' element={<BookClubsPage />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/people" element={<People />} />
             <Route path="/profile" element={<ProfilePage />} />
