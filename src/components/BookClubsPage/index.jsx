@@ -39,10 +39,10 @@ export const BookClubsPage = () => {
     }
   }, []);
 
-  return (
-    <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
-      <div className="bg-slate-100 h-full">
-        {bookClubs.map((groupData, index) =>
+  const renderGroups = (bookClubs) => {
+    if (storedProfile && bookClubs.length > 0) {
+      return (
+        bookClubs.map((groupData, index) =>
           (<div key={index}>
             <a href={'/profile?uid=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg"> {/** can delete bg-white to get rid of white background, can delete shadow-lg to be less like a card */}
               <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
@@ -55,7 +55,19 @@ export const BookClubsPage = () => {
             </a>
             <div className="border-b ml-3 mr-3 border-slate-300"></div>
           </div>
-          ))}
+          ))
+      );
+    } else if (storedProfile && bookClubs.length == 0) {
+      return (<div className="font-bold text-xl mb-2 pt-30">You are not in any book clubs. Join one!</div>);
+    } else {
+      return (<div className="font-bold text-xl mb-2 pt-30">Sign in or make an account to see your book clubs.</div>);
+    }
+  };
+
+  return (
+    <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+      <div className="bg-slate-100 h-full bg-white pt-10">
+        {renderGroups(bookClubs)}
       </div>
     </div>
   );
