@@ -3,8 +3,9 @@ import {SearchIcon} from '../../assets/Icons';
 import {searchContent} from '../../api';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import ReactLoading from 'react-loading';
-import {UserSearchResult, BookshelfSearchResult, GroupSearchResult, CommentSearchResult} from './SearchResults';
+import {UserSearchResult, BookshelfSearchResult, GroupSearchResult} from './SearchResults';
 import Row from 'react-bootstrap/Row';
+import {Comment} from '../Comment/Comment';
 
 export const Search = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -69,7 +70,7 @@ export const Search = () => {
             </TabPanel>
             <TabPanel>
               {results.comments.map((comment, index) => (<Row key={index}>
-                <CommentSearchResult commentInfo={comment}/>
+                <Comment commentId={comment._id} noParent={true}/>
               </Row>))}
             </TabPanel>
           </TabPanels>

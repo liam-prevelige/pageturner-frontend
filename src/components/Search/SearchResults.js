@@ -1,4 +1,4 @@
-import React from 'react';
+import {React} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 export const UserSearchResult = (userInfo) => {
@@ -33,14 +33,6 @@ export const BookshelfSearchResult = () => {
 };
 
 export const GroupSearchResult = () => {
-  return (
-    <div>
-      Hello
-    </div>
-  );
-};
-
-export const CommentSearchResult = () => {
   return (
     <div>
       Hello
