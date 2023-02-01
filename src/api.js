@@ -87,6 +87,30 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
+ * Creates a new group
+ *
+ * @param {dict} newGroupProfile - new group profile
+ */
+export const createGroup = async (newGroupProfile) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/groups/create`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({newGroupProfile}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /create failed');
+  }
+  return body.result;
+};
+
+/**
  * Updates a group profile after being edited
  *
  * @param {dict} newProfile - new group profile to be set as current group's profile

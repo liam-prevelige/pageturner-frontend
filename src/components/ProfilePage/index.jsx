@@ -307,7 +307,7 @@ export const ProfilePage = () => {
 
                 {groupButtonOptions()}
 
-                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
+                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-6 ml-5 mr-5">
                   {!isEditMode ?
                     <span className="text-xl font-bold">{profile.name}</span> :
                     <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
