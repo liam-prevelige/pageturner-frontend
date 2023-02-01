@@ -9,8 +9,6 @@ export const UserSearchResult = (userInfo) => {
     navigate(path);
   };
 
-  console.log(userInfo);
-
   return (
     <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color'>
       <img src={userInfo.userInfo.profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(userInfo.userInfo._id)} />
@@ -32,10 +30,23 @@ export const BookshelfSearchResult = () => {
   );
 };
 
-export const GroupSearchResult = () => {
+export const GroupSearchResult = (groupInfo) => {
+  const navigate = useNavigate();
+
+  const loadGroup = (gid) => {
+    // TODO fix the path below
+    const path = `/group?id=${gid}`;
+    navigate(path);
+  };
+
   return (
-    <div>
-      Hello
+    <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color'>
+      <img src={groupInfo.groupInfo.banner_picture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadGroup(groupInfo.groupInfo._id)} />
+      <div className="flex-1">
+        <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadGroup(groupInfo.groupInfo._id)}>
+          <span className="ml-1 font-bold text-black">{groupInfo.groupInfo.name}</span>
+        </div>
+      </div>
     </div>
   );
 };
