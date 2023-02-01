@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {SearchIcon} from '../../assets/Icons';
 import {searchContent} from '../../api';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
-import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import ReactLoading from 'react-loading';
 import {UserSearchResult, BookshelfSearchResult, GroupSearchResult, CommentSearchResult} from './SearchResults';
+import Row from 'react-bootstrap/Row';
 
 export const Search = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -53,24 +53,24 @@ export const Search = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <ScrollMenu style={{overflowY: 'auto'}}>
-                {results.users.map((user, index) => (<UserSearchResult key={index} userInfo={user}/>))}
-              </ScrollMenu>
+              {results.users.map((user, index) => (<Row key={index}>
+                <UserSearchResult userInfo={user}/>
+              </Row>))}
             </TabPanel>
             <TabPanel>
-              <ScrollMenu style={{overflowX: 'auto'}}>
-                {results.groups.map((group, index) => (<GroupSearchResult key={index} groupInfo={group}/>))}
-              </ScrollMenu>
+              {results.groups.map((group, index) => (<Row key={index}>
+                <GroupSearchResult groupInfo={group}/>
+              </Row>))}
             </TabPanel>
             <TabPanel>
-              <ScrollMenu style={{overflowX: 'auto'}}>
-                {results.bookshelves.map((bookshelf, index) => (<BookshelfSearchResult key={index} bookshelfInfo={bookshelf}/>))}
-              </ScrollMenu>
+              {results.bookshelves.map((bookshelf, index) => (<Row key={index}>
+                <BookshelfSearchResult bookshelfInfo={bookshelf}/>
+              </Row>))}
             </TabPanel>
             <TabPanel>
-              <ScrollMenu style={{overflowX: 'auto'}}>
-                {results.comments.map((comment, index) => (<CommentSearchResult key={index} commentInfo={comment}/>))}
-              </ScrollMenu>
+              {results.comments.map((comment, index) => (<Row key={index}>
+                <CommentSearchResult commentInfo={comment}/>
+              </Row>))}
             </TabPanel>
           </TabPanels>
         </Tabs>
