@@ -3,6 +3,70 @@
 
 const API_URL = 'http://localhost:5001';
 
+/**
+ * Checks if auth_code is within 5 minutes of expiration and calls for token refresh if necessary
+ * Essentially middleware for all API calls
+ * TODO: if possible, convert to actual middleware
+ */
+export async function refreshToken() {
+  const expiryDate = sessionStorage.getItem('expiry_date');
+  if (!expiryDate) {
+    console.log('no expiry date');
+    return;
+  }
+  console.log('expiry date: ' + expiryDate);
+
+  const diff = expiryDate - Date.now();
+  console.log(diff);
+  if (diff < 300000) { // 5 minutes
+    const response = await fetch(`${API_URL}/user/refresh_token`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': sessionStorage.getItem('auth_token'),
+        'refreshrequest': true,
+      },
+    });
+
+    const body = await response.json();
+    if (!response.ok) {
+      throw new Error('Call to /refresh_token failed');
+    }
+
+    if (body.result.tokens && body.result.tokens.id_token != sessionStorage.getItem('auth_token')) {
+      sessionStorage.setItem('auth_token', body.result.tokens.id_token);
+      sessionStorage.setItem('expiry_date', body.result.tokens.expiry_date);
+    }
+  }
+}
+
+/**
+ * /:user/update_likes
+ *
+ * Update the likes on a post. Adds comment ID to user's liked list and updates post's metadata
+ *
+ */
+export const updateLikes = async (cid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/comments/update_likes`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({cid: cid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/update_likes failed');
+  }
+  console.log(res);
+  return res.likedPosts;
+};
 
 /**
  * /:user/get_feed
@@ -31,98 +95,6 @@ export const getFeed = async () => {
   console.log(body);
   return body.feed;
 };
-
-// /**
-//  * /:user/get_feed
-//  *
-//  * Gets all comments of user and user's following list
-//  * Requires user is logged in
-//  *
-//  */
-// export const postComment = async (postText) => {
-//   await refreshToken();
-
-//   const response = await fetch(`${API_URL}/comments/post_comment`, {
-//     method: 'GET',
-//     headers: {
-//       'Accept': 'application.json',
-//       'Content-Type': 'application/json',
-//       'Authorization': sessionStorage.getItem('auth_token'),
-//     },
-//     cache: 'default',
-//     body: JSON.stringify({
-//       text: postText,
-//       pType: 'global',
-//     }),
-//   });
-
-//   const body = await response.json();
-//   if (!response.ok) {
-//     throw new Error('Call to /user/get_feed failed');
-//   }
-//   console.log(body);
-//   return body.feed;
-// };
-
-/**
- * /:user/update_likes
- *
- * Update the likes on a post. Adds comment ID to user's liked list and updates post's metadata
- *
- */
-export const updateLikes = async () => {
-  await refreshToken();
-
-  const response = await fetch(`${API_URL}/comments/update_likes`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application.json',
-      'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
-    },
-    cache: 'default',
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /user/update_likes failed');
-  }
-  console.log(body);
-  return body.likes;
-};
-
-/**
- * Checks if auth_code is within 5 minutes of expiration and calls for token refresh if necessary
- * Essentially middleware for all API calls
- * TODO: if possible, convert to actual middleware
- */
-export async function refreshToken() {
-  const expiryDate = sessionStorage.getItem('expiry_date');
-  if (!expiryDate) return;
-
-  const diff = expiryDate - Date.now();
-  if (diff < 300000) { // 5 minutes
-    const response = await fetch(`${API_URL}/user/refresh_token`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': sessionStorage.getItem('auth_token'),
-        'refreshrequest': true,
-      },
-    });
-
-    const body = await response.json();
-    if (!response.ok) {
-      throw new Error('Call to /refresh_token failed');
-    }
-
-    if (body.result.tokens && body.result.tokens.id_token != sessionStorage.getItem('auth_token')) {
-      sessionStorage.setItem('auth_token', body.result.tokens.id_token);
-      sessionStorage.setItem('expiry_date', body.result.tokens.expiry_date);
-    }
-  }
-}
 
 /**
  * TODO
@@ -181,11 +153,11 @@ export const updateProfile = async (newProfile) => {
  * Gets all comments on the requested parent object
  * Requires user is logged in
  *
- * @param {string} pType - type of parent object to comment on
+ * @param {string} scope - type of parent object to comment on
  * @param {string} pid - ID of parent object to comment on
  * @param {string} text - Content of the comment
  */
-export const postComment = async (pType, pid, text) => {
+export const postComment = async (scope, pid, text) => {
   await refreshToken();
   await fetch(`${API_URL}/comments/post_comment`, {
     method: 'POST',
@@ -194,7 +166,7 @@ export const postComment = async (pType, pid, text) => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({pid, pType, text}),
+    body: JSON.stringify({pid, scope, text}),
   });
 };
 
@@ -285,6 +257,7 @@ export async function removeFriend(email) {
   const body = await response.json();
   return body.success;
 }
+
 // endpoint to add a new post to the database from the book-info page
 export const postBookReview = async (user, isbn, text) => {
   await refreshToken();

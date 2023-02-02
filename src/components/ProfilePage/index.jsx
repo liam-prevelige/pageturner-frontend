@@ -60,6 +60,7 @@ export const ProfilePage = () => {
     if (isEditMode) {
       const updatedProfile = await updateProfile(newProfile);
       sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
+      console.log('Updated profile: ', updatedProfile);
       setNewProfile(updatedProfile);
       window.location.reload();
     } else {
