@@ -148,7 +148,7 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
- * /comments/postComment
+ * /comments/post_comment
  *
  * Gets all comments on the requested parent object
  * Requires user is logged in
@@ -519,6 +519,51 @@ export const getProfile = async (uid) => {
     throw new Error('Call to /get_profile failed');
   }
   return body.result;
+};
+
+
+/**
+ * Fetches a user's posts using their token
+ */
+export const getPosts = async () => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_posts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_posts failed');
+  }
+  return body.posts;
+};
+
+/**
+ * Fetches a user's posts using their token
+ */
+export const getLikedPosts = async () => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_liked_posts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_liked_posts failed');
+  }
+  return body.likedPosts;
 };
 
 /**
