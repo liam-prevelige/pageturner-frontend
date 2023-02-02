@@ -7,8 +7,12 @@ export const ShareBox = () => {
   const [postText, setPostText] = useState('');
 
   const submitPostCb = async () => {
-    console.log('submit post');
-    await postComment('global', '', postText);
+    if (postText && postText.length > 0) {
+      console.log('submit post');
+      await postComment('global', '', postText);
+      window.dispatchEvent(new Event('newPost'));
+      setPostText('');
+    }
   };
 
   const updatePostText = (e) => {
@@ -21,7 +25,7 @@ export const ShareBox = () => {
         <img className="rounded-full h-11 w-11 mt-1" src="https://www.protocol.com/media-library/image.png?id=27946197&width=1200&height=600" />
       }
       <div className="flex flex-1 flex-col mt-2 text-black">
-        <textarea type="text" rows="1" className="bg-white tweet-box w-full outline-none overflow-y-auto flex-1 rounded-xl text-m p-2 resize-none" placeholder="What have you been reading?" onChange={(e) => updatePostText(e)}/>
+        <textarea id="postInput" type="text" rows="1" className="bg-white tweet-box w-full outline-none overflow-y-auto flex-1 rounded-xl text-m p-2 resize-none" placeholder="What have you been reading?" value={postText} onChange={(e) => updatePostText(e)}/>
         <div className="items-center flex justify-between">
           <div className="flex items-center justify-center">
             <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">

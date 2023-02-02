@@ -9,7 +9,7 @@ import {Comment} from './Comment';
 
 export const Timeline = () => {
   const [timeLine, setTimeLine] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -21,9 +21,17 @@ export const Timeline = () => {
     }
   };
 
-  useEffect(() => {
+  // Create event listener for newPost in sessionStorage
+  window.addEventListener('newPost', () => {
     if (!isLoading) {
+      console.log('newPost event triggered');
       setIsLoading(true);
+    }
+  });
+
+  useEffect(() => {
+    if (isLoading) {
+      setIsLoading(false);
       fetchData();
     }
   }, [isLoading]);
@@ -32,7 +40,7 @@ export const Timeline = () => {
     <div className="bg-white h-full">
       {timeLine && timeLine.map((commentData, index) =>
         (<div key={index}>
-          <Comment commentId={commentData} noParent={true}/>
+          <Comment commentId={commentData}/>
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
         </div>
         ))}

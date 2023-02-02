@@ -10,9 +10,14 @@ const API_URL = 'http://localhost:5001';
  */
 export async function refreshToken() {
   const expiryDate = sessionStorage.getItem('expiry_date');
-  if (!expiryDate) return;
+  if (!expiryDate) {
+    console.log('no expiry date');
+    return;
+  }
+  console.log('expiry date: ' + expiryDate);
 
   const diff = expiryDate - Date.now();
+  console.log(diff);
   if (diff < 300000) { // 5 minutes
     const response = await fetch(`${API_URL}/user/refresh_token`, {
       method: 'POST',
@@ -42,7 +47,7 @@ export async function refreshToken() {
  * Update the likes on a post. Adds comment ID to user's liked list and updates post's metadata
  *
  */
-export const updateLikes = async () => {
+export const updateLikes = async (cid) => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/comments/update_likes`, {
@@ -52,15 +57,15 @@ export const updateLikes = async () => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    cache: 'default',
+    body: JSON.stringify({cid: cid}),
   });
 
-  const body = await response.json();
+  const res = await response.json();
   if (!response.ok) {
     throw new Error('Call to /user/update_likes failed');
   }
-  console.log(body);
-  return body.likes;
+  console.log(res);
+  return res.likedPosts;
 };
 
 /**
@@ -148,11 +153,11 @@ export const updateProfile = async (newProfile) => {
  * Gets all comments on the requested parent object
  * Requires user is logged in
  *
- * @param {string} pType - type of parent object to comment on
+ * @param {string} scope - type of parent object to comment on
  * @param {string} pid - ID of parent object to comment on
  * @param {string} text - Content of the comment
  */
-export const postComment = async (pType, pid, text) => {
+export const postComment = async (scope, pid, text) => {
   await refreshToken();
   await fetch(`${API_URL}/comments/post_comment`, {
     method: 'POST',
@@ -161,7 +166,7 @@ export const postComment = async (pType, pid, text) => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({pid, pType, text}),
+    body: JSON.stringify({pid, scope, text}),
   });
 };
 
