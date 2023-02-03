@@ -67,7 +67,7 @@ export const GroupSearchResult = (groupInfo) => {
   const navigate = useNavigate();
 
   const loadGroup = (gid) => {
-    const path = `/group?id=${gid}`;
+    const path = `/group-profile?id=${gid}`;
     navigate(path);
   };
 
