@@ -34,15 +34,14 @@ export const BookshelfSearchResult = ({bookshelfInfo}) => {
   };
 
   const loadBookshelf = (id) => {
+    // TODO fix this path
     const path = `/profile?id=${id}`;
     navigate(path);
   };
 
   const getUser = async (uid) => {
     if (!uid) return;
-    // Turn on loading state while waiting for API
     setUser(null);
-    // TODO: not returning right profile
     const profile = await getProfile(uid);
     setUser(profile);
   };
@@ -68,7 +67,6 @@ export const GroupSearchResult = (groupInfo) => {
   const navigate = useNavigate();
 
   const loadGroup = (gid) => {
-    // TODO fix the path below
     const path = `/group?id=${gid}`;
     navigate(path);
   };
@@ -85,12 +83,12 @@ export const GroupSearchResult = (groupInfo) => {
   );
 };
 
-// TODO
 export const BookSearchResult = ({bookInfo}) => {
   const navigate = useNavigate();
 
 
   const loadBook = (uid) => {
+    // TODO fix this path
     const path = `/profile?id=${uid}`;
     navigate(path);
   };
