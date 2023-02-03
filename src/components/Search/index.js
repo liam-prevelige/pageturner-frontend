@@ -3,7 +3,7 @@ import {SearchIcon} from '../../assets/Icons';
 import {searchContent} from '../../api';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import ReactLoading from 'react-loading';
-import {UserSearchResult, BookshelfSearchResult, GroupSearchResult} from './SearchResults';
+import {UserSearchResult, BookshelfSearchResult, GroupSearchResult, BookSearchResult} from './SearchResults';
 import Row from 'react-bootstrap/Row';
 import {Comment} from '../Comment/Comment';
 
@@ -51,6 +51,7 @@ export const Search = () => {
             <Tab>Groups</Tab>
             <Tab>Bookshelves</Tab>
             <Tab>Comments</Tab>
+            <Tab>Books</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -71,6 +72,11 @@ export const Search = () => {
             <TabPanel>
               {results.comments.map((comment, index) => (<Row key={index}>
                 <Comment commentId={comment._id} noParent={true}/>
+              </Row>))}
+            </TabPanel>
+            <TabPanel>
+              {results.books.map((book, index) => (<Row key={index}>
+                <BookSearchResult bookInfo={book}/>
               </Row>))}
             </TabPanel>
           </TabPanels>
