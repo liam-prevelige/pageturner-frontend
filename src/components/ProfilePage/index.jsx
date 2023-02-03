@@ -3,7 +3,7 @@ import {React, useState, useRef, useEffect} from 'react';
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
-import {updateProfile, updateGroupProfile, removeGroupMember} from '../../api';
+import {updateProfile} from '../../api';
 import {getProfile} from '../../api';
 
 // export const Banner = styled.div`
@@ -22,7 +22,6 @@ export const ProfilePage = () => {
   const queryParams = new URLSearchParams(search);
   const isMyProfile = !queryParams.has('uid');
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-  const [isGroup, setIsGroup] = useState(false);
 
   const fakeProfile = {
     id: 1,
@@ -43,11 +42,6 @@ export const ProfilePage = () => {
     console.log(retrievedProfile);
     if (retrievedProfile) {
       setProfile(retrievedProfile);
-      if (profile.members != []) {
-        setIsGroup(true);
-      } else {
-        setIsGroup(false);
-      }
     }
   };
 
@@ -63,24 +57,11 @@ export const ProfilePage = () => {
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
 
-  /**
-   * removes the user (storedProfile) from this book club
-   */
-  const handleLeaveGroup = async () => {
-    const updatedProfile = await removeGroupMember(profile, storedProfile._id);
-    setNewProfile(updatedProfile);
-    window.location.reload();
-  };
-
   const handleEditProfile = async () => {
     if (isEditMode) {
       let updatedProfile = null;
-      if (isGroup) {
-        updatedProfile = await updateGroupProfile(newProfile);
-      } else {
-        updatedProfile = await updateProfile(newProfile);
-        sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
-      }
+      updatedProfile = await updateProfile(newProfile);
+      sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
       setNewProfile(updatedProfile);
       window.location.reload();
     } else {
@@ -108,11 +89,7 @@ export const ProfilePage = () => {
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64Image = reader.result;
-      if (isGroup) {
-        setNewProfile({...newProfile, banner_picture: base64Image});
-      } else {
-        setNewProfile({...newProfile, cover: base64Image});
-      }
+      setNewProfile({...newProfile, cover: base64Image});
     };
     reader.readAsDataURL(file);
   };
@@ -132,54 +109,17 @@ export const ProfilePage = () => {
     input.current.click();
   };
 
-  /**
-   * renders different button functionality depending on if the user is a group admin, member, non-member
-   * @param {*} groupProfile the group profile with a list of members and admins
-   * @return {jsx} different button layout depending on member status and admin status
-   */
-  const groupButtonOptions = () => {
-    // TODO: add functionality to buttons
-    if (profile.members.includes(storedProfile._id)) {
-      if (profile.admins.includes(storedProfile._id)) {
-        return (
-          <div>
-            <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-              {isEditMode ? 'Save Changes' : 'Edit Profile'}
-            </button>
-            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleLeaveGroup}>
-            Leave Group
-            </button>
-          </div>
-        );
-      } else {
-        return (
-          <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleLeaveGroup}>
-          Leave Group
-          </button>
-        );
-      }
-    } else {
-      return (
-        <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
-          Join Group
-        </button>
-      );
-    }
-  };
+  return (
+    <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+      <main className="flex flex-col">
+        <>
+          <div className="profile">
+            <div className="profile-info">
+              <div className="profile-head">
+                <BackNav profile={profile}/>
+              </div>
 
-  // returns a different rendering depending on if the profile is a single user or a group profile
-  if (!isGroup) {
-    return (
-      <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
-        <main className="flex flex-col">
-          <>
-            <div className="profile">
-              <div className="profile-info">
-                <div className="profile-head">
-                  <BackNav profile={profile}/>
-                </div>
-
-                {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.cover} /> :
+              {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.cover} /> :
                     (
                       <div className="h-64 w-full object-cover">
                         <img className="h-64 w-full object-cover" src={newProfile.cover} />
@@ -199,10 +139,10 @@ export const ProfilePage = () => {
                         />
                       </div>
                     )
-                }
+              }
 
-                <div className="relative ml-10">
-                  {!isEditMode ? <img className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white" src={profile.profilePicture} /> :
+              <div className="relative ml-10">
+                {!isEditMode ? <img className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white" src={profile.profilePicture} /> :
                     (
                       <div className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white">
                         <img className="rounded-full h-40 w-40" src={newProfile.profilePicture} />
@@ -221,9 +161,9 @@ export const ProfilePage = () => {
                         />
                       </div>
                     )
-                  }
-                </div>
-                {profile &&
+                }
+              </div>
+              {profile &&
                 <div className="flex flex-col float-right font-bold">
                   {isMyProfile ?
                   (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
@@ -234,116 +174,42 @@ export const ProfilePage = () => {
                   </button>)}
                 </div>}
 
-                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
-                  {!isEditMode ?
+              <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
+                {!isEditMode ?
                     <span className="text-xl font-bold">{profile.name}</span> :
                     <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.name}
                       value={newProfile.name}
                       onChange={handleNameChange}/>
-                  }
-                  {!isEditMode ?
+                }
+                {!isEditMode ?
                     <span className="text-base text-slate-500">@{profile.tag}</span> :
                     <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.tag}
                       value={newProfile.tag}
                       onChange={handleTagChange}/>
-                  }
-                  {!isEditMode ?
+                }
+                {!isEditMode ?
                     <span className="text-base text-black mt-2">{profile.description}</span> :
                     <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.description}
                       value={newProfile.description}
                       onChange={handleDescriptionChange}/>
-                  }
-
-                  <div className="flex flex-row space-x-5">
-                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.friends.length}</strong> Friends</button>
-                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.following.length}</strong> Following</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <ProfileTabs />
-          </>
-        </main>
-      </div >
-    );
-  } else {
-    return (
-      <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
-        <main className="flex flex-col">
-          <>
-            <div className="profile">
-              <div className="profile-info">
-                <div className="profile-head">
-                  <BackNav profile={profile}/>
-                </div>
-
-                {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.banner_picture} /> :
-                    (
-                      <div className="h-64 w-full object-cover">
-                        <img className="h-64 w-full object-cover" src={newProfile.cover} />
-
-                        <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
-                          <div className="flex flex-col justify-center">
-                            <FaFileUpload className="h-20 w-20"/>
-                          </div>
-                        </div>
-                        <input
-                          type="file"
-                          className='invisible'
-                          ref={coverPicInput}
-                          onChange={(event) => {
-                            handleCoverPicChange(event.target.files[0]);
-                          }}
-                        />
-                      </div>
-                    )
                 }
 
-                {groupButtonOptions()}
-
-                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-6 ml-5 mr-5">
-                  {!isEditMode ?
-                    <span className="text-xl font-bold">{profile.name}</span> :
-                    <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
-                      type="text"
-                      placeholder={profile.name}
-                      value={newProfile.name}
-                      onChange={handleNameChange}/>
-                  }
-                  {!isEditMode ?
-                    <span className="text-base text-slate-500">@{profile.tag}</span> :
-                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
-                      type="text"
-                      placeholder={profile.tag}
-                      value={newProfile.tag}
-                      onChange={handleTagChange}/>
-                  }
-                  {!isEditMode ?
-                    <span className="text-base text-black mt-2">{profile.description}</span> :
-                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
-                      type="text"
-                      placeholder={profile.description}
-                      value={newProfile.description}
-                      onChange={handleDescriptionChange}/>
-                  }
-
-                  <div className="flex flex-row space-x-5">
-                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.members.length}</strong>{(profile.members.length == 1 ? ' Member' : ' Members')}</button>
-                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.admins.length}</strong>{(profile.members.length == 1 ? ' Admin' : ' Admins')}</button>
-                  </div>
+                <div className="flex flex-row space-x-5">
+                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.friends.length}</strong> Friends</button>
+                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.following.length}</strong> Following</button>
                 </div>
               </div>
             </div>
-            <ProfileTabs />
-          </>
-        </main>
-      </div >
-    );
-  };
+          </div>
+          <ProfileTabs />
+        </>
+      </main>
+    </div >
+  );
 };

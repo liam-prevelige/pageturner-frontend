@@ -37,7 +37,7 @@ export const SideBar = () => {
                 </div>
               </a>
               <a href={bookClubsPath}>
-                <div className="flex items-center hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2">
+                <div className={path===bookClubsPath ? activeClassName : notActiveClassName}>
                   <GroupIcon />
                   <li className="ml-4 sidebar-text">Book Clubs</li>
                 </div>

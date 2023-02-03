@@ -554,6 +554,32 @@ export const getProfile = async (uid) => {
 };
 
 /**
+ * Fetches profile information
+ *
+ * @param {string} id - new profile to be set as current user's profile
+ */
+export const getGroupProfile = async (id) => {
+  await refreshToken();
+
+
+  const response = await fetch(`${API_URL}/groups/get_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({id: id}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /groups/get_profile failed');
+  }
+  return body.result;
+};
+
+/**
  * Fetches replies to a comment, given the comment's id
  *
  * @param {string} id - new profile to be set as current user's profile

@@ -58,7 +58,7 @@ export const BookClubsPage = () => {
       return (
         bookClubs.map((groupData, index) =>
           (<div key={index}>
-            <a href={'/profile?uid=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg">
+            <a href={'/group-profile?id=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg">
               <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
               <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">{groupData.name}</div>
