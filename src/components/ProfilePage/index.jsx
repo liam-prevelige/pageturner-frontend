@@ -206,7 +206,7 @@ export const ProfilePage = () => {
               </div>
             </div>
           </div>
-          <ProfileTabs />
+          <ProfileTabs uid={profile._id} />
         </>
       </main>
     </div >

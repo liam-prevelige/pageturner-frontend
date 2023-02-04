@@ -8,19 +8,18 @@ import {Comment} from '../Comment/Comment';
 import {getPosts, getLikedPosts} from '../../api';
 
 
-export const ProfileTabs = () => {
-  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+export const ProfileTabs = ({uid}) => {
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
 
   const fetchPosts = async () => {
-    const profilePosts = await getPosts();
+    const profilePosts = await getPosts(uid);
     console.log(profilePosts);
     setPosts(profilePosts);
   };
 
   const fetchLikedPosts = async () => {
-    const likedPosts = await getLikedPosts();
+    const likedPosts = await getLikedPosts(uid);
     console.log(likedPosts);
     setLikedPosts(likedPosts);
   };
@@ -29,7 +28,7 @@ export const ProfileTabs = () => {
     console.log('fetching posts');
     fetchPosts();
     fetchLikedPosts();
-  }, [profile]);
+  }, [uid]);
 
   return (
     <ChakraProvider resetCSS={false}>

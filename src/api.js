@@ -525,7 +525,7 @@ export const getProfile = async (uid) => {
 /**
  * Fetches a user's posts using their token
  */
-export const getPosts = async () => {
+export const getPosts = async (uid) => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/user/get_posts`, {
@@ -535,19 +535,20 @@ export const getPosts = async () => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
+    body: JSON.stringify({uid: uid}),
   });
 
-  const body = await response.json();
+  const res = await response.json();
   if (!response.ok) {
     throw new Error('Call to /get_posts failed');
   }
-  return body.posts;
+  return res.posts;
 };
 
 /**
  * Fetches a user's posts using their token
  */
-export const getLikedPosts = async () => {
+export const getLikedPosts = async (uid) => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/user/get_liked_posts`, {
@@ -557,13 +558,14 @@ export const getLikedPosts = async () => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
+    body: JSON.stringify({uid: uid}),
   });
 
-  const body = await response.json();
+  const res = await response.json();
   if (!response.ok) {
     throw new Error('Call to /get_liked_posts failed');
   }
-  return body.likedPosts;
+  return res.likedPosts;
 };
 
 /**
@@ -578,6 +580,8 @@ export const getReplies = async (id) => {
   if (!id) {
     throw new Error('No id provided');
   }
+
+  console.log('id', id);
   const response = await fetch(`${API_URL}/comments/get_replies`, {
     method: 'POST',
     headers: {
