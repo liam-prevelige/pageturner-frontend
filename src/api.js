@@ -724,7 +724,7 @@ export const getBookClubs = async (uid) => {
   }
   return body;
 };
-  
+
 /*
  * Fetches all trends stored in databse
  *
