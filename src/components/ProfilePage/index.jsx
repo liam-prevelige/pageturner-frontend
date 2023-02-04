@@ -39,6 +39,7 @@ export const ProfilePage = () => {
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
     const retrievedProfile = await getProfile(uid);
+    console.log(retrievedProfile);
     if (retrievedProfile) {
       setProfile(retrievedProfile);
     }
@@ -58,7 +59,8 @@ export const ProfilePage = () => {
 
   const handleEditProfile = async () => {
     if (isEditMode) {
-      const updatedProfile = await updateProfile(newProfile);
+      let updatedProfile = null;
+      updatedProfile = await updateProfile(newProfile);
       sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
       console.log('Updated profile: ', updatedProfile);
       setNewProfile(updatedProfile);
@@ -119,84 +121,84 @@ export const ProfilePage = () => {
               </div>
 
               {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.cover} /> :
-                  (
-                    <div className="h-64 w-full object-cover">
-                      <img className="h-64 w-full object-cover" src={newProfile.cover} />
+                    (
+                      <div className="h-64 w-full object-cover">
+                        <img className="h-64 w-full object-cover" src={newProfile.cover} />
 
-                      <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
-                        <div className="flex flex-col justify-center">
-                          <FaFileUpload className="h-20 w-20"/>
+                        <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
+                          <div className="flex flex-col justify-center">
+                            <FaFileUpload className="h-20 w-20"/>
+                          </div>
                         </div>
+                        <input
+                          type="file"
+                          className='invisible'
+                          ref={coverPicInput}
+                          onChange={(event) => {
+                            handleCoverPicChange(event.target.files[0]);
+                          }}
+                        />
                       </div>
-                      <input
-                        type="file"
-                        className='invisible'
-                        ref={coverPicInput}
-                        onChange={(event) => {
-                          handleCoverPicChange(event.target.files[0]);
-                        }}
-                      />
-                    </div>
-                  )
+                    )
               }
 
               <div className="relative ml-10">
                 {!isEditMode ? <img className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white" src={profile.profilePicture} /> :
-                  (
-                    <div className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white">
-                      <img className="rounded-full h-40 w-40" src={newProfile.profilePicture} />
-                      <div className="relative flex flex-row justify-center -top-40 -ml-1 h-40 w-40 rounded-full object-cover" onClick={() => triggerClick(profilePicInput)}>
-                        <div className="flex flex-col rounded-full justify-center">
-                          <FaFileUpload className="h-20 w-20"/>
+                    (
+                      <div className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white">
+                        <img className="rounded-full h-40 w-40" src={newProfile.profilePicture} />
+                        <div className="relative flex flex-row justify-center -top-40 -ml-1 h-40 w-40 rounded-full object-cover" onClick={() => triggerClick(profilePicInput)}>
+                          <div className="flex flex-col rounded-full justify-center">
+                            <FaFileUpload className="h-20 w-20"/>
+                          </div>
                         </div>
+                        <input
+                          type="file"
+                          className='invisible'
+                          ref={profilePicInput}
+                          onChange={(event) => {
+                            handleProfilePicChange(event.target.files[0]);
+                          }}
+                        />
                       </div>
-                      <input
-                        type="file"
-                        className='invisible'
-                        ref={profilePicInput}
-                        onChange={(event) => {
-                          handleProfilePicChange(event.target.files[0]);
-                        }}
-                      />
-                    </div>
-                  )
+                    )
                 }
               </div>
               {profile &&
-              <div className="flex flex-col float-right font-bold">
-                {isMyProfile ?
-                (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-                  {isEditMode ? 'Save Changes' : 'Edit Profile'}
-                </button>) :
-                (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
-                  Add Friend
-                </button>)}
-              </div>}
+                <div className="flex flex-col float-right font-bold">
+                  {isMyProfile ?
+                  (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+                    {isEditMode ? 'Save Changes' : 'Edit Profile'}
+                  </button>) :
+                  (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
+                    Add Friend
+                  </button>)}
+                </div>}
 
               <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
                 {!isEditMode ?
-                  <span className="text-xl font-bold">{profile.name}</span> :
-                  <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.name}
-                    value={newProfile.name}
-                    onChange={handleNameChange}/>
+                    <span className="text-xl font-bold">{profile.name}</span> :
+                    <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.name}
+                      value={newProfile.name}
+                      onChange={handleNameChange}/>
                 }
                 {!isEditMode ?
-                  <span className="text-base text-slate-500">@{profile.tag}</span> :
-                  <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.tag}
-                    value={newProfile.tag}
-                    onChange={handleTagChange}/>
+                    <span className="text-base text-slate-500">@{profile.tag}</span> :
+                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.tag}
+                      value={newProfile.tag}
+                      onChange={handleTagChange}/>
                 }
                 {!isEditMode ?
-                  <span className="text-base text-black mt-2">{profile.description}</span> :
-                  <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.description}
-                    value={newProfile.description}
-                    onChange={handleDescriptionChange}/>
+                    <span className="text-base text-black mt-2">{profile.description}</span> :
+                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.description}
+                      value={newProfile.description}
+                      onChange={handleDescriptionChange}/>
                 }
 
                 <div className="flex flex-row space-x-5">

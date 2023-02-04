@@ -148,6 +148,79 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
+ * Creates a new group
+ *
+ * @param {dict} newGroupProfile - new group profile
+ */
+export const createGroup = async (newGroupProfile) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/groups/create`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({newGroupProfile}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /create failed');
+  }
+  return body.result;
+};
+
+/**
+ * Updates a group profile after being edited
+ *
+ * @param {dict} newProfile - new group profile to be set as current group's profile
+ */
+export const updateGroupProfile = async (newProfile) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/groups/update_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({newProfile}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  return body.result;
+};
+
+/**
+ * Removes a member/admin from a group
+ *
+ * @param {dict} groupProfile - profile of the group that the given user is leaving
+ * @param {string} memberId - Id of member being removed
+ */
+export const removeGroupMember = async (groupProfile, memberId) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/groups/remove_member`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({groupProfile, memberId}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  return body.result;
+};
+
+/**
  * /comments/post_comment
  *
  * Gets all comments on the requested parent object
@@ -569,6 +642,32 @@ export const getLikedPosts = async (uid) => {
 };
 
 /**
+ * Fetches profile information
+ *
+ * @param {string} id - new profile to be set as current user's profile
+ */
+export const getGroupProfile = async (id) => {
+  await refreshToken();
+
+
+  const response = await fetch(`${API_URL}/groups/get_profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({id: id}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /groups/get_profile failed');
+  }
+  return body.result;
+};
+
+/**
  * Fetches replies to a comment, given the comment's id
  *
  * @param {string} id - new profile to be set as current user's profile
@@ -601,6 +700,29 @@ export const getReplies = async (id) => {
 };
 
 /**
+ * Fetches book clubs that a user is a member of, given the user's id
+ *
+ * @param {string} uid - user id
+ * @return {array} replies - array of book clubs / groups the user is a part of
+ */
+export const getBookClubs = async (uid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/groups/get_book_clubs`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({uid: uid}),
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_book_clubs failed');
+  }
+
  * Fetches all trends stored in databse
  *
  * @return {array} trends - array of trends

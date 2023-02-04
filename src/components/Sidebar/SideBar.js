@@ -6,6 +6,7 @@ export const SideBar = () => {
   const [path, setPath] = useState(window.location.pathname);
 
   const homePath = '/';
+  const bookClubsPath = '/book-clubs';
   const profilePath = '/profile';
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
 
@@ -35,8 +36,8 @@ export const SideBar = () => {
                   <li className="ml-4 sidebar-text">Home</li>
                 </div>
               </a>
-              <a href="">
-                <div className="flex items-center hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2">
+              <a href={bookClubsPath}>
+                <div className={path===bookClubsPath ? activeClassName : notActiveClassName}>
                   <GroupIcon />
                   <li className="ml-4 sidebar-text">Book Clubs</li>
                 </div>

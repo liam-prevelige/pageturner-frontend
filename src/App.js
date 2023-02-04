@@ -13,11 +13,13 @@ import {SideBar} from './components/Sidebar/SideBar';
 import {People} from './components/People';
 import {Feed} from './components/Feed';
 import {ProfilePage} from './components/ProfilePage';
+import {GroupProfilePage} from './components/ProfilePage/GroupProfilePage';
 // import {Auth} from './components/Auth/Auth';
 import {BookInfo} from './components/BookInfo';
 import {HomePage} from './components/HomePage';
 import {ThreadView} from './components/ThreadView/ThreadView';
 import {RightBar} from './components/RightBar';
+import {BookClubsPage} from './components/BookClubsPage';
 
 /**
  * Core React component
@@ -33,9 +35,11 @@ const App = () => {
         <main className="flex-1 flex flex-col bg-white">
           <Routes>
             <Route exact path="/" element={<HomePage />} />
+            <Route path='/book-clubs' element={<BookClubsPage />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/people" element={<People />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/group-profile" element={<GroupProfilePage />} />
             <Route path="/book-info/*" element={<BookInfo />} />
             <Route path="/thread/:commentIdParam" element={<ThreadView />}/>
           </Routes>
