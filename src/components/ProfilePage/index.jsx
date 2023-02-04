@@ -62,6 +62,7 @@ export const ProfilePage = () => {
       let updatedProfile = null;
       updatedProfile = await updateProfile(newProfile);
       sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
+      console.log('Updated profile: ', updatedProfile);
       setNewProfile(updatedProfile);
       window.location.reload();
     } else {
@@ -207,7 +208,7 @@ export const ProfilePage = () => {
               </div>
             </div>
           </div>
-          <ProfileTabs />
+          <ProfileTabs uid={profile._id} />
         </>
       </main>
     </div >

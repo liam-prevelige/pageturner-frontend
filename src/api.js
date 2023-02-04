@@ -1,3 +1,4 @@
+/* eslint-disable valid-jsdoc */
 // api.js: wrappers for all API endpoints
 
 const API_URL = 'http://localhost:5001';
@@ -9,9 +10,14 @@ const API_URL = 'http://localhost:5001';
  */
 export async function refreshToken() {
   const expiryDate = sessionStorage.getItem('expiry_date');
-  if (!expiryDate) return;
+  if (!expiryDate) {
+    console.log('no expiry date');
+    return;
+  }
+  console.log('expiry date: ' + expiryDate);
 
   const diff = expiryDate - Date.now();
+  console.log(diff);
   if (diff < 300000) { // 5 minutes
     const response = await fetch(`${API_URL}/user/refresh_token`, {
       method: 'POST',
@@ -34,6 +40,61 @@ export async function refreshToken() {
     }
   }
 }
+
+/**
+ * /:user/update_likes
+ *
+ * Update the likes on a post. Adds comment ID to user's liked list and updates post's metadata
+ *
+ */
+export const updateLikes = async (cid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/comments/update_likes`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({cid: cid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/update_likes failed');
+  }
+  console.log(res);
+  return res.likedPosts;
+};
+
+/**
+ * /:user/get_feed
+ *
+ * Gets all comments of user and user's following list
+ * Requires user is logged in
+ *
+ */
+export const getFeed = async () => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_feed`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_feed failed');
+  }
+  console.log(body);
+  return body.feed;
+};
 
 /**
  * TODO
@@ -160,16 +221,16 @@ export const removeGroupMember = async (groupProfile, memberId) => {
 };
 
 /**
- * /comments/postComment
+ * /comments/post_comment
  *
  * Gets all comments on the requested parent object
  * Requires user is logged in
  *
- * @param {string} pType - type of parent object to comment on
+ * @param {string} scope - type of parent object to comment on
  * @param {string} pid - ID of parent object to comment on
  * @param {string} text - Content of the comment
  */
-export const postComment = async (pType, pid, text) => {
+export const postComment = async (scope, pid, text) => {
   await refreshToken();
   await fetch(`${API_URL}/comments/post_comment`, {
     method: 'POST',
@@ -178,7 +239,7 @@ export const postComment = async (pType, pid, text) => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({pid, pType, text}),
+    body: JSON.stringify({pid, scope, text}),
   });
 };
 
@@ -269,26 +330,6 @@ export async function removeFriend(email) {
   const body = await response.json();
   return body.success;
 }
-
-// Returns list of posts, which represent the feed to be displayed
-export const getFeed = async (query) => {
-  await refreshToken();
-
-  const response = await fetch(`${API_URL}/feed/get/${query}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application.json',
-      'Content-Type': 'application/json',
-    },
-    cache: 'default',
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /feed/get failed');
-  }
-  return body;
-};
 
 // endpoint to add a new post to the database from the book-info page
 export const postBookReview = async (user, isbn, text) => {
@@ -553,6 +594,53 @@ export const getProfile = async (uid) => {
   return body.result;
 };
 
+
+/**
+ * Fetches a user's posts using their token
+ */
+export const getPosts = async (uid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_posts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_posts failed');
+  }
+  return res.posts;
+};
+
+/**
+ * Fetches a user's posts using their token
+ */
+export const getLikedPosts = async (uid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_liked_posts`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_liked_posts failed');
+  }
+  return res.likedPosts;
+};
+
 /**
  * Fetches profile information
  *
@@ -591,6 +679,8 @@ export const getReplies = async (id) => {
   if (!id) {
     throw new Error('No id provided');
   }
+
+  console.log('id', id);
   const response = await fetch(`${API_URL}/comments/get_replies`, {
     method: 'POST',
     headers: {
@@ -633,5 +723,46 @@ export const getBookClubs = async (uid) => {
     throw new Error('Call to /user/get_book_clubs failed');
   }
 
+ * Fetches all trends stored in databse
+ *
+ * @return {array} trends - array of trends
+ */
+export const getTrends = async () => {
+  const response = await fetch(`${API_URL}/get_trends`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_trends failed');
+  }
+  return body.trends;
+};
+
+/**
+ * Search all PageTurner content
+ *
+ * @param {string} searchString - the string to search with
+ */
+export const searchContent = async (searchString) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/search/${searchString}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /search failed');
+  }
   return body;
 };
