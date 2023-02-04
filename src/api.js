@@ -722,7 +722,10 @@ export const getBookClubs = async (uid) => {
   if (!response.ok) {
     throw new Error('Call to /user/get_book_clubs failed');
   }
-
+  return body;
+};
+  
+/*
  * Fetches all trends stored in databse
  *
  * @return {array} trends - array of trends
