@@ -9,14 +9,20 @@ import {Comment} from '../Comment/Comment';
 
 export const Search = () => {
   const [searchInput, setSearchInput] = useState('');
-  // eslint-disable-next-line
   const [results, setResults] = useState(null);
-  const [show, setShowing] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleInputChange = async (newInput) => {
+    setSearchInput(newInput);
+    setShow(false);
+    setResults(null);
+  };
 
   const performSearch = async () => {
+    setResults(null);
+    setShow(true);
     const res = await searchContent(searchInput);
     setResults(res);
-    setShowing(true);
   };
 
   // Execute the search when the user hits 'enter'
@@ -35,12 +41,14 @@ export const Search = () => {
           type="text"
           placeholder="Search PageTurner"
           value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={handleKeyDown}
         />
       </div>
     </div>
-    {show && (results == null ? <ReactLoading type="spin" color="black" /> : <div>
+    {show && (results == null ? <div className="flex margin-auto justify-content-center">
+      <ReactLoading type="spin" color="black" />
+    </div> : <div>
       <ChakraProvider resetCSS={false}>
         <Tabs isFitted className="m-3" variant='line' colorScheme='cyan'>
           <TabList>
