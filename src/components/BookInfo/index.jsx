@@ -15,7 +15,7 @@ import Col from 'react-bootstrap/Col';
 import {ScrollMenu} from 'react-horizontal-scrolling-menu';
 import {BookDisplay} from '../BookDisplay';
 import ReactLoading from 'react-loading';
-import {postBookReview} from '../../api';
+// import {postBookReview} from '../../api';
 import {getRecs} from '../../api';
 import {useNavigate} from 'react-router-dom';
 import {useLocation} from 'react-router-dom';
@@ -29,7 +29,7 @@ export const BookInfo = () => {
   const search = useLocation().search;
   const queryParams = new URLSearchParams(search);
   const loggedIn = useState(JSON.parse(sessionStorage.getItem('profile')))[0] != null;
-  const [textReview, setTextReview] = useState('');
+  // const [textReview, setTextReview] = useState('');
   // TODO: all fields below are just dummy variables and should be replaced
   //       with real information from the GET request mentioned above
   const [author] = useState(queryParams.get('author'));
@@ -64,7 +64,7 @@ export const BookInfo = () => {
  */
   const handleSubmit = async () => {
     // await postBookReview(props.user, props.isbn, textReview);
-    await postBookReview('alex2', queryParams.get('isbn'), textReview);
+    // await postBookReview('alex2', queryParams.get('isbn'), textReview);
     console.log('reached frontend event function');
     navigate('/');
   };

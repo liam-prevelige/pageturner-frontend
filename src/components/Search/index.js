@@ -17,9 +17,6 @@ export const Search = () => {
     const res = await searchContent(searchInput);
     setResults(res);
     setShowing(true);
-
-    // TODO: Remove this log
-    console.log(res);
   };
 
   // Execute the search when the user hits 'enter'
