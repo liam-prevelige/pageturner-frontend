@@ -725,6 +725,28 @@ export const getBookClubs = async (uid) => {
   return body;
 };
 
+/**
+ * Returns info about a single book
+ *
+ * @param {string} bookId - the ID of the book to get
+ */
+export const getBook = async (bookId) => {
+  const response = await fetch(`${API_URL}/book/${bookId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /book failed');
+  }
+  return body;
+};
+
 /*
  * Fetches all trends stored in databse
  *
