@@ -696,7 +696,6 @@ export const getBook = async (bookId) => {
   if (!response.ok) {
     throw new Error('Call to /book failed');
   }
-  console.log(body);
   return body;
 };
 
