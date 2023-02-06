@@ -1,8 +1,7 @@
 /**
- * renders a page for information on a particular book
- * 5-star rating system amdended from: https://javascript.plainenglish.io/react-5-star-rating-system-4fa81b71cac9
- * star images from: https://icons8.com/icons/set/empty-star
- * author: Alex Kruger
+ * Renders a page for information on a particular book
+ * See other books written by current book's author
+ * Write a review and give a rating
  */
 
 import React, {useEffect, useState} from 'react';
@@ -15,9 +14,7 @@ import ReactLoading from 'react-loading';
 import {getRecs, getBook, postComment, getReplies} from '../../api';
 import {Review} from '../Comment/Review';
 import {useParams} from 'react-router-dom';
-
-// const emptyStar = 'empty-star';
-// const filledStar = 'filled-star';
+import {Rating} from '@mui/material';
 
 export const BookInfo = () => {
   const search = window.location.search;
@@ -69,7 +66,7 @@ export const BookInfo = () => {
     setRating(0);
   };
 
-  // Globl review
+  // Global review
   const submitPostCb = async () => {
     if (setReview && setReview.length > 0) {
       console.log('submit post');
@@ -77,11 +74,12 @@ export const BookInfo = () => {
       console.log('Current reviews:', reviews);
       window.dispatchEvent(new Event('newReview'));
       setReview('');
+      setRating(0);
     }
   };
 
   const {bookIdParam} = useParams();
-  const [bookId, setBookId] = useState(bookIdParam || '3YUrtAEACAAJ'); // if no url param, fake/default bookId
+  const [bookId, setBookId] = useState(bookIdParam || '3YUrtAEACAAJ'); // fake/default bookId
   const [isLoading, setIsLoading] = useState(true);
 
   const loadReviews = async (newBookId) => {
@@ -123,7 +121,7 @@ export const BookInfo = () => {
               <Row>
                 <div className="flex flex-row ..." style={{marginTop: '5px'}}>
                   {!book ? <ReactLoading type="spin" color="black" /> :
-                  <span className="basis-1/6 text-slate-500">{book.publishedDate} • </span>}
+                  <span className="basis-1/6 text-slate-500">{book.publishedDate.substr(0, 4)} • </span>}
                   {!book ? <ReactLoading type="spin" color="black" /> :
                   <span className='text-slate-500'>{book.authors[0]}</span>}
                 </div>
@@ -137,19 +135,14 @@ export const BookInfo = () => {
             {loggedIn && <form onSubmit={handleSubmit}>
               <div className="form-group" style={{marginTop: '20px'}}>
                 <textarea placeholder='Add a review' className="form-control bg-gray-100 p-2" rows="8" value={review} onChange={(event) => setReview(event.target.value)} />
-                <div className='flex space-x-4'>
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <label key={value}>
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={value}
-                        checked={value === rating}
-                        onChange={(event) => setRating(parseInt(event.target.value))}
-                      />
-                      {value}
-                    </label>
-                  ))}
+                <div>
+                  <Rating
+                    name="simple-controlled"
+                    value={rating}
+                    onChange={(event) => {
+                      setRating(parseInt(event.target.value));
+                    }}
+                  />
                 </div>
                 <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>Post Review</button>
               </div>
@@ -158,7 +151,8 @@ export const BookInfo = () => {
           <Row>
             {/* TODO: Dynamically render other books */}
             <div className='font-semibold' style={{marginTop: '20px'}}>
-              <h3>Other books by this author</h3>
+              {!book ? <ReactLoading type="spin" color="black" /> :
+              <h3>Other books by {book.authors[0]}</h3>}
               <img className='box-content h-64 w-48 p-2' src='https://images.randomhouse.com/cover/9781582436043' alt='...' />
             </div>
           </Row>
@@ -195,57 +189,3 @@ export const BookInfo = () => {
               ))
               }
             </ScrollMenu> */}
-
-// class Stars extends Component {
-//   /**
-//    * class representing the stars in the star rating system
-//    */
-//   constructor(props) {
-//     super(props);
-//     this.state = {currRating: 0};
-//     this.onHover = this.onHover.bind(this);
-//     this.onClick = this.onClick.bind(this);
-//   }
-
-//   onHover(e) {
-//     if (e.target.className === 'star') {
-//       this.setRating(e.target.dataset.value);
-//     }
-//   }
-
-//   onClick(e) {
-//     if (e.target.dataset.value === this.state.currRating) {
-//       this.setRating(e.target.dataset.value);
-//     }
-//   }
-
-//   setRating(value) {
-//     this.setState({currRating: value});
-//     // TODO: send post request with number of stars, which is in this.state.currRating
-//   }
-
-//   render() {
-//     return (
-//       [...Array(this.props.starCount).keys()].map((index) => {
-//         return (
-//           <img
-//             onMouseOver={this.onHover}
-//             onClick={this.onClick}
-//             data-value={index + 1}
-//             className="star"
-//             src={index + 1 <= this.state.currRating ?
-//       require('./' + filledStar + '.png') : require('./' + emptyStar + '.png')}
-//             alt={index + 1 <= this.state.currRating ?
-//         'filled star' : 'empty star'} />);
-//       })
-//     );
-//   }
-// }
-
-// const RatingSystem = (props) => {
-//   return (
-//     <div className='rating'>
-//       <Stars starCount={props.starCount}/>
-//     </div>
-//   );
-// };
