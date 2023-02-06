@@ -28,7 +28,9 @@ export const Comment = ({commentId, noParent}) => {
     const profile = await getProfile(comment.uid);
     setProfileData(profile);
     setCommentData(comment);
-    setIsLiked(myProfile.likedPosts && myProfile.likedPosts.includes(comment._id));
+    if (myProfile != null) {
+      setIsLiked(myProfile.likedPosts && myProfile.likedPosts.includes(comment._id));
+    }
   };
 
   const updateLikesCb = async (e) => {
