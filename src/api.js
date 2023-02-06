@@ -696,7 +696,6 @@ export const getBook = async (bookId) => {
   if (!response.ok) {
     throw new Error('Call to /book failed');
   }
-  console.log(body);
   return body;
 };
 
@@ -743,4 +742,26 @@ export const searchContent = async (searchString) => {
     throw new Error('Call to /search failed');
   }
   return body;
+};
+
+/*
+ * Fetches global feed from database
+ *
+ * @return {array} feed - array of comments
+ */
+export const getGlobalFeed = async () => {
+  const response = await fetch(`${API_URL}/get_global_feed`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_global_feed failed');
+  }
+  return body.feed;
 };

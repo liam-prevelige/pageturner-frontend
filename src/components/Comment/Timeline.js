@@ -4,20 +4,28 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import {getFeed} from '../../api';
+import {getFeed, getGlobalFeed} from '../../api';
 import {Comment} from './Comment';
 
 export const Timeline = () => {
   const [timeLine, setTimeLine] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
 
   const fetchData = async () => {
     try {
       const timeLine = await getFeed();
       console.log('Timeline:', timeLine);
+      let timeLine = null;
+      if (profile != null) {
+        timeLine = await getFeed();
+      } else {
+        timeLine = await getGlobalFeed();
+      }
+      console.log(timeLine);
       setTimeLine(timeLine);
     } catch (err) {
-      console.log('error', err);
+      console.log(err);
     }
   };
 
