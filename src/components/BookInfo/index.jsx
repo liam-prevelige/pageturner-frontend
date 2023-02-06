@@ -60,7 +60,6 @@ export const BookInfo = () => {
   // Local review
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Submitting review:', review, 'with rating:', rating);
     setReviews([...reviews, {review, rating}]);
     setReview('');
     setRating(0);
@@ -69,10 +68,8 @@ export const BookInfo = () => {
   // Global review
   const submitPostCb = async () => {
     if (setReview && setReview.length > 0) {
-      console.log('submit post');
       await postComment('global', book.bookId, review);
-      console.log('Current reviews:', reviews);
-      window.dispatchEvent(new Event('newReview'));
+      setIsLoading(true);
       setReview('');
       setRating(0);
     }
@@ -87,13 +84,6 @@ export const BookInfo = () => {
     const newReviews = await getReplies(newBookId);
     setReviews([...newReviews]);
   };
-
-  window.addEventListener('newReview', () => {
-    if (!isLoading) {
-      console.log('newReview event triggered');
-      setIsLoading(true);
-    }
-  });
 
   useEffect(() => {
     setBookId(bookIdParam);
@@ -160,18 +150,12 @@ export const BookInfo = () => {
             <div style={{marginTop: '20px'}}>
               <p className='font-semibold'>Reviews</p>
               {reviews.map((r, index) =>
+              // ((bookId === r && <div key={index}>
                 (<div key={index}>
                   <Review commentId={r._id} noParent={true}/>
                   <div className="border-b ml-3 mr-3 border-slate-300"></div>
                 </div>
                 ))}
-              {/*
-              {reviews.map((r, index) => (
-                <li key={index}>
-                  <p>{r.review}</p>
-                  <p>Rating: {r.rating}/5</p>
-                </li>
-              ))} */}
             </div>
           </Row>
         </Container>
