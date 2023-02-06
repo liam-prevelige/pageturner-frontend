@@ -5,12 +5,20 @@ import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs
 import {ThreadView} from '../ThreadView/ThreadView';
 import {Comment} from '../Comment/Comment';
 
-import {getPosts, getLikedPosts} from '../../api';
-
+import {getBookshelves, getPosts, getLikedPosts} from '../../api';
+import {PopoverForm} from './BookshelfPopup';
+import {Bookshelf} from './Bookshelf';
 
 export const ProfileTabs = ({uid}) => {
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
+  const [bookshelves, setBookshelves] = useState([]);
+
+  const fetchBookshelves = async () => {
+    const loadedBookshelves = await getBookshelves(uid, 'user');
+    console.log('loadedBookshelves', loadedBookshelves);
+    setBookshelves(loadedBookshelves);
+  };
 
   const fetchPosts = async () => {
     const profilePosts = await getPosts(uid);
@@ -26,6 +34,7 @@ export const ProfileTabs = ({uid}) => {
 
   useEffect(() => {
     console.log('fetching posts');
+    fetchBookshelves();
     fetchPosts();
     fetchLikedPosts();
   }, [uid]);
@@ -40,9 +49,19 @@ export const ProfileTabs = ({uid}) => {
           <Tab>Liked</Tab>
         </TabList>
         <TabPanels>
+          {/* Bookshelves Tab */}
           <TabPanel>
+            <PopoverForm/>
+            {/* <button className="flex bg-green-300 items-center justify-center ml-3 mr-3 h-9 w-9 justify-center rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer" onClick={createBookshelf}></button> */}
             <ScrollMenu style={{overflowY: 'auto'}}>
-              <ThreadView commentId={'63cef967b83ed8c71f06be01'}/>
+              <div className="bg-white h-full">
+                {bookshelves && bookshelves.map((bookshelfData, index) =>
+                  (<div key={index}>
+                    <Bookshelf bookshelfId={bookshelfData._id}/>
+                    <div className="border-b ml-3 mr-3 border-slate-300"/>
+                  </div>
+                  ))}
+              </div>
             </ScrollMenu>
           </TabPanel>
           {/* Posts Tab */}
