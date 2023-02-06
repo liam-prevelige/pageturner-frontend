@@ -331,59 +331,11 @@ export async function removeFriend(email) {
   return body.success;
 }
 
-// endpoint to add a new post to the database from the book-info page
-export const postBookReview = async (user, isbn, text) => {
-  await refreshToken();
-
-  const data = {
-    user: user,
-    isbn: isbn,
-    text: text,
-  };
-
-  fetch(`${API_URL}/book-info/submit-post`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-};
-
 // Search for a book given a query
 export const getSearch = async (query) => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/search/${query}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application.json',
-      'Content-Type': 'application/json',
-    },
-    cache: 'default',
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /search failed');
-  }
-
-  return body;
-};
-
-// Search for a book
-// Does this funtion only work if the query is submit-post? How is it different from getSearch?
-export const getBookInfo = async (query) => {
-  await refreshToken();
-
-  const response = await fetch(`${API_URL}/book-info/${query}`, {
     method: 'GET',
     headers: {
       'Accept': 'application.json',
@@ -721,6 +673,28 @@ export const getBookClubs = async (uid) => {
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /user/get_book_clubs failed');
+  }
+  return body;
+};
+
+/**
+ * Returns info about a single book
+ *
+ * @param {string} bookId - the ID of the book to get
+ */
+export const getBook = async (bookId) => {
+  const response = await fetch(`${API_URL}/book/${bookId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /book failed');
   }
   return body;
 };
