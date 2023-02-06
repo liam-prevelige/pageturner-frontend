@@ -14,6 +14,8 @@ export const Timeline = () => {
 
   const fetchData = async () => {
     try {
+      const timeLine = await getFeed();
+      console.log('Timeline:', timeLine);
       let timeLine = null;
       if (profile != null) {
         timeLine = await getFeed();

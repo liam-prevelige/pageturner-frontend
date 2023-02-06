@@ -89,7 +89,7 @@ export const BookSearchResult = ({bookInfo}) => {
 
   const loadBook = (uid) => {
     // TODO fix this path
-    const path = `/profile?id=${uid}`;
+    const path = `/book-info?id=${uid}`;
     navigate(path);
   };
 
