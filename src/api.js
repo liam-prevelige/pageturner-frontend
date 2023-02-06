@@ -788,7 +788,7 @@ export const getGlobalFeed = async () => {
 
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to /get_trends failed');
+    throw new Error('Call to /get_global_feed failed');
   }
   return body.feed;
 };
