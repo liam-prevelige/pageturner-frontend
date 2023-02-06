@@ -8,59 +8,40 @@
 import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './bookInfo.css';
-
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-// import {ScrollMenu} from 'react-horizontal-scrolling-menu';
-// import {BookDisplay} from '../BookDisplay';
-// import ReactLoading from 'react-loading';
-// import {postBookReview} from '../../api';
-import {getRecs} from '../../api';
-// import {useNavigate} from 'react-router-dom';
-// import {useLocation} from 'react-router-dom';
-// import {searchContent} from '../../api';
-
+import ReactLoading from 'react-loading';
+import {getRecs, getBook, postComment, getReplies} from '../../api';
+import {Review} from '../Comment/Review';
+import {useParams} from 'react-router-dom';
 
 // const emptyStar = 'empty-star';
 // const filledStar = 'filled-star';
 
-
 export const BookInfo = () => {
   const search = window.location.search;
   const queryParams = new URLSearchParams(search);
-  // const isBookInfo = !queryParams.has('id');
-  // const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-  const fakeBook = {
-    id: 'Gz8t2MttEQUC',
-    title: 'What I learned from the trees',
-    author: 'LE Bowman',
-    description: 'What I Learned from the Trees delves into the intricate relationship between humans and nature, and how these often overlooked, everyday interactions affect us as individuals, families, and communities. With a backbone rooted in primordial imagery and allegory, and a focus on how the growing disconnect with our own wants, needs, and fears creates deeper divides in our relationships, this collection is notably relevant to today\'s society and the struggles we face with the ever-expanding detachment between humans and the natural world. Aren\'t all living creatures seeking a notable existence? A deep sense of belonging? Of relevance? Of purpose? Of love? How often do we yearn for these wants, yet fight the vulnerability it takes to reach them? Why do we so clearly seek each other, yet refuse to reach out our hands?',
-    year: '2021',
-    cover: 'https://images.randomhouse.com/cover/9781582436043',
+  const isBookInfo = !queryParams.has('id');
+  const loggedIn = useState(JSON.parse(sessionStorage.getItem('profile')))[0] != null;
+
+  const [book, setBook] = useState();
+
+  const retrieveBookFromId = async () => {
+    const id = queryParams.get('id');
+    const retrievedBook = await getBook(id);
+    if (retrievedBook) {
+      setBook(retrievedBook);
+    }
   };
 
-  // const [book, setBook] = useState((isBookInfo) ? storedBook : fakeBook);
+  useEffect(() => {
+    if (!isBookInfo) {
+      retrieveBookFromId();
+    }
+  }, []);
 
-  // const retrieveBookFromId = async () => {
-  //   const id = queryParams.get('id');
-  //   const retrievedBook = await searchContent(id);
-  //   console.log(id);
-  //   if (id) {
-  //     setBook(retrievedBook);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (!isBookInfo) {
-  //     retrieveBookFromId();
-  //   }
-  // }, []);
-
-  const loggedIn = useState(JSON.parse(sessionStorage.getItem('profile')))[0] != null;
-  // const [textReview, setTextReview] = useState('');
   // const [recs, setRecs] = useState([]);
-  // const navigate = useNavigate();
 
   // Get recommendations from the database
   const loadRecs = async () => {
@@ -75,30 +56,11 @@ export const BookInfo = () => {
     loadRecs();
   }, []);
 
-  /**
-* handles updating the text the user enters as a text review
-// * @param {*} event
-// */
-  //   function handleTextChange(event) {
-  //     setTextReview(event.target.value);
-  //   }
-
-  /**
- * handles submitting a text review
- * @param {*} event
- */
-  // const handleSubmit = async () => {
-  //   // await postBookReview(props.user, props.isbn, textReview);
-  //   await postBookReview('alex2', queryParams.get('isbn'), textReview);
-  //   console.log('reached frontend event function');
-  //   navigate('/');
-  // };
-
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
 
-
+  // Local review
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Submitting review:', review, 'with rating:', rating);
@@ -107,31 +69,75 @@ export const BookInfo = () => {
     setRating(0);
   };
 
+  // Globl review
+  const submitPostCb = async () => {
+    if (setReview && setReview.length > 0) {
+      console.log('submit post');
+      await postComment('global', book.bookId, review);
+      console.log('Current reviews:', reviews);
+      window.dispatchEvent(new Event('newReview'));
+      setReview('');
+    }
+  };
+
+  const {bookIdParam} = useParams();
+  const [bookId, setBookId] = useState(bookIdParam || '3YUrtAEACAAJ'); // if no url param, fake/default bookId
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadReviews = async (newBookId) => {
+    if (!newBookId) return;
+    const newReviews = await getReplies(newBookId);
+    setReviews([...newReviews]);
+  };
+
+  window.addEventListener('newReview', () => {
+    if (!isLoading) {
+      console.log('newReview event triggered');
+      setIsLoading(true);
+    }
+  });
+
+  useEffect(() => {
+    setBookId(bookIdParam);
+  }, [bookIdParam]);
+
+  useEffect(() => {
+    if (isLoading) {
+      loadReviews(bookId); // setState hooks are async, so this is necessary
+      setIsLoading(false);
+    }
+  }, [bookId, isLoading]);
+
   return (
     <div className="App" style={{marginTop: '30px'}}>
       <div className='gradient_bg'>
         <Container>
           <Row>
-            <Col><img src={fakeBook.cover} alt='...' /></Col>
+            {!book ? <ReactLoading type="spin" color="black" /> :
+            <Col><img src={book.imageLinks.thumbnail} alt='...' style={{width: '300px', height: '400px'}}/></Col>}
             <Col>
               <Row>
-                <span className="font-bold text-2xl text-black">{fakeBook.title}</span>
+                {!book ? <ReactLoading type="spin" color="black" /> :
+                <span className="font-bold text-2xl text-black">{book.title}</span>}
               </Row>
               <Row>
                 <div className="flex flex-row ..." style={{marginTop: '5px'}}>
-                  <div className="basis-1/6 text-slate-500">{fakeBook.year} • </div>
-                  <div className='text-slate-500'>{fakeBook.author}</div>
+                  {!book ? <ReactLoading type="spin" color="black" /> :
+                  <span className="basis-1/6 text-slate-500">{book.publishedDate} • </span>}
+                  {!book ? <ReactLoading type="spin" color="black" /> :
+                  <span className='text-slate-500'>{book.authors[0]}</span>}
                 </div>
               </Row>
               <Row>
-                <span className='text-sm' style={{marginTop: '5px'}}>{fakeBook.description}</span>
+                {!book ? <ReactLoading type="spin" color="black" /> :
+                <span className='text-sm' style={{marginTop: '5px'}}>{book.description.substring(0, 650)}...</span>}
               </Row>
             </Col>
             {/* {!loggedIn && <p>Sign in to write and post a review!</p>} */}
             {loggedIn && <form onSubmit={handleSubmit}>
               <div className="form-group" style={{marginTop: '20px'}}>
-                <textarea placeholder='Add a review' className="form-control" rows="4" value={review} onChange={(event) => setReview(event.target.value)} />
-                <div>
+                <textarea placeholder='Add a review' className="form-control bg-gray-100 p-2" rows="8" value={review} onChange={(event) => setReview(event.target.value)} />
+                <div className='flex space-x-4'>
                   {[1, 2, 3, 4, 5].map((value) => (
                     <label key={value}>
                       <input
@@ -145,25 +151,33 @@ export const BookInfo = () => {
                     </label>
                   ))}
                 </div>
-                <button type="submit">Post Review</button>
+                <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>Post Review</button>
               </div>
             </form>}
           </Row>
           <Row>
-            <div style={{marginTop: '20px'}}>
-              <h3>More like this:</h3>
-              <img className='box-content h-64 w-48 p-2' src={fakeBook.cover} alt='...' />
+            {/* TODO: Dynamically render other books */}
+            <div className='font-semibold' style={{marginTop: '20px'}}>
+              <h3>Other books by this author</h3>
+              <img className='box-content h-64 w-48 p-2' src='https://images.randomhouse.com/cover/9781582436043' alt='...' />
             </div>
           </Row>
           <Row>
             <div style={{marginTop: '20px'}}>
-                Reviews:
+              <p className='font-semibold'>Reviews</p>
+              {reviews.map((r, index) =>
+                (<div key={index}>
+                  <Review commentId={r._id} noParent={true}/>
+                  <div className="border-b ml-3 mr-3 border-slate-300"></div>
+                </div>
+                ))}
+              {/*
               {reviews.map((r, index) => (
                 <li key={index}>
                   <p>{r.review}</p>
                   <p>Rating: {r.rating}/5</p>
                 </li>
-              ))}
+              ))} */}
             </div>
           </Row>
         </Container>

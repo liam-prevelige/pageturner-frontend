@@ -14,7 +14,7 @@ export const Timeline = () => {
   const fetchData = async () => {
     try {
       const timeLine = await getFeed();
-      console.log(timeLine);
+      console.log('Timeline:', timeLine);
       setTimeLine(timeLine);
     } catch (err) {
       console.log('error', err);
