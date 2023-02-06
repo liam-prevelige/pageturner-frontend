@@ -546,7 +546,6 @@ export const getComments = async (pid) => {
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComment = async (id) => {
-  console.log(id);
   await refreshToken();
 
   if (!id) {
