@@ -52,13 +52,13 @@ export const ProfileTabs = ({uid}) => {
           {/* Bookshelves Tab */}
           <TabPanel>
             <PopoverForm/>
-            {/* <button className="flex bg-green-300 items-center justify-center ml-3 mr-3 h-9 w-9 justify-center rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer" onClick={createBookshelf}></button> */}
+            <div className="border-b m-3 border-slate-300"/>
             <ScrollMenu style={{overflowY: 'auto'}}>
               <div className="bg-white h-full">
                 {bookshelves && bookshelves.map((bookshelfData, index) =>
                   (<div key={index}>
                     <Bookshelf bookshelfId={bookshelfData._id}/>
-                    <div className="border-b ml-3 mr-3 border-slate-300"/>
+                    <div className="border-b m-3 border-slate-300"/>
                   </div>
                   ))}
               </div>

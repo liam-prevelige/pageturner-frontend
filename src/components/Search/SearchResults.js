@@ -87,9 +87,9 @@ export const BookSearchResult = ({bookInfo}) => {
   const navigate = useNavigate();
 
 
-  const loadBook = (uid) => {
+  const loadBook = (bid) => {
     // TODO fix this path
-    const path = `/book-info?id=${uid}`;
+    const path = `/book-info?id=${bid}`;
     navigate(path);
   };
 

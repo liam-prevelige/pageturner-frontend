@@ -4,6 +4,7 @@ import {getBookshelf} from '../../api';
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import ReactLoading from 'react-loading';
 import {Col} from 'react-bootstrap';
+import {BookDisplay} from './BookDisplay';
 // import {BookDisplay} from '../BookDisplay';
 
 export const Bookshelf = ({bookshelfId}) => {
@@ -12,6 +13,7 @@ export const Bookshelf = ({bookshelfId}) => {
 
   const fetchBookshelf = async () => {
     const bookshelfData = await getBookshelf(bookshelfId);
+    console.log(bookshelfData);
     setBookshelf(bookshelfData);
   };
 
@@ -21,11 +23,11 @@ export const Bookshelf = ({bookshelfId}) => {
 
   return (
     <>
-      {bookshelf && <h1>{bookshelf.name}</h1>}
+      {bookshelf && <div className="text-base text-black font-bold m-1">{bookshelf.name}</div>}
       <ScrollMenu style={{overflowX: 'auto'}}>
-        {!bookshelf ? <ReactLoading type="spin" color="black" /> : bookshelf.books.map((book, index) => (
+        {!bookshelf ? <ReactLoading type="spin" color="black" /> : bookshelf.books.map((bid, index) => (
           <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
-            {/* <BookDisplay url={book.image_l} title={book.title} author={book.author} /> */}
+            <BookDisplay bid={bid} />
           </Col>
         ))
         }

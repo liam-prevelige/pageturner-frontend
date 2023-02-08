@@ -15,6 +15,7 @@ import {getRecs, getBook, postComment, getReplies} from '../../api';
 import {Review} from '../Comment/Review';
 import {useParams} from 'react-router-dom';
 import {Rating} from '@mui/material';
+import {BookshelfPopup} from './BookshelfPopup';
 
 export const BookInfo = () => {
   const search = window.location.search;
@@ -22,7 +23,7 @@ export const BookInfo = () => {
   const isBookInfo = !queryParams.has('id');
   const loggedIn = useState(JSON.parse(sessionStorage.getItem('profile')))[0] != null;
 
-  const [book, setBook] = useState();
+  const [book, setBook] = useState(null);
 
   const retrieveBookFromId = async () => {
     const id = queryParams.get('id');
@@ -97,70 +98,75 @@ export const BookInfo = () => {
   }, [bookId, isLoading]);
 
   return (
-    <div className="App" style={{marginTop: '30px'}}>
-      <div className='gradient_bg'>
-        <Container>
-          <Row>
-            {!book ? <ReactLoading type="spin" color="black" /> :
-            <Col><img src={book.imageLinks.thumbnail} alt='...' style={{width: '300px', height: '400px'}}/></Col>}
-            <Col>
-              <Row>
-                {!book ? <ReactLoading type="spin" color="black" /> :
-                <span className="font-bold text-2xl text-black">{book.title}</span>}
-              </Row>
-              <Row>
-                <div className="flex flex-row ..." style={{marginTop: '5px'}}>
-                  {!book ? <ReactLoading type="spin" color="black" /> :
-                  <span className="basis-1/6 text-slate-500">{book.publishedDate.substr(0, 4)} • </span>}
-                  {!book ? <ReactLoading type="spin" color="black" /> :
-                  <span className='text-slate-500'>{book.authors[0]}</span>}
-                </div>
-              </Row>
-              <Row>
-                {!book ? <ReactLoading type="spin" color="black" /> :
-                <span className='text-sm' style={{marginTop: '5px'}}>{book.description.substring(0, 650)}...</span>}
-              </Row>
-            </Col>
-            {/* {!loggedIn && <p>Sign in to write and post a review!</p>} */}
-            {loggedIn && <form onSubmit={handleSubmit}>
-              <div className="form-group" style={{marginTop: '20px'}}>
-                <textarea placeholder='Add a review' className="form-control bg-gray-100 p-2" rows="8" value={review} onChange={(event) => setReview(event.target.value)} />
-                <div>
-                  <Rating
-                    name="simple-controlled"
-                    value={rating}
-                    onChange={(event) => {
-                      setRating(parseInt(event.target.value));
-                    }}
-                  />
-                </div>
-                <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>Post Review</button>
-              </div>
-            </form>}
-          </Row>
-          <Row>
-            {/* TODO: Dynamically render other books */}
-            <div className='font-semibold' style={{marginTop: '20px'}}>
+    <>
+      {book && (<div className="App" style={{marginTop: '30px'}}>
+        <div className='gradient_bg'>
+          <Container>
+            <Row>
               {!book ? <ReactLoading type="spin" color="black" /> :
-              <h3>Other books by {book.authors[0]}</h3>}
-              <img className='box-content h-64 w-48 p-2' src='https://images.randomhouse.com/cover/9781582436043' alt='...' />
-            </div>
-          </Row>
-          <Row>
-            <div style={{marginTop: '20px'}}>
-              <p className='font-semibold'>Reviews</p>
-              {reviews.map((r, index) =>
-              // ((bookId === r && <div key={index}>
-                (<div key={index}>
-                  <Review commentId={r._id} noParent={true}/>
-                  <div className="border-b ml-3 mr-3 border-slate-300"></div>
+            <Col><img src={book.imageLinks.thumbnail} alt='...' style={{width: '300px', height: '400px'}}/></Col>}
+              <Col>
+                <Row>
+                  {!book ? <ReactLoading type="spin" color="black" /> :
+                <span className="font-bold text-2xl text-black">{book.title}</span>}
+                </Row>
+                <Row>
+                  <div className="flex flex-row ..." style={{marginTop: '5px'}}>
+                    {!book ? <ReactLoading type="spin" color="black" /> :
+                  <span className="basis-1/6 text-slate-500">{book.publishedDate.substr(0, 4)} • </span>}
+                    {!book ? <ReactLoading type="spin" color="black" /> :
+                  <span className='text-slate-500'>{book.authors[0]}</span>}
+                  </div>
+                </Row>
+                <Row>
+                  {!book ? <ReactLoading type="spin" color="black" /> :
+                <span className='text-sm' style={{marginTop: '5px'}}>{book.description.substring(0, 650)}...</span>}
+                </Row>
+                <Row>
+                  <BookshelfPopup/>
+                </Row>
+              </Col>
+              {/* {!loggedIn && <p>Sign in to write and post a review!</p>} */}
+              {loggedIn && <form onSubmit={handleSubmit}>
+                <div className="form-group" style={{marginTop: '20px'}}>
+                  <textarea placeholder='Add a review' className="form-control bg-gray-100 p-2" rows="8" value={review} onChange={(event) => setReview(event.target.value)} />
+                  <div>
+                    <Rating
+                      name="simple-controlled"
+                      value={rating}
+                      onChange={(event) => {
+                        setRating(parseInt(event.target.value));
+                      }}
+                    />
+                  </div>
+                  <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>Post Review</button>
                 </div>
-                ))}
-            </div>
-          </Row>
-        </Container>
-      </div>
-    </div>
+              </form>}
+            </Row>
+            <Row>
+              {/* TODO: Dynamically render other books */}
+              <div className='font-semibold' style={{marginTop: '20px'}}>
+                {!book ? <ReactLoading type="spin" color="black" /> :
+              <h3>Other books by {book.authors[0]}</h3>}
+                <img className='box-content h-64 w-48 p-2' src='https://images.randomhouse.com/cover/9781582436043' alt='...' />
+              </div>
+            </Row>
+            <Row>
+              <div style={{marginTop: '20px'}}>
+                <p className='font-semibold'>Reviews</p>
+                {reviews.map((r, index) =>
+                // ((bookId === r && <div key={index}>
+                  (<div key={index}>
+                    <Review commentId={r._id} noParent={true}/>
+                    <div className="border-b ml-3 mr-3 border-slate-300"></div>
+                  </div>
+                  ))}
+              </div>
+            </Row>
+          </Container>
+        </div>
+      </div>)}
+    </>
   );
 };
 

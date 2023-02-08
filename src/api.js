@@ -740,7 +740,7 @@ export const getBookClubs = async (uid) => {
  * @param {string} bookId - the ID of the book to get
  */
 export const getBook = async (bookId) => {
-  const response = await fetch(`${API_URL}/book/${bookId}`, {
+  const response = await fetch(`${API_URL}/books/${bookId}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -751,7 +751,7 @@ export const getBook = async (bookId) => {
 
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to /book failed');
+    throw new Error('Call to /books/search failed');
   }
   return body;
 };
