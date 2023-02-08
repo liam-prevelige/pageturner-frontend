@@ -15,6 +15,7 @@ export const Parent = ({commentId}) => {
     setProfileData(null);
     setCommentData(null);
     const comment = await getComment(cId);
+    if (!comment) return;
     const profile = await getProfile(comment.uid);
     setProfileData(profile);
     setCommentData(comment);
