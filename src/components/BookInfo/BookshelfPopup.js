@@ -6,8 +6,10 @@ import {
   Input,
 } from '@chakra-ui/react';
 import {getBookshelves, addBookToBookshelf, createBookshelf} from '../../api';
+import {FaPlus} from 'react-icons/fa';
+import {IconButton} from '@chakra-ui/react';
 
-export const BookshelfPopup = ({bid}) => {
+export const BookshelfPopup = ({bid, useIcon}) => {
   const [show, setShow] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [bookshelves, setBookshelves] = useState([]);
@@ -91,9 +93,10 @@ export const BookshelfPopup = ({bid}) => {
 
   return (
     <div onClick={collapseDropdown}>
-      <button className="font-bold w-36 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={handleShow}>
+      {useIcon ? (<IconButton size='sm' icon={<FaPlus />} onClick={handleShow} />) :
+      (<button className="font-bold w-36 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={handleShow}>
           Add to Bookshelf
-      </button>
+      </button>)}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

@@ -123,7 +123,7 @@ export const BookInfo = () => {
                 <span className='text-sm' style={{marginTop: '5px'}}>{book.description.substring(0, 650)}...</span>}
                 </Row>
                 <Row>
-                  <BookshelfPopup bid={book.id}/>
+                  <BookshelfPopup bid={book.id} useIcon={false}/>
                 </Row>
               </Col>
               {/* {!loggedIn && <p>Sign in to write and post a review!</p>} */}
