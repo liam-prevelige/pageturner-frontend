@@ -649,6 +649,33 @@ export const createBookshelf = async (name, ownerId, ownerType) => {
   if (!response.ok) {
     throw new Error('Call to /bookshelves/create failed');
   }
+  return body._id;
+};
+
+/**
+ * Adds a book to an existing bookshelf
+*/
+export const addBookToBookshelf = async (bookId, bookshelfId) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/bookshelves/modify`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({
+      bookId: bookId,
+      shelfId: bookshelfId,
+      op: 'add',
+    }),
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /bookshelves/modify failed');
+  }
   return body;
 };
 
