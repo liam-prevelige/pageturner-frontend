@@ -18,7 +18,12 @@ export const ShareBox = () => {
       // (scope, pid, ptype, text)
       await postComment('global', pid, ptype, postText);
       window.dispatchEvent(new Event('newPost'));
+      // Reset state
       setPostText('');
+      setIsAttachedBookshelf(false);
+      setAttachedBookshelf({});
+      setPid('');
+      setPtype('');
     }
   };
 

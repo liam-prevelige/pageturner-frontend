@@ -6,18 +6,32 @@ import {getProfile, getComment, updateLikes} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
 import {FaHeart, FaRegHeart} from 'react-icons/fa';
+import {Bookshelf} from '../ProfilePage/Bookshelf';
 
 export const Comment = ({commentId, noParent}) => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [commentData, setCommentData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [hasParentComment, setHasParentComment] = useState(false);
+  const [hasParentBookshelf, setHasParentBookshelf] = useState(false);
+
   const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
     const path = `/thread/${clickedCommentData._id}`;
     navigate(path);
   };
+
+  useEffect(() => {
+    if (noParent || !commentData || !commentData.pid) return;
+
+    if (commentData.ptype && commentData.ptype === 'bookshelf') {
+      setHasParentBookshelf(true);
+    } else if (!commentData.ptype || commentData.ptype === 'comment') { // first check is for existing comments without ptype
+      setHasParentComment(true);
+    }
+  }, [commentData]);
 
   const getData = async (cId) => {
     if (!cId) return;
@@ -76,7 +90,8 @@ export const Comment = ({commentId, noParent}) => {
              <div className="items-center text-black overflow-hidden" onClick={(e) => loadThread(e, commentData)}>
                {commentData.text}
                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
-               {!noParent && commentData.pid && <Parent commentId={commentData.pid}/>}
+               {hasParentComment && <Parent commentId={commentData.pid}/>}
+               {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><Bookshelf bookshelfId={commentData.pid}/></div>}
              </div>
 
              <ul className="flex justify-between mt-2">
