@@ -19,7 +19,7 @@ export const Bookshelf = ({bookshelfId}) => {
 
   useEffect(() => {
     fetchBookshelf();
-  }, []);
+  }, [bookshelfId]);
 
   return (
     <>

@@ -78,7 +78,16 @@ export const Comment = ({commentId, noParent}) => {
                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
                {!noParent && commentData.pid && <Parent commentId={commentData.pid}/>}
              </div>
+
              <ul className="flex justify-between mt-2">
+               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
+                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
+                   {isLiked && <FaHeart className="fill-primary-like w-5 h-5"/>}
+                   {!isLiked && <FaRegHeart className="stroke-1 w-5 h-5"/>}
+                 </div>
+                 <span>{commentData.metadata.likes}</span>
+               </li>
+
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-reply group cursor-pointer">
                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-reply_hover">
                    <Reply/>
@@ -91,14 +100,6 @@ export const Comment = ({commentId, noParent}) => {
                    <Retweet/>
                  </div>
                  <span>{commentData.metadata.retweets}</span>
-               </li>
-
-               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
-                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
-                   {isLiked && <FaHeart className="fill-primary-like w-5 h-5"/>}
-                   {!isLiked && <FaRegHeart className="stroke-1 w-5 h-5"/>}
-                 </div>
-                 <span>{commentData.metadata.likes}</span>
                </li>
 
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors group cursor-pointer">

@@ -6,7 +6,7 @@ import {ThreadView} from '../ThreadView/ThreadView';
 import {Comment} from '../Comment/Comment';
 
 import {getBookshelves, getPosts, getLikedPosts} from '../../api';
-import {PopoverForm} from './BookshelfPopup';
+// import {PopoverForm} from './BookshelfPopup';
 import {Bookshelf} from './Bookshelf';
 
 export const ProfileTabs = ({uid}) => {
@@ -51,8 +51,8 @@ export const ProfileTabs = ({uid}) => {
         <TabPanels>
           {/* Bookshelves Tab */}
           <TabPanel>
-            <PopoverForm/>
-            <div className="border-b m-3 border-slate-300"/>
+            {/* <PopoverForm/> */}
+            {/* <div className="border-b m-3 border-slate-300"/> */}
             <ScrollMenu style={{overflowY: 'auto'}}>
               <div className="bg-white h-full">
                 {bookshelves && bookshelves.map((bookshelfData, index) =>
