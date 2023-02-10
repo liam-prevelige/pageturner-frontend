@@ -9,10 +9,14 @@ export const ShareBox = () => {
   const [postText, setPostText] = useState('');
   const [isAttachedBookshelf, setIsAttachedBookshelf] = useState(false);
   const [attachedBookshelf, setAttachedBookshelf] = useState({});
+  const [pid, setPid] = useState('');
+  const [ptype, setPtype] = useState('');
+
   const submitPostCb = async () => {
     if (postText && postText.length > 0) {
       console.log('submit post');
-      await postComment('global', '', postText);
+      // (scope, pid, ptype, text)
+      await postComment('global', pid, ptype, postText);
       window.dispatchEvent(new Event('newPost'));
       setPostText('');
     }
@@ -22,6 +26,8 @@ export const ShareBox = () => {
     console.log('attachBookshelf', e.detail);
     setIsAttachedBookshelf(true);
     setAttachedBookshelf(e.detail);
+    setPid(e.detail._id);
+    setPtype('bookshelf');
   });
 
   const updatePostText = (e) => {
@@ -35,14 +41,15 @@ export const ShareBox = () => {
       }
       <div className="flex flex-1 flex-col mt-2 text-black">
         <textarea id="postInput" type="text" rows="1" className="bg-white tweet-box w-full outline-none overflow-y-auto flex-1 rounded-xl text-m p-2 resize-none" placeholder="What have you been reading?" value={postText} onChange={(e) => updatePostText(e)}/>
-        {isAttachedBookshelf && <Bookshelf bookshelfId={attachedBookshelf._id}/>}
+        {isAttachedBookshelf &&
+        <div className='rounded bg-slate-200 mb-3 mt-3 p-2'>
+          <Bookshelf bookshelfId={attachedBookshelf._id}/>
+        </div>}
         <div className="items-center flex justify-between">
           <div className="flex items-center justify-center">
             <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
-              <a title="list">
-                <AttachBookshelfPopup/>
-                {/* <ListIcon/> */}
-              </a>
+              <AttachBookshelfPopup/>
+              {/* <ListIcon/> */}
             </div>
             {/* <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
               <a title="media">

@@ -69,7 +69,7 @@ export const BookInfo = () => {
   // Global review
   const submitPostCb = async () => {
     if (setReview && setReview.length > 0) {
-      await postComment('global', book.bookId, review);
+      await postComment('global', book.bookId, 'book', review);
       setIsLoading(true);
       setReview('');
       setRating(0);

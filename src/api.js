@@ -223,10 +223,11 @@ export const removeGroupMember = async (groupProfile, memberId) => {
  * Requires user is logged in
  *
  * @param {string} scope - type of parent object to comment on
- * @param {string} pid - ID of parent object to comment on
+ * @param {string} pid - ID of parent object to comment on. Sometimes just empty string
+ * @param {string} ptype - the type of parent object. Can be 'book', 'bookshelf', 'comment', or ''
  * @param {string} text - Content of the comment
  */
-export const postComment = async (scope, pid, text) => {
+export const postComment = async (scope, pid, ptype, text) => {
   await refreshToken();
   await fetch(`${API_URL}/comments/post_comment`, {
     method: 'POST',
@@ -235,7 +236,7 @@ export const postComment = async (scope, pid, text) => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({pid, scope, text}),
+    body: JSON.stringify({pid, scope, ptype, text}),
   });
 };
 
