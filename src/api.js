@@ -622,7 +622,7 @@ export const getGroupProfile = async (id) => {
 /**
  * Fetches replies to a comment, given the comment's id
  *
- * @param {string} id - new profile to be set as current user's profile
+ * @param {string} id - id of comment
  * @return {array} replies - array of comment IDs replying to the comment
  */
 export const getReplies = async (id) => {
@@ -632,7 +632,6 @@ export const getReplies = async (id) => {
     throw new Error('No id provided');
   }
 
-  console.log('id', id);
   const response = await fetch(`${API_URL}/comments/get_replies`, {
     method: 'POST',
     headers: {
@@ -640,7 +639,7 @@ export const getReplies = async (id) => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({id: id}),
+    body: JSON.stringify({id}),
   });
 
   const body = await response.json();
@@ -649,6 +648,37 @@ export const getReplies = async (id) => {
     throw new Error('Call to /get_replies failed');
   }
   return body.replies;
+};
+
+/**
+ * Fetches reviews, given bookId
+ *
+ * @param {string} bookId - id of book
+ * @return {array} reviews - array of reviews of book
+ */
+export const getReviews = async (bookId) => {
+  await refreshToken();
+
+  if (!bookId) {
+    throw new Error('No id provided');
+  }
+
+  const response = await fetch(`${API_URL}/comments/get_reviews`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({bookId}),
+  });
+
+  const body = await response.json();
+
+  if (!response.ok) {
+    throw new Error('Call to /get_reviews failed');
+  }
+  return body.reviews;
 };
 
 /**
