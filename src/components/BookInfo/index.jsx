@@ -11,9 +11,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ReactLoading from 'react-loading';
-import {getRecs, getBook, postComment, getReplies} from '../../api';
+import {getRecs, getBook, postComment, getReviews} from '../../api';
 import {Review} from '../Comment/Review';
-import {useParams} from 'react-router-dom';
 import {Rating} from '@mui/material';
 
 export const BookInfo = () => {
@@ -68,33 +67,28 @@ export const BookInfo = () => {
   // Global review
   const submitPostCb = async () => {
     if (setReview && setReview.length > 0) {
-      await postComment('global', book.bookId, review);
+      await postComment('review', book.bookId, review);
       setIsLoading(true);
       setReview('');
       setRating(0);
     }
   };
 
-  const {bookIdParam} = useParams();
-  const [bookId, setBookId] = useState(bookIdParam || '3YUrtAEACAAJ'); // fake/default bookId
   const [isLoading, setIsLoading] = useState(true);
 
   const loadReviews = async (newBookId) => {
     if (!newBookId) return;
-    const newReviews = await getReplies(newBookId);
-    setReviews([...newReviews]);
+    console.log(newBookId);
+    const newReviews = await getReviews(newBookId);
+    setReviews(newReviews);
   };
 
   useEffect(() => {
-    setBookId(bookIdParam);
-  }, [bookIdParam]);
-
-  useEffect(() => {
-    if (isLoading) {
-      loadReviews(bookId); // setState hooks are async, so this is necessary
+    if (isLoading && book) {
+      loadReviews(book.bookId); // setState hooks are async, so this is necessary
       setIsLoading(false);
     }
-  }, [bookId, isLoading]);
+  }, [book]);
 
   return (
     <div className="App" style={{marginTop: '30px'}}>
