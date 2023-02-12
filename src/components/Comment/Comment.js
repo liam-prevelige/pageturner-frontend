@@ -28,8 +28,10 @@ export const Comment = ({commentId, noParent}) => {
 
     if (commentData.ptype && commentData.ptype === 'bookshelf') {
       setHasParentBookshelf(true);
+      setHasParentComment(false);
     } else if (!commentData.ptype || commentData.ptype === 'comment') { // first check is for existing comments without ptype
       setHasParentComment(true);
+      setHasParentBookshelf(false);
     }
   }, [commentData]);
 
