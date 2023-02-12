@@ -285,21 +285,22 @@ export const getUserBooks = async (email) => {
 };
 
 /**
- * Add a friend
- * @param {string} email - email of user to add as a friend
+ * Follow a user
+ * @param {string} uid - uid of user to start following
  * @return {boolean} success
  */
-export async function addFriend(email) {
+export async function addFollower(uid) {
   await refreshToken();
 
-  const response = await fetch(`${API_URL}/user/friend/add`, {
+  const response = await fetch(`${API_URL}/user/follower/add`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({friend_email: email}),
+    cache: 'default',
+    body: JSON.stringify({uid: uid}),
   });
 
   const body = await response.json();

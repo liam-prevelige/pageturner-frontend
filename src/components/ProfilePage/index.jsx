@@ -3,8 +3,7 @@ import {React, useState, useRef, useEffect} from 'react';
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
-import {updateProfile} from '../../api';
-import {getProfile} from '../../api';
+import {updateProfile, getProfile, addFollower} from '../../api';
 
 // export const Banner = styled.div`
 //   flex-shrink: 0;
@@ -30,6 +29,7 @@ export const ProfilePage = () => {
     bio: 'Hey there, it\'s Barack. Former POTUS, dad, and grandfather. I love books, wrote a couple (you may have heard of \'em), and believe in the power of stories to change the world. Let\'s chat about what we\'re reading!',
     friends: Array.from(Array(9473).keys()),
     following: Array.from(Array(891).keys()),
+    followers: Array.from(Array(891).keys()),
     profilePicture: 'https://mastersofscale.com/wp-content/uploads/sites/2/2021/05/barack_obama-1.jpg',
     cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
   };
@@ -45,9 +45,21 @@ export const ProfilePage = () => {
     }
   };
 
+  const updateSessionProfile = async () => {
+    const retrievedProfile = await getProfile(storedProfile._id);
+    console.log(retrievedProfile);
+    if (retrievedProfile) {
+      sessionStorage.setItem('profile', JSON.stringify(retrievedProfile));
+      storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+      setProfile(retrievedProfile);
+    }
+  };
+
   useEffect(() => {
     if (!isMyProfile) {
       retrieveProfileFromUid();
+    } else {
+      updateSessionProfile();
     }
   }, []);
 
@@ -56,6 +68,12 @@ export const ProfilePage = () => {
 
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
+
+  const handleFollowUser = async () => {
+    const uid = queryParams.get('uid');
+    await addFollower(uid);
+    window.location.reload();
+  };
 
   const handleEditProfile = async () => {
     if (isEditMode) {
@@ -170,8 +188,8 @@ export const ProfilePage = () => {
                   (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
                     {isEditMode ? 'Save Changes' : 'Edit Profile'}
                   </button>) :
-                  (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
-                    Add Friend
+                  (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
+                    Follow
                   </button>)}
                 </div>}
 
@@ -202,8 +220,8 @@ export const ProfilePage = () => {
                 }
 
                 <div className="flex flex-row space-x-5">
-                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.friends.length}</strong> Friends</button>
-                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.following.length}</strong> Following</button>
+                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.followers.length}</strong> Followers</button>
+                  <button data-modal-target="followingModal" data-modal-toggle="followingModal"className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.following.length}</strong> Following</button>
                 </div>
               </div>
             </div>
