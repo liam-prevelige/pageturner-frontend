@@ -14,7 +14,6 @@ export async function refreshToken() {
     console.log('no expiry date');
     return;
   }
-  console.log('expiry date: ' + expiryDate);
 
   const diff = expiryDate - Date.now();
   console.log(diff);
@@ -116,9 +115,6 @@ export async function onLogin() {
 
   sessionStorage.setItem('auth_token', body.result.tokens.id_token);
   sessionStorage.setItem('expiry_date', body.result.tokens.expiry_date);
-  console.log('expiry date', body.result.tokens.expiry_date);
-
-  console.log('onLogin body', body);
 
   return body.result;
 }
@@ -227,10 +223,11 @@ export const removeGroupMember = async (groupProfile, memberId) => {
  * Requires user is logged in
  *
  * @param {string} scope - type of parent object to comment on
- * @param {string} pid - ID of parent object to comment on
+ * @param {string} pid - ID of parent object to comment on. Sometimes just empty string
+ * @param {string} ptype - the type of parent object. Can be 'book', 'bookshelf', 'comment', or ''
  * @param {string} text - Content of the comment
  */
-export const postComment = async (scope, pid, text) => {
+export const postComment = async (scope, pid, ptype, text) => {
   await refreshToken();
   await fetch(`${API_URL}/comments/post_comment`, {
     method: 'POST',
@@ -239,7 +236,7 @@ export const postComment = async (scope, pid, text) => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({pid, scope, text}),
+    body: JSON.stringify({pid, scope, ptype, text}),
   });
 };
 
@@ -475,28 +472,6 @@ export const getFriends = async () => {
 };
 
 // Given a certain id, I want to get all *children* of that comment (and the original comment)
-export const getComments = async (pid) => {
-  await refreshToken();
-
-  const response = await fetch(`${API_URL}/comments/get_comments`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application.json',
-      'Content-Type': 'application/json',
-      'Authorization': sessionStorage.getItem('auth_token'),
-    },
-    cache: 'default',
-    body: JSON.stringify({pid: pid}),
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /user/friends failed');
-  }
-  return body.comments;
-};
-
-// Given a certain id, I want to get all *children* of that comment (and the original comment)
 export const getComment = async (id) => {
   await refreshToken();
 
@@ -652,6 +627,116 @@ export const getReplies = async (id) => {
 };
 
 /**
+ * Creates a new bookshelf
+*/
+export const createBookshelf = async (name, ownerId, ownerType) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/bookshelves/create`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({
+      name: name,
+      ownerId: ownerId,
+      ownerType: ownerType,
+    }),
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /bookshelves/create failed');
+  }
+  return body._id;
+};
+
+/**
+ * Adds a book to an existing bookshelf
+*/
+export const addBookToBookshelf = async (bookId, bookshelfId) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/bookshelves/modify`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({
+      bookId: bookId,
+      shelfId: bookshelfId,
+      op: 'add',
+    }),
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /bookshelves/modify failed');
+  }
+  return body;
+};
+
+/**
+ * Fetches one bookshelf given a user ID
+ *
+ * @return {dict} bookshelf - bookshelf object
+ */
+export const getBookshelf = async (bookshelfId) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/bookshelves/get_bookshelf`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({
+      bookshelfId: bookshelfId,
+    }),
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /bookshelves/get_bookshelves failed');
+  }
+  console.log(body);
+  return body.bookshelf;
+};
+
+/**
+ * Fetches all bookshelves owned by a user
+ *
+ * @return {array} replies - get bookshelves owned by a user
+ */
+export const getBookshelves = async (ownerId, ownerType) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/bookshelves/get_bookshelves`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({
+      ownerId: ownerId,
+      ownerType: ownerType,
+    }),
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /bookshelves/get_bookshelves failed');
+  }
+  return body.bookshelves;
+};
+
+/**
  * Fetches book clubs that a user is a member of, given the user's id
  *
  * @param {string} uid - user id
@@ -683,7 +768,7 @@ export const getBookClubs = async (uid) => {
  * @param {string} bookId - the ID of the book to get
  */
 export const getBook = async (bookId) => {
-  const response = await fetch(`${API_URL}/book/${bookId}`, {
+  const response = await fetch(`${API_URL}/books/${bookId}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -694,7 +779,7 @@ export const getBook = async (bookId) => {
 
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to /book failed');
+    throw new Error('Call to /books/search failed');
   }
   return body;
 };
