@@ -86,7 +86,7 @@ export const GroupSearchResult = (groupInfo) => {
 
 export const BookSearchResult = ({bookInfo}) => {
   const navigate = useNavigate();
-
+  console.log(bookInfo);
 
   const loadBook = (bid) => {
     // TODO fix this path
@@ -98,11 +98,14 @@ export const BookSearchResult = ({bookInfo}) => {
     <>
       <div className='flex space-x-3 px-4 py-3 justify-between border-primary-container_border_color cursor-pointer'>
         <div className="flex flex-row space-x-2" onClick={() => loadBook(bookInfo.id)}>
+          {'volumeInfo' in bookInfo && 'imageLinks' in bookInfo.volumeInfo && 'smallThumbnail' in bookInfo.volumeInfo.imageLinks &&
+        <div className="flex flex-row space-x-2">
           <img className="h-14 object-scale-down" src={bookInfo.volumeInfo.imageLinks.smallThumbnail} />
           <div className="flex flex-col items-left text-sm space-x-2 h-14 justify-center">
             <span className="ml-1 font-bold text-black">{bookInfo.volumeInfo.title}</span>
             <span className="ml-2 text-black">{bookInfo.volumeInfo.authors[0]}</span>
           </div>
+        </div>}
         </div>
         <div>
           <BookshelfPopup bid={bookInfo.id} useIcon={true}/>
