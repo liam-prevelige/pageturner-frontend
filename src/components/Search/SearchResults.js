@@ -1,6 +1,7 @@
 import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {getProfile} from '../../api';
+import {BookshelfPopup} from '../BookInfo/BookshelfPopup';
 
 export const UserSearchResult = (userInfo) => {
   const navigate = useNavigate();
@@ -87,24 +88,30 @@ export const BookSearchResult = ({bookInfo}) => {
   const navigate = useNavigate();
   console.log(bookInfo);
 
-  const loadBook = (uid) => {
+  const loadBook = (bid) => {
     // TODO fix this path
-    const path = `/book-info?id=${uid}`;
+    const path = `/book-info?id=${bid}`;
     navigate(path);
   };
 
   return (
-    <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color'>
-      {'volumeInfo' in bookInfo && 'imageLinks' in bookInfo.volumeInfo && 'smallThumbnail' in bookInfo.volumeInfo.imageLinks &&
-        <div>
-          <img src={bookInfo.volumeInfo.imageLinks.smallThumbnail} className="cursor-pointer w-11 h-11" onClick={() => loadBook(bookInfo.id)} />
-          <div className="flex-1">
-            <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadBook(bookInfo.id)}>
-              <span className="ml-1 font-bold text-black">{bookInfo.volumeInfo.title}</span>
-              <span className="ml-2 font-bold text-black">by {bookInfo.volumeInfo.authors[0]}</span>
-            </div>
+    <>
+      <div className='flex space-x-3 px-4 py-3 justify-between border-primary-container_border_color cursor-pointer'>
+        <div className="flex flex-row space-x-2" onClick={() => loadBook(bookInfo.id)}>
+          {'volumeInfo' in bookInfo && 'imageLinks' in bookInfo.volumeInfo && 'smallThumbnail' in bookInfo.volumeInfo.imageLinks &&
+        <div className="flex flex-row space-x-2">
+          <img className="h-14 object-scale-down" src={bookInfo.volumeInfo.imageLinks.smallThumbnail} />
+          <div className="flex flex-col items-left text-sm space-x-2 h-14 justify-center">
+            <span className="ml-1 font-bold text-black">{bookInfo.volumeInfo.title}</span>
+            <span className="ml-2 text-black">{bookInfo.volumeInfo.authors[0]}</span>
           </div>
         </div>}
-    </div>
+        </div>
+        <div>
+          <BookshelfPopup bid={bookInfo.id} useIcon={true}/>
+        </div>
+      </div>
+      <div className="border-b m-3 border-slate-300"/>
+    </>
   );
 };

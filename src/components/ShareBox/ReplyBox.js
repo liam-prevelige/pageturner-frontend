@@ -8,7 +8,8 @@ export const ReplyBox = ({pid}) => {
   const submitReplyCb = async () => {
     if (replyText && replyText.length > 0) {
       console.log('submit post');
-      await postComment('global', pid, replyText);
+      // await postComment('global', pid, replyText);
+      await postComment('global', pid, 'comment', replyText);
       window.dispatchEvent(new Event('newReply'));
       setReplyText('');
     }

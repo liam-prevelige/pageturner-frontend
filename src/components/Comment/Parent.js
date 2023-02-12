@@ -3,11 +3,13 @@ import {useNavigate} from 'react-router-dom';
 import {getProfile} from '../../api';
 import {getComment} from '../../api';
 import ReactLoading from 'react-loading';
+import {Bookshelf} from '../ProfilePage/Bookshelf';
 
 export const Parent = ({commentId}) => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [commentData, setCommentData] = useState(null);
+  const [hasParentBookshelf, setHasParentBookshelf] = useState(false);
 
   const getData = async (cId) => {
     if (!cId) return;
@@ -24,6 +26,12 @@ export const Parent = ({commentId}) => {
   useEffect(() => {
     getData(commentId);
   }, [commentId]);
+
+  useEffect(() => {
+    if (commentData && commentData.ptype && commentData.ptype === 'bookshelf') {
+      setHasParentBookshelf(true);
+    }
+  }, [commentData]);
 
   const loadParentThread = (e, clickedCommentData) => {
     e.stopPropagation(); // otherwise comment component registers a click as it's own
@@ -51,6 +59,7 @@ export const Parent = ({commentId}) => {
             <div className="items-center text-black overflow-hidden">
               {commentData.text}
             </div>
+            {hasParentBookshelf && <div className='rounded bg-slate-200 border border-white mb-3 mt-3 p-2'><Bookshelf bookshelfId={commentData.pid}/></div>}
           </div>
         </div>
       </div>)}

@@ -6,18 +6,34 @@ import {getProfile, getComment, updateLikes} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
 import {FaHeart, FaRegHeart} from 'react-icons/fa';
+import {Bookshelf} from '../ProfilePage/Bookshelf';
 
 export const Comment = ({commentId, noParent}) => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [commentData, setCommentData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [hasParentComment, setHasParentComment] = useState(false);
+  const [hasParentBookshelf, setHasParentBookshelf] = useState(false);
+
   const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
     const path = `/thread/${clickedCommentData._id}`;
     navigate(path);
   };
+
+  useEffect(() => {
+    if (noParent || !commentData || !commentData.pid) return;
+
+    if (commentData.ptype && commentData.ptype === 'bookshelf') {
+      setHasParentBookshelf(true);
+      setHasParentComment(false);
+    } else if (!commentData.ptype || commentData.ptype === 'comment') { // first check is for existing comments without ptype
+      setHasParentComment(true);
+      setHasParentBookshelf(false);
+    }
+  }, [commentData]);
 
   const getData = async (cId) => {
     if (!cId) return;
@@ -76,9 +92,19 @@ export const Comment = ({commentId, noParent}) => {
              <div className="items-center text-black overflow-hidden" onClick={(e) => loadThread(e, commentData)}>
                {commentData.text}
                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
-               {!noParent && commentData.pid && <Parent commentId={commentData.pid}/>}
+               {hasParentComment && <Parent commentId={commentData.pid}/>}
+               {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><Bookshelf bookshelfId={commentData.pid}/></div>}
              </div>
+
              <ul className="flex justify-between mt-2">
+               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
+                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
+                   {isLiked && <FaHeart className="fill-primary-like w-5 h-5"/>}
+                   {!isLiked && <FaRegHeart className="stroke-1 w-5 h-5"/>}
+                 </div>
+                 <span>{commentData.metadata.likes}</span>
+               </li>
+
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-reply group cursor-pointer">
                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-reply_hover">
                    <Reply/>
@@ -91,14 +117,6 @@ export const Comment = ({commentId, noParent}) => {
                    <Retweet/>
                  </div>
                  <span>{commentData.metadata.retweets}</span>
-               </li>
-
-               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
-                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
-                   {isLiked && <FaHeart className="fill-primary-like w-5 h-5"/>}
-                   {!isLiked && <FaRegHeart className="stroke-1 w-5 h-5"/>}
-                 </div>
-                 <span>{commentData.metadata.likes}</span>
                </li>
 
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors group cursor-pointer">

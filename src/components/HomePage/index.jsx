@@ -12,13 +12,15 @@ export const HomePage = () => {
           <>
             <Search />
             <div className="h-full border-r border-l border-slate-300">
-              <header className="sticky-top flex justify-between items-center p-4 border-b border-slate-300 bg-white">
-                <span className="font-bold text-3xl text-black">Home</span>
-              </header>
-              <div className="flex space-x-4 px-4 py-2 border-b border-slate-300">
+              {/* <header className="sticky-top flex justify-between items-center p-4 border-b border-slate-300 bg-white"> */}
+              <span className="relative z-0 sticky-top flex justify-between items-center p-4 border-b border-slate-300 bg-white font-bold text-3xl text-black">Home</span>
+              {/* </header> */}
+              <div className="relative z-20 flex space-x-4 px-4 py-2 border-b border-slate-300">
                 <ShareBox />
               </div>
-              <Timeline />
+              <div className='relative z-10'>
+                <Timeline />
+              </div>
             </div>
           </>
         </main>
