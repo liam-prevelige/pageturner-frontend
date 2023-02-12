@@ -25,7 +25,7 @@ export const Trending = () => {
         <div className="mb-3 mt-3">
           {trends.map((trendData, index) =>
             (<div key={index}>
-              <TrendingEntry rank={index+1} title={trendData.title} postcount={trendData.postcount}/>
+              <TrendingEntry rank={index+1} title={trendData.displayName} postcount={trendData.likes}/>
             </div>
             ))}
         </div>
