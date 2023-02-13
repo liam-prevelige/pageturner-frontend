@@ -2,6 +2,10 @@
   "name": "pageturner",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "16.14.0",
+    "npm": "8.5.0"
+  },
   "dependencies": {
     "@chakra-ui/layout": "^2.1.9",
     "@chakra-ui/react": "^2.3.7",
