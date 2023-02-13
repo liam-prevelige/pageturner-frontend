@@ -1,7 +1,8 @@
 /* eslint-disable valid-jsdoc */
 // api.js: wrappers for all API endpoints
 
-const API_URL = 'http://localhost:5001';
+const API_URL = (process.env.NODE_ENV === 'development') ? 'http://localhost:5001' : 'https://pageturner-backend.herokuapp.com';
+console.log(API_URL);
 
 /**
  * Checks if auth_code is within 5 minutes of expiration and calls for token refresh if necessary
