@@ -7,6 +7,7 @@ import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
 import {FaHeart, FaRegHeart} from 'react-icons/fa';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
+import {IndividualBookDisplay} from './IndividualBookDisplay';
 
 export const Comment = ({commentId, noParent}) => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export const Comment = ({commentId, noParent}) => {
   const [isLiked, setIsLiked] = useState(false);
   const [hasParentComment, setHasParentComment] = useState(false);
   const [hasParentBookshelf, setHasParentBookshelf] = useState(false);
+  const [hasParentBook, setHasParentBook] = useState(false);
 
   const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const loadThread = (e, clickedCommentData) => {
@@ -29,9 +31,15 @@ export const Comment = ({commentId, noParent}) => {
     if (commentData.ptype && commentData.ptype === 'bookshelf') {
       setHasParentBookshelf(true);
       setHasParentComment(false);
+      setHasParentBook(false);
+    } else if (commentData.ptype || commentData.ptype === 'book') { // first check is for existing comments without ptype
+      setHasParentBook(true);
+      setHasParentComment(false);
+      setHasParentBookshelf(false);
     } else if (!commentData.ptype || commentData.ptype === 'comment') { // first check is for existing comments without ptype
       setHasParentComment(true);
       setHasParentBookshelf(false);
+      setHasParentBook(false);
     }
   }, [commentData]);
 
@@ -94,6 +102,7 @@ export const Comment = ({commentId, noParent}) => {
                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
                {hasParentComment && <Parent commentId={commentData.pid}/>}
                {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><Bookshelf bookshelfId={commentData.pid}/></div>}
+               {hasParentBook && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><IndividualBookDisplay bid={commentData.pid}/></div>}
              </div>
 
              <ul className="flex justify-between mt-2">

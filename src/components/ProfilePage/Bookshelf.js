@@ -13,7 +13,7 @@ export const Bookshelf = ({bookshelfId}) => {
 
   const fetchBookshelf = async () => {
     const bookshelfData = await getBookshelf(bookshelfId);
-    console.log(bookshelfData);
+    console.log('discovered bookshelfData', bookshelfData);
     setBookshelf(bookshelfData);
   };
 
