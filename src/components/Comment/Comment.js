@@ -27,12 +27,12 @@ export const Comment = ({commentId, noParent}) => {
 
   useEffect(() => {
     if (noParent || !commentData || !commentData.pid) return;
-
+    console.log(commentData);
     if (commentData.ptype && commentData.ptype === 'bookshelf') {
       setHasParentBookshelf(true);
       setHasParentComment(false);
       setHasParentBook(false);
-    } else if (commentData.ptype || commentData.ptype === 'book') { // first check is for existing comments without ptype
+    } else if (commentData.ptype && commentData.ptype === 'book') { // first check is for existing comments without ptype
       setHasParentBook(true);
       setHasParentComment(false);
       setHasParentBookshelf(false);
