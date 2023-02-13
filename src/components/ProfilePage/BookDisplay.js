@@ -1,23 +1,28 @@
 import {React, useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
 import ReactLoading from 'react-loading';
-
+import {useNavigate} from 'react-router-dom';
 import {getBook} from '../../api';
 
 // import {BookInfo} from '../../BookInfo';
 
 export const BookDisplay = ({bid}) => {
   const [book, setBook] = useState(null);
+  const navigate = useNavigate();
 
   const retrieveBookFromId = async () => {
     const retrievedBook = await getBook(bid);
     setBook(retrievedBook);
-    console.log(retrievedBook);
+  };
+
+  const loadBook = (e) => {
+    e.stopPropagation();
+    const path = `/book-info?id=${bid}`;
+    navigate(path);
   };
 
   useEffect(() => {
     retrieveBookFromId();
-  }, []);
+  }, [bid]);
 
   return (
     <>
@@ -25,15 +30,12 @@ export const BookDisplay = ({bid}) => {
       <div className="max-width-xs">
         <nav>
           <center>
-            <Link className="cursor-pointer" to={{
-              pathname: '../book-info',
-              search: '?id=' + book.id,
-            }}>
+            <div className="cursor-pointer" onClick={(e) => loadBook(e)}>
               <img className="object-scale-down w-28 h-48" src={book.imageLinks.thumbnail}/>
               <div className="text-sm w-32">
                 {book.title}
               </div>
-            </Link>
+            </div>
           </center>
         </nav>
       </div>)}

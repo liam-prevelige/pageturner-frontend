@@ -28,6 +28,7 @@ export const Parent = ({commentId}) => {
   }, [commentId]);
 
   useEffect(() => {
+    console.log('commentData', commentData);
     if (commentData && commentData.ptype && commentData.ptype === 'bookshelf') {
       setHasParentBookshelf(true);
     }

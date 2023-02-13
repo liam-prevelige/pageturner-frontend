@@ -11,7 +11,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ReactLoading from 'react-loading';
-import {getRecs, getBook, postComment, getReplies} from '../../api';
+import {getBook, postComment, getReplies} from '../../api';
 import {Review} from '../Comment/Review';
 import {useParams} from 'react-router-dom';
 import {Rating} from '@mui/material';
@@ -39,21 +39,6 @@ export const BookInfo = () => {
     }
   }, []);
 
-  // const [recs, setRecs] = useState([]);
-
-  // Get recommendations from the database
-  const loadRecs = async () => {
-    if (queryParams.get('isbn')) {
-      const newRecs = await getRecs(queryParams.get('isbn'));
-      console.log(newRecs);
-      setRecs(newRecs);
-    }
-  };
-
-  useEffect(() => {
-    loadRecs();
-  }, []);
-
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
@@ -69,7 +54,7 @@ export const BookInfo = () => {
   // Global review
   const submitPostCb = async () => {
     if (setReview && setReview.length > 0) {
-      await postComment('global', book.bookId, 'book', review);
+      await postComment('global', book.id, 'book', review);
       setIsLoading(true);
       setReview('');
       setRating(0);
