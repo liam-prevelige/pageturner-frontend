@@ -5,7 +5,7 @@ import {FaArrowLeft} from 'react-icons/fa';
 
 export const BackNav = ({profile}) => {
   const navigate = useNavigate();
-  console.log(window.location.search);
+
   const navigateBack = () => {
     navigate(-1);
   };

@@ -64,7 +64,6 @@ export const BookInfo = () => {
 
   const loadReviews = async (newBookId) => {
     if (!newBookId) return;
-    console.log(newBookId);
     const newReviews = await getReviews(newBookId);
     setReviews(newReviews);
   };

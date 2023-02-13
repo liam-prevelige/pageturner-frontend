@@ -14,7 +14,6 @@ export const ShareBox = () => {
 
   const submitPostCb = async () => {
     if (postText && postText.length > 0) {
-      console.log('submit post');
       // (scope, pid, ptype, text)
       await postComment('global', pid, ptype, postText);
       window.dispatchEvent(new Event('newPost'));
@@ -28,7 +27,6 @@ export const ShareBox = () => {
   };
 
   window.addEventListener('attachBookshelf', (e) => {
-    console.log('attachBookshelf', e.detail);
     setIsAttachedBookshelf(true);
     setAttachedBookshelf(e.detail);
     setPid(e.detail._id);

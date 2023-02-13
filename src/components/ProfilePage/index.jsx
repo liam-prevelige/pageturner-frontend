@@ -39,7 +39,6 @@ export const ProfilePage = () => {
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
     const retrievedProfile = await getProfile(uid);
-    console.log(retrievedProfile);
     if (retrievedProfile) {
       setProfile(retrievedProfile);
     }
@@ -62,7 +61,6 @@ export const ProfilePage = () => {
       let updatedProfile = null;
       updatedProfile = await updateProfile(newProfile);
       sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
-      console.log('Updated profile: ', updatedProfile);
       setNewProfile(updatedProfile);
       window.location.reload();
     } else {

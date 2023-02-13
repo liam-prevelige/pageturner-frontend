@@ -86,7 +86,6 @@ export const GroupSearchResult = (groupInfo) => {
 
 export const BookSearchResult = ({bookInfo}) => {
   const navigate = useNavigate();
-  console.log(bookInfo);
 
   const loadBook = (bid) => {
     // TODO fix this path

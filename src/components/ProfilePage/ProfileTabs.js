@@ -16,24 +16,20 @@ export const ProfileTabs = ({uid}) => {
 
   const fetchBookshelves = async () => {
     const loadedBookshelves = await getBookshelves(uid, 'user');
-    console.log('loadedBookshelves', loadedBookshelves);
     setBookshelves(loadedBookshelves);
   };
 
   const fetchPosts = async () => {
     const profilePosts = await getPosts(uid);
-    console.log(profilePosts);
     setPosts(profilePosts);
   };
 
   const fetchLikedPosts = async () => {
     const likedPosts = await getLikedPosts(uid);
-    console.log(likedPosts);
     setLikedPosts(likedPosts);
   };
 
   useEffect(() => {
-    console.log('fetching posts');
     fetchBookshelves();
     fetchPosts();
     fetchLikedPosts();

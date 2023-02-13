@@ -35,7 +35,6 @@ export const PostContainer = () => {
   };
 
   useEffect(() => {
-    console.log(triggerNumber);
     if (!loaded) {
       load();
     } else {

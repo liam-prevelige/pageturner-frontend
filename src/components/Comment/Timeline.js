@@ -20,7 +20,6 @@ export const Timeline = () => {
       } else {
         timeLine = await getGlobalFeed();
       }
-      console.log(timeLine);
       setTimeLine(timeLine);
     } catch (err) {
       console.log(err);
@@ -30,7 +29,6 @@ export const Timeline = () => {
   // Create event listener for newPost in sessionStorage
   window.addEventListener('newPost', () => {
     if (!isLoading) {
-      console.log('newPost event triggered');
       setIsLoading(true);
     }
   });

@@ -22,7 +22,6 @@ export const ThreadView = () => {
   // Create event listener for newPost in sessionStorage
   window.addEventListener('newReply', () => {
     if (!isLoading) {
-      console.log('newReply event triggered');
       setIsLoading(true);
     }
   });

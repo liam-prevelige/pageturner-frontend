@@ -2,7 +2,6 @@
 // api.js: wrappers for all API endpoints
 
 const API_URL = (process.env.NODE_ENV === 'development') ? 'http://localhost:5001' : 'https://pageturner-backend.herokuapp.com';
-console.log(API_URL);
 
 /**
  * Checks if auth_code is within 5 minutes of expiration and calls for token refresh if necessary
@@ -12,12 +11,10 @@ console.log(API_URL);
 export async function refreshToken() {
   const expiryDate = sessionStorage.getItem('expiry_date');
   if (!expiryDate) {
-    console.log('no expiry date');
     return;
   }
 
   const diff = expiryDate - Date.now();
-  console.log(diff);
   if (diff < 300000) { // 5 minutes
     const response = await fetch(`${API_URL}/user/refresh_token`, {
       method: 'POST',
@@ -64,7 +61,6 @@ export const updateLikes = async (cid) => {
   if (!response.ok) {
     throw new Error('Call to /user/update_likes failed');
   }
-  console.log(res);
   return res.likedPosts;
 };
 
@@ -92,7 +88,6 @@ export const getFeed = async () => {
   if (!response.ok) {
     throw new Error('Call to /user/get_feed failed');
   }
-  console.log(body);
   return body.feed;
 };
 
@@ -735,7 +730,6 @@ export const getBookshelf = async (bookshelfId) => {
   if (!response.ok) {
     throw new Error('Call to /bookshelves/get_bookshelves failed');
   }
-  console.log(body);
   return body.bookshelf;
 };
 

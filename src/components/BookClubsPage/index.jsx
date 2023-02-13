@@ -105,7 +105,7 @@ export const BookClubsPage = () => {
       private: false,
     };
     const response = await createGroup(defaultProfile);
-    console.log(response);
+
     if (!response) {
       toggleCreatingGroup();
       setTagExists(false);

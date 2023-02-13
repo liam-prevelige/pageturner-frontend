@@ -66,7 +66,6 @@ export const Profile = () => {
   }];
 
   const load = async () => {
-    console.log('entering load');
     setUserInfo(JSON.parse(sessionStorage.getItem('profile')));
 
     const friends = await getFriends();

@@ -39,7 +39,6 @@ const Form = ({firstFieldRef, onCancel}) => {
   };
 
   const attachSelectedBookshelf = (bookshelfData) => {
-    console.log('bookshelfData', bookshelfData);
     window.dispatchEvent(new CustomEvent('attachBookshelf', {detail: bookshelfData}));
     onCancel();
   };

@@ -10,7 +10,6 @@ export const IndividualBookDisplay = ({bid}) => {
   const navigate = useNavigate();
   const retrieveBookFromId = async () => {
     const retrievedBook = await getBook(bid);
-    console.log('retrivedBook', retrievedBook);
     setBook(retrievedBook);
   };
 

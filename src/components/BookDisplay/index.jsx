@@ -12,7 +12,6 @@ export const BookDisplay = ({bid}) => {
 
   const getBookData = async () => {
     const bookData = await getBook(bid);
-    console.log(bookData);
     setBook(bookData);
   };
 
