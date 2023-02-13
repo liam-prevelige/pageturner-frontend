@@ -3,7 +3,14 @@ import {React, useState, useRef, useEffect} from 'react';
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
-import {updateProfile, getProfile, addFollower, getFollowers, getFollowing} from '../../api';
+import {
+  updateProfile,
+  getProfile,
+  addFollower,
+  removeFollower,
+  getFollowers,
+  getFollowing,
+} from '../../api';
 
 // export const Banner = styled.div`
 //   flex-shrink: 0;
@@ -41,18 +48,24 @@ export const ProfilePage = () => {
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
     const retrievedProfile = await getProfile(uid);
-    console.log(retrievedProfile);
     if (retrievedProfile) {
+      const followers = await getFollowers(uid);
+      retrievedProfile.followers = followers;
+      const following = await getFollowing(uid);
+      retrievedProfile.following = following;
       setProfile(retrievedProfile);
     }
   };
 
   const updateSessionProfile = async () => {
     const retrievedProfile = await getProfile(storedProfile._id);
-    console.log(retrievedProfile);
     if (retrievedProfile) {
       sessionStorage.setItem('profile', JSON.stringify(retrievedProfile));
       storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+      const followers = await getFollowers(uid);
+      retrievedProfile.followers = followers;
+      const following = await getFollowing(uid);
+      retrievedProfile.following = following;
       setProfile(retrievedProfile);
     }
   };
@@ -63,8 +76,6 @@ export const ProfilePage = () => {
     } else {
       updateSessionProfile();
     }
-    console.log('profile:');
-    console.log(profile);
   }, []);
 
   const [newProfile, setNewProfile] = useState(profile);
@@ -79,16 +90,20 @@ export const ProfilePage = () => {
     window.location.reload();
   };
 
+  const handleUnfollowUser = async () => {
+    const uid = queryParams.get('uid');
+    await removeFollower(uid);
+    window.location.reload();
+  };
+
   const handleOpenFollowersModal = async () => {
     const followers = await getFollowers(profile._id);
-    console.log(followers);
     profile.followers = followers;
     setShowFollowersModal(true);
   };
 
   const handleOpenFollowingModal = async () => {
     const following = await getFollowing(profile._id);
-    console.log(following);
     profile.following = following;
     setShowFollowingModal(true);
   };
@@ -98,7 +113,6 @@ export const ProfilePage = () => {
       let updatedProfile = null;
       updatedProfile = await updateProfile(newProfile);
       sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
-      console.log('Updated profile: ', updatedProfile);
       setNewProfile(updatedProfile);
       window.location.reload();
     } else {
@@ -163,7 +177,7 @@ export const ProfilePage = () => {
           );
         } else {
           return (
-            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleFollowUser}>
+            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleUnfollowUser}>
               Unfollow
             </button>
           );

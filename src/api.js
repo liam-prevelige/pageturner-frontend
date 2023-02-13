@@ -308,6 +308,29 @@ export async function addFollower(uid) {
 }
 
 /**
+ * Unfollow a user
+ * @param {string} uid - uid of user to start following
+ * @return {boolean} success
+ */
+export async function removeFollower(uid) {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/follower/remove`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const body = await response.json();
+  return body.success;
+}
+
+/**
  * Remove a friend
  * @param {string} email - email of user to remove as a friend
  * @return {boolean} success
