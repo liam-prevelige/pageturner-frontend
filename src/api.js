@@ -570,6 +570,52 @@ export const getLikedPosts = async (uid) => {
 };
 
 /**
+ * Fetches the accounts a user follows
+ */
+export const getFollowing = async (uid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_following`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_following failed');
+  }
+  return res;
+};
+
+/**
+ * Fetches a user's followers
+ */
+export const getFollowers = async (uid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_followers`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_followers failed');
+  }
+  return res;
+};
+
+/**
  * Fetches profile information
  *
  * @param {string} id - new profile to be set as current user's profile
