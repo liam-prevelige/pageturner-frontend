@@ -146,6 +146,44 @@ export const ProfilePage = () => {
     input.current.click();
   };
 
+  const renderEditFollow = () => {
+    if (profile) {
+      if (isMyProfile) {
+        return (
+          <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+            {isEditMode ? 'Save Changes' : 'Edit Profile'}
+          </button>
+        );
+      } else {
+        if (!profile.followers.includes(storedProfile._id) && !profile.followers.some((e) => String(e._id) === String(storedProfile._id))) {
+          return (
+            <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
+              Follow
+            </button>
+          );
+        } else {
+          return (
+            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleFollowUser}>
+              Unfollow
+            </button>
+          );
+        }
+      }
+    }
+
+
+    {profile &&
+      <div className="flex flex-col float-right font-bold">
+        {isMyProfile ?
+        (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+          {isEditMode ? 'Save Changes' : 'Edit Profile'}
+        </button>) :
+        (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
+          Follow
+        </button>)}
+      </div>;}
+  };
+
   return (
     <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
       <main className="flex flex-col">
@@ -200,17 +238,9 @@ export const ProfilePage = () => {
                     )
                 }
               </div>
-              {profile &&
-                <div className="flex flex-col float-right font-bold">
-                  {isMyProfile ?
-                  (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-                    {isEditMode ? 'Save Changes' : 'Edit Profile'}
-                  </button>) :
-                  (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
-                    Follow
-                  </button>)}
-                </div>}
-
+              <div className="float-right">
+                {renderEditFollow()}
+              </div>
               <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
                 {!isEditMode ?
                     <span className="text-xl font-bold">{profile.name}</span> :
