@@ -15,6 +15,9 @@ import {getBook, postComment, getReviews} from '../../api';
 import {Review} from '../Comment/Review';
 import {Rating} from '@mui/material';
 import {BookshelfPopup} from './BookshelfPopup';
+import {BackNav} from '../BackNav/BackNav';
+import {FaAngleDown, FaAngleUp} from 'react-icons/fa';
+import parse from 'html-react-parser';
 
 export const BookInfo = () => {
   const search = window.location.search;
@@ -23,6 +26,11 @@ export const BookInfo = () => {
   const loggedIn = useState(JSON.parse(sessionStorage.getItem('profile')))[0] != null;
 
   const [book, setBook] = useState(null);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [reviews, setReviews] = useState([]);
+  const [review, setReview] = useState('');
+  const [rating, setRating] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const retrieveBookFromId = async () => {
     const id = queryParams.get('id');
@@ -30,17 +38,8 @@ export const BookInfo = () => {
     if (retrievedBook) {
       setBook(retrievedBook);
     }
+    console.log(retrievedBook);
   };
-
-  useEffect(() => {
-    if (!isBookInfo) {
-      retrieveBookFromId();
-    }
-  }, []);
-
-  const [reviews, setReviews] = useState([]);
-  const [review, setReview] = useState('');
-  const [rating, setRating] = useState(0);
 
   // Local review
   const handleSubmit = (event) => {
@@ -60,13 +59,17 @@ export const BookInfo = () => {
     }
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-
   const loadReviews = async (newBookId) => {
     if (!newBookId) return;
     const newReviews = await getReviews(newBookId);
     setReviews(newReviews);
   };
+
+  useEffect(() => {
+    if (!isBookInfo) {
+      retrieveBookFromId();
+    }
+  }, []);
 
   useEffect(() => {
     if (isLoading && book) {
@@ -77,12 +80,36 @@ export const BookInfo = () => {
 
   return (
     <>
-      {book && (<div className="App" style={{marginTop: '30px'}}>
+      {!book ? <ReactLoading type="spin" color="black" /> : (
+      <div>
         <div className='gradient_bg'>
+          <BackNav />
+          <div className="flex flex-col">
+            <div className="flex flex-row">
+              <img className="object-scale-down w-36 h-56" src={book.imageLinks.thumbnail} alt='...'/>
+              <div className="flex flex-col ml-3">
+                <span className="font-bold text-3xl text-black">{book.title}</span>
+                <span className='text-slate-500 text-2xl'>{book.authors[0]} • {book.publishedDate.substr(0, 4)}</span>
+              </div>
+            </div>
+            {isCollapsed && <div>
+              <span className='text-sm' style={{marginTop: '5px'}}>{parse(book.description.substring(0, 650))}...</span>
+              <div className='flex flex-row justify-center'>
+                <button className="w-8" onClick={() => setIsCollapsed(false)}><FaAngleDown/></button>
+              </div>
+            </div>}
+            {!isCollapsed && <div>
+              <span className='text-sm' style={{marginTop: '5px'}}>{parse(book.description)}</span>
+              <div className='flex flex-row justify-center'>
+                <button className="w-8" onClick={() => setIsCollapsed(true)}><FaAngleUp/></button>
+              </div>
+            </div>}
+          </div>
+
           <Container>
             <Row>
               {!book ? <ReactLoading type="spin" color="black" /> :
-            <Col><img src={book.imageLinks.thumbnail} alt='...' style={{width: '300px', height: '400px'}}/></Col>}
+            <Col></Col>}
               <Col>
                 <Row>
                   {!book ? <ReactLoading type="spin" color="black" /> :
@@ -91,14 +118,12 @@ export const BookInfo = () => {
                 <Row>
                   <div className="flex flex-row ..." style={{marginTop: '5px'}}>
                     {!book ? <ReactLoading type="spin" color="black" /> :
-                  <span className="basis-1/6 text-slate-500">{book.publishedDate.substr(0, 4)} • </span>}
-                    {!book ? <ReactLoading type="spin" color="black" /> :
-                  <span className='text-slate-500'>{book.authors[0]}</span>}
+                  <span className='text-slate-500'>{book.authors[0]} • {book.publishedDate.substr(0, 4)}</span>}
                   </div>
                 </Row>
                 <Row>
                   {!book ? <ReactLoading type="spin" color="black" /> :
-                <span className='text-sm' style={{marginTop: '5px'}}>{book.description.substring(0, 650)}...</span>}
+                <span className='text-sm' style={{marginTop: '5px'}}>{parse(book.description.substring(0, 650))}...</span>}
                 </Row>
                 <Row>
                   <BookshelfPopup bid={book.id} useIcon={false}/>
