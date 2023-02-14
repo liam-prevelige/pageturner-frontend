@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './bookInfo.css';
 import ReactLoading from 'react-loading';
 import {getBook, postComment, getReviews} from '../../api';
-import {Review} from '../Comment/Review';
+import {Comment} from '../Comment/Comment';
 import {Rating} from '@mui/material';
 import {BookshelfPopup} from './BookshelfPopup';
 import {BackNav} from '../BackNav/BackNav';
@@ -27,7 +27,6 @@ export const BookInfo = () => {
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
 
   const retrieveBookFromId = async () => {
     const id = queryParams.get('id');
@@ -48,13 +47,13 @@ export const BookInfo = () => {
     setReviews([...reviews, {review, rating}]);
     setReview('');
     setRating(0);
+    loadReviews(book.bookId);
   };
 
   // Global review
   const submitPostCb = async () => {
     if (setReview && setReview.length > 0) {
       await postComment('global', book.bookId, 'book', review, {rating: rating});
-      setIsLoading(true);
       setReview('');
       setRating(0);
     }
@@ -73,9 +72,8 @@ export const BookInfo = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoading && book) {
-      loadReviews(book.bookId); // setState hooks are async, so this is necessary
-      setIsLoading(false);
+    if (book) {
+      loadReviews(book.bookId);
     }
   }, [book]);
 
@@ -141,7 +139,7 @@ export const BookInfo = () => {
             <p className='font-semibold text-lg'>Reviews on PageTurner</p>
             {reviews.map((r, index) =>
               (<div key={index}>
-                <Review commentId={r._id} noParent={true}/>
+                <Comment commentId={r._id} noParent={true}/>
                 <div className="border-b ml-3 mr-3 border-slate-300"></div>
               </div>
               ))}
