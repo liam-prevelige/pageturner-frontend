@@ -10,7 +10,7 @@ export const Review = ({commentId, noParent}) => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [commentData, setCommentData] = useState(null);
-  const rating = 4;
+  const [rating, setRating] = useState(0);
 
   const getData = async (cId) => {
     if (!cId) return;
@@ -21,6 +21,7 @@ export const Review = ({commentId, noParent}) => {
     const profile = await getProfile(comment.uid);
     setProfileData(profile);
     setCommentData(comment);
+    setRating(comment.rating || 0);
   };
 
   const loadUserProfile = (uid) => {
