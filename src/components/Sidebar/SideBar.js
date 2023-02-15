@@ -23,7 +23,7 @@ export const SideBar = () => {
 
   return (
     <>
-      <div className="flex flex-col w-275 justify-between px-3 bg-white mt-3">
+      <div className="flex flex-col w-275 justify-between px-3 bg-white pt-3">
         <div className='sticky top-0'>
           <div className="flex items-center justify-center h-24 w-24 p-1 rounded-full transform transition-colors duration-2 hover:bg-primary-twıtter_ıcon hover:bg-blue-100 cursor-pointer">
             <BookIcon />
@@ -60,14 +60,11 @@ export const SideBar = () => {
               </a>
             </ul>
           </nav>
-          <button className="bg-primary-button text-white rounded-full text-xl shadow-lg py-3 px-8 w-90 transform transition-colors duration-500 hover:bg-primary-button_hover font-bold sidebar-text-bold">
-                        Share
-          </button>
-          <div className="mt-5">
+          {!profile && <div className="mt-5">
             <Auth triggerReload = {() => {
               reloadPageFunc();
             }}/>
-          </div>
+          </div>}
         </div>
       </div>
     </>

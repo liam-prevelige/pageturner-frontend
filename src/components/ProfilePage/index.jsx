@@ -11,6 +11,7 @@ import {
   getFollowers,
   getFollowing,
 } from '../../api';
+import {Auth} from '../Auth/Auth';
 
 // export const Banner = styled.div`
 //   flex-shrink: 0;
@@ -58,6 +59,9 @@ export const ProfilePage = () => {
   };
 
   const updateSessionProfile = async () => {
+    if (!storedProfile) {
+      return;
+    }
     const retrievedProfile = await getProfile(storedProfile._id);
     if (retrievedProfile) {
       sessionStorage.setItem('profile', JSON.stringify(retrievedProfile));
@@ -164,9 +168,16 @@ export const ProfilePage = () => {
     if (profile) {
       if (isMyProfile) {
         return (
-          <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-            {isEditMode ? 'Save Changes' : 'Edit Profile'}
-          </button>
+          <div className='flex flex-col'>
+            <button className="mt-3 mr-3 text-primary-button font-bold rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+              {isEditMode ? 'Save Changes' : 'Edit Profile'}
+            </button>
+            {profile && <div className="flex flex-row justify-end mt-1">
+              <Auth triggerReload = {() => {
+                reloadPageFunc();
+              }}/>
+            </div>}
+          </div>
         );
       } else {
         if (!profile.followers.includes(storedProfile._id) && !profile.followers.some((e) => String(e._id) === String(storedProfile._id))) {
@@ -189,9 +200,11 @@ export const ProfilePage = () => {
     {profile &&
       <div className="flex flex-col float-right font-bold">
         {isMyProfile ?
-        (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-          {isEditMode ? 'Save Changes' : 'Edit Profile'}
-        </button>) :
+        (<>
+          <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+            {isEditMode ? 'Save Changes' : 'Edit Profile'}
+          </button>
+        </>) :
         (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
           Follow
         </button>)}
