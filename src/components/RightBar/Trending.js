@@ -32,11 +32,11 @@ export const Trending = () => {
         <div className="mb-3 mt-3">
           {trends.map((trendData, index) =>
             (<div key={index} onClick={(e) => loadThread(e, trendData)}>
-              <TrendingEntry rank={index+1} title={trendData.displayName} postcount={trendData.metadata.likes}/>
+              <TrendingEntry rank={index+1} title={'@'+trendData.displayName} postcount={trendData.metadata.likes}/>
             </div>
             ))}
         </div>
-        <div className="p-2 transform transition-colors duration-2 bg-slate-200">
+        <div className="p-2 transform transition-colors duration-2 bg-slate-200 cursor-pointer">
           <span className=" text-primary-button">Show more</span>
         </div>
       </div>

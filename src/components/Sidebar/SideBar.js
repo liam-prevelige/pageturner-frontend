@@ -60,14 +60,11 @@ export const SideBar = () => {
               </a>
             </ul>
           </nav>
-          <button className="bg-primary-button text-white rounded-full text-xl shadow-lg py-3 px-8 w-90 transform transition-colors duration-500 hover:bg-primary-button_hover font-bold sidebar-text-bold">
-                        Share
-          </button>
-          <div className="mt-5">
+          {!profile && <div className="mt-5">
             <Auth triggerReload = {() => {
               reloadPageFunc();
             }}/>
-          </div>
+          </div>}
         </div>
       </div>
     </>

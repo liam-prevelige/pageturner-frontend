@@ -55,7 +55,7 @@ export const Auth = (props) => {
       <button className="font-bold w-40 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={() => login()}>
         Sign In with Google
       </button> :
-      <button className="font-bold w-24 mt-3 mr-3 text-primary-button wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:border-primary-button hover:text-white" onClick={logout}>
+      <button className="font-bold w-24 mt-3 mr-3 text-red-400 wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-red-400 transform transition-colors duration-200 hover:bg-red-400 hover:border-red-400 hover:text-white" onClick={logout}>
         Log Out
       </button>
       }
