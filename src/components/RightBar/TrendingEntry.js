@@ -18,7 +18,7 @@ export const TrendingEntry = ({rank, title, postcount}) => {
         </div>
       </div>
       <div className="TopicCount mb-3">
-        <span className="text-gray-600">{postcount} Posts</span>
+        <span className="text-gray-600">{postcount} Likes</span>
       </div>
       <div style={{borderTop: '1px solid gray'}}></div>
     </div>
