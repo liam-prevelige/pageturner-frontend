@@ -11,19 +11,16 @@ export const ThreadView = () => {
   const [replies, setReplies] = useState([]);
   const {commentIdParam} = useParams();
   const [commentId, setCommentId] = useState(commentIdParam || '63d0ab8ff3d6963f6f68a93a'); // if no url param, fake/default comment ID
-  const [isLoading, setIsLoading] = useState(true);
 
   const loadReplies = async (newCommentId) => {
     if (!newCommentId) return;
     const newReplies = await getReplies(newCommentId);
-    setReplies([...newReplies]);
+    setReplies(newReplies);
   };
 
   // Create event listener for newPost in sessionStorage
   window.addEventListener('newReply', () => {
-    if (!isLoading) {
-      setIsLoading(true);
-    }
+    loadReplies(commentId);
   });
 
   useEffect(() => {
@@ -31,11 +28,8 @@ export const ThreadView = () => {
   }, [commentIdParam]);
 
   useEffect(() => {
-    if (isLoading) {
-      loadReplies(commentId); // setState hooks are async, so this is necessary
-      setIsLoading(false);
-    }
-  }, [commentId, isLoading]);
+    loadReplies(commentId); // setState hooks are async, so this is necessary
+  }, [commentId]);
 
   return (
     <div className="flex relative flex-col bg-slate-100">

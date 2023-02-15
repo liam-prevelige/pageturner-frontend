@@ -16,10 +16,11 @@ import {Auth} from '../Auth/Auth';
 export const ProfilePage = () => {
   const search = window.location.search;
   const queryParams = new URLSearchParams(search);
-  const isMyProfile = !queryParams.has('uid');
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false);
+  const isMyProfile = !queryParams.has('uid') || (storedProfile && queryParams.get('uid') === storedProfile._id);
+  const [profile, setProfile] = useState((isMyProfile && storedProfile) ? storedProfile : null);
 
   const fakeProfile = {
     id: 1,
@@ -32,8 +33,6 @@ export const ProfilePage = () => {
     profilePicture: 'https://mastersofscale.com/wp-content/uploads/sites/2/2021/05/barack_obama-1.jpg',
     cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
   };
-
-  const [profile, setProfile] = useState((isMyProfile && storedProfile) ? storedProfile : fakeProfile);
 
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
@@ -64,7 +63,9 @@ export const ProfilePage = () => {
   };
 
   useEffect(() => {
-    if (!isMyProfile) {
+    if (!storedProfile && !queryParams.get('uid')) {
+      setProfile(fakeProfile);
+    } else if (!isMyProfile) {
       retrieveProfileFromUid();
     } else {
       updateSessionProfile();
@@ -154,7 +155,7 @@ export const ProfilePage = () => {
   };
 
   const renderEditFollow = () => {
-    if (profile && profile !== fakeProfile) {
+    if (profile && (storedProfile || queryParams.get('uid'))) {
       if (isMyProfile) {
         return (
           <div className='flex flex-col'>
@@ -187,16 +188,17 @@ export const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
-      <main className="flex flex-col">
-        <>
-          <div className="profile">
-            <div className="profile-info">
-              <div className="profile-head">
-                <BackNav profile={profile}/>
-              </div>
+    <>
+      {profile && (<div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+        <main className="flex flex-col">
+          <>
+            <div className="profile">
+              <div className="profile-info">
+                <div className="profile-head">
+                  <BackNav profile={profile}/>
+                </div>
 
-              {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.cover} /> :
+                {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.cover} /> :
                     (
                       <div className="h-64 w-full object-cover">
                         <img className="h-64 w-full object-cover" src={newProfile.cover} />
@@ -216,10 +218,10 @@ export const ProfilePage = () => {
                         />
                       </div>
                     )
-              }
+                }
 
-              <div className="relative ml-10">
-                {!isEditMode ? <img className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white" src={profile.profilePicture} /> :
+                <div className="relative ml-10">
+                  {!isEditMode ? <img className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white" src={profile.profilePicture} /> :
                     (
                       <div className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white">
                         <img className="rounded-full h-40 w-40" src={newProfile.profilePicture} />
@@ -238,41 +240,41 @@ export const ProfilePage = () => {
                         />
                       </div>
                     )
-                }
-              </div>
-              <div className="float-right">
-                {renderEditFollow()}
-              </div>
-              <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
-                {!isEditMode ?
+                  }
+                </div>
+                <div className="float-right">
+                  {renderEditFollow()}
+                </div>
+                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-24 ml-5 mr-5">
+                  {!isEditMode ?
                     <span className="text-xl font-bold">{profile.name}</span> :
                     <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.name}
                       value={newProfile.name}
                       onChange={handleNameChange}/>
-                }
-                {!isEditMode ?
+                  }
+                  {!isEditMode ?
                     <span className="text-base text-slate-500">@{profile.tag}</span> :
                     <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.tag}
                       value={newProfile.tag}
                       onChange={handleTagChange}/>
-                }
-                {!isEditMode ?
+                  }
+                  {!isEditMode ?
                     <span className="text-base text-black mt-2">{profile.description}</span> :
                     <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.description}
                       value={newProfile.description}
                       onChange={handleDescriptionChange}/>
-                }
+                  }
 
-                <div className="flex flex-row space-x-5">
-                  <button className="text-base text-slate-500 mt-2" type="button" onClick={handleOpenFollowersModal}><strong className="text-black">{profile.followers.length}</strong> Followers</button>
-                  <button className="text-base text-slate-500 mt-2" type="button" onClick={handleOpenFollowingModal}><strong className="text-black">{profile.following.length}</strong> Following</button>
-                  {showFollowersModal ? (
+                  <div className="flex flex-row space-x-5">
+                    <button className="text-base text-slate-500 mt-2" type="button" onClick={handleOpenFollowersModal}><strong className="text-black">{profile.followers.length}</strong> Followers</button>
+                    <button className="text-base text-slate-500 mt-2" type="button" onClick={handleOpenFollowingModal}><strong className="text-black">{profile.following.length}</strong> Following</button>
+                    {showFollowersModal ? (
                     <>
                       <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
@@ -313,7 +315,7 @@ export const ProfilePage = () => {
                       </div>
                     </>
                   ) : null}
-                  {showFollowingModal ? (
+                    {showFollowingModal ? (
                     <>
                       <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
@@ -354,13 +356,14 @@ export const ProfilePage = () => {
                       </div>
                     </>
                   ) : null}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <ProfileTabs uid={profile._id} />
-        </>
-      </main>
-    </div >
+            <ProfileTabs uid={profile._id} />
+          </>
+        </main>
+      </div >)}
+    </>
   );
 };

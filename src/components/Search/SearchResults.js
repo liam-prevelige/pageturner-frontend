@@ -87,6 +87,10 @@ export const GroupSearchResult = (groupInfo) => {
 export const BookSearchResult = ({bookInfo}) => {
   const navigate = useNavigate();
 
+  if (bookInfo.volumeInfo.authors == null) {
+    bookInfo.volumeInfo.authors = [''];
+  }
+
   const loadBook = (bid) => {
     // TODO fix this path
     const path = `/book-info?id=${bid}`;
