@@ -55,7 +55,7 @@ export const ProfileTabs = ({uid}) => {
               {/* <div className="border-b m-3 border-slate-300"/> */}
               <ScrollMenu style={{overflowY: 'auto'}}>
                 <div className="bg-white h-full">
-                  {bookshelves && bookshelves.map((bookshelfData, index) =>
+                  {bookshelves && bookshelves.reverse().map((bookshelfData, index) =>
                     (<div key={index}>
                       <Bookshelf bookshelfId={bookshelfData._id} isProfile={true}/>
                       <div className="border-b m-3 border-slate-300"/>
@@ -67,7 +67,7 @@ export const ProfileTabs = ({uid}) => {
             {/* Posts Tab */}
             <TabPanel width={'710px'}>
               <div className="bg-white h-full">
-                {posts && posts.map((commentData, index) =>
+                {posts && posts.reverse().map((commentData, index) =>
                   (<div key={index}>
                     <Comment commentId={commentData}/>
                     <div className="border-b ml-3 mr-3 border-slate-300"/>
@@ -81,7 +81,7 @@ export const ProfileTabs = ({uid}) => {
             </TabPanel>
             <TabPanel width={'710px'}>
               <div className="bg-white h-full">
-                {likedPosts && likedPosts.map((commentData, index) =>
+                {likedPosts && likedPosts.reverse().map((commentData, index) =>
                   (<div key={index}>
                     <Comment commentId={commentData}/>
                     <div className="border-b ml-3 mr-3 border-slate-300"/>
