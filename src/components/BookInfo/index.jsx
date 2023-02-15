@@ -130,7 +130,6 @@ export const BookInfo = () => {
                   }}
                 />
               </div>
-<<<<<<< HEAD
               <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>Post Review</button>
             </div>
           </form>}
@@ -149,12 +148,6 @@ export const BookInfo = () => {
         </div>
       </div>)}
     </>
-=======
-            </Row>
-          </Container>
-        </div>)}
-    </div>
->>>>>>> main
   );
 };
 
