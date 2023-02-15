@@ -76,29 +76,26 @@ export const BookInfo = () => {
   }, [book]);
 
   return (
-    <>
-      {book && (<div className="App" style={{marginTop: '30px'}}>
+    <div>
+      {(!book ? <div className="flex margin-auto justify-content-center">
+        <ReactLoading type="spin" color="black" />
+      </div> :
         <div className='gradient_bg'>
           <Container>
             <Row>
-              {!book ? <ReactLoading type="spin" color="black" /> :
-            <Col><img src={book.imageLinks.thumbnail} alt='...' style={{width: '300px', height: '400px'}}/></Col>}
+              <Col><img src={book.imageLinks.thumbnail} alt='...' style={{width: '300px', height: '400px'}}/></Col>
               <Col>
                 <Row>
-                  {!book ? <ReactLoading type="spin" color="black" /> :
-                <span className="font-bold text-2xl text-black">{book.title}</span>}
+                  <span className="font-bold text-2xl text-black">{book.title}</span>
                 </Row>
                 <Row>
                   <div className="flex flex-row ..." style={{marginTop: '5px'}}>
-                    {!book ? <ReactLoading type="spin" color="black" /> :
-                  <span className="basis-1/6 text-slate-500">{book.publishedDate.substr(0, 4)} • </span>}
-                    {!book ? <ReactLoading type="spin" color="black" /> :
-                  <span className='text-slate-500'>{book.authors[0]}</span>}
+                    <span className="basis-1/6 text-slate-500">{book.publishedDate.substr(0, 4)} • </span>
+                    <span className='text-slate-500'>{book.authors[0]}</span>
                   </div>
                 </Row>
                 <Row>
-                  {!book ? <ReactLoading type="spin" color="black" /> :
-                <span className='text-sm' style={{marginTop: '5px'}}>{book.description.substring(0, 650)}...</span>}
+                  <span className='text-sm' style={{marginTop: '5px'}}>{book.description.substring(0, 650)}...</span>
                 </Row>
                 <Row>
                   <BookshelfPopup bid={book.id} useIcon={false}/>
@@ -124,8 +121,7 @@ export const BookInfo = () => {
             <Row>
               {/* TODO: Dynamically render other books */}
               <div className='font-semibold' style={{marginTop: '20px'}}>
-                {!book ? <ReactLoading type="spin" color="black" /> :
-              <h3>Other books by {book.authors[0]}</h3>}
+                <h3>Other books by {book.authors[0]}</h3>
                 <img className='box-content h-64 w-48 p-2' src='https://images.randomhouse.com/cover/9781582436043' alt='...' />
               </div>
             </Row>
@@ -142,9 +138,8 @@ export const BookInfo = () => {
               </div>
             </Row>
           </Container>
-        </div>
-      </div>)}
-    </>
+        </div>)}
+    </div>
   );
 };
 
