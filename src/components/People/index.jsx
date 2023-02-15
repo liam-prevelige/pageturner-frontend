@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {DynamicSearch} from '../DynamicSearch';
-import {searchUsers, getUserBooks, addFriend, removeFriend} from '../../api';
+import {searchUsers, getUserBooks, removeFriend} from '../../api';
 import {BookDisplay} from '../BookDisplay';
 import Card from 'react-bootstrap/Card';
 import './People.css';
@@ -50,9 +50,9 @@ export const People = () => {
         setUser({...user, friend: false});
       }
     } else {
-      if (await addFriend(user.email)) {
-        setUser({...user, friend: true});
-      }
+      // if (await addFriend(user.email)) {
+      //   setUser({...user, friend: true});
+      // }
     }
   };
 

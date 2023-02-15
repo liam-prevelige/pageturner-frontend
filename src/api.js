@@ -281,21 +281,45 @@ export const getUserBooks = async (email) => {
 };
 
 /**
- * Add a friend
- * @param {string} email - email of user to add as a friend
+ * Follow a user
+ * @param {string} uid - uid of user to start following
  * @return {boolean} success
  */
-export async function addFriend(email) {
+export async function addFollower(uid) {
   await refreshToken();
 
-  const response = await fetch(`${API_URL}/user/friend/add`, {
+  const response = await fetch(`${API_URL}/user/follower/add`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({friend_email: email}),
+    cache: 'default',
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const body = await response.json();
+  return body.success;
+}
+
+/**
+ * Unfollow a user
+ * @param {string} uid - uid of user to start following
+ * @return {boolean} success
+ */
+export async function removeFollower(uid) {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/follower/remove`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({uid: uid}),
   });
 
   const body = await response.json();
@@ -562,6 +586,52 @@ export const getLikedPosts = async (uid) => {
     throw new Error('Call to /get_liked_posts failed');
   }
   return res.likedPosts;
+};
+
+/**
+ * Fetches the accounts a user follows
+ */
+export const getFollowing = async (uid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_following`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_following failed');
+  }
+  return res;
+};
+
+/**
+ * Fetches a user's followers
+ */
+export const getFollowers = async (uid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_followers`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({uid: uid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_followers failed');
+  }
+  return res;
 };
 
 /**
