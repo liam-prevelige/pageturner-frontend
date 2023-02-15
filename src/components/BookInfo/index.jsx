@@ -38,7 +38,6 @@ export const BookInfo = () => {
       }
       setBook(retrievedBook);
     }
-    console.log(retrievedBook);
   };
 
   // Local review
@@ -136,13 +135,15 @@ export const BookInfo = () => {
           </form>}
 
           <div className="mt-4">
-            <p className='font-semibold text-lg'>Reviews on PageTurner</p>
-            {reviews.map((r, index) =>
-              (<div key={index}>
-                <Comment commentId={r._id} noParent={true}/>
-                <div className="border-b ml-3 mr-3 border-slate-300"></div>
-              </div>
-              ))}
+            <p className='font-semibold text-lg mb-2'>Reviews on PageTurner</p>
+            <div className="bg-slate-100 rounded p-2">
+              {reviews.map((r, index) =>
+                (<div key={index}>
+                  <Comment commentId={r._id} noParent={true}/>
+                  <div className="border-b ml-3 mr-3 border-slate-300"></div>
+                </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>)}
@@ -150,12 +151,3 @@ export const BookInfo = () => {
   );
 };
 
-{/* <ScrollMenu style={{overflowX: 'auto'}}>
-              {console.log(recs.length)}
-              {recs.length === 0 ? <ReactLoading type="spin" color="black" /> : recs.map((book, index) => (
-                <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
-                  <BookDisplay url={book.image_l} title={book.title} author={book.author} />
-                </Col>
-              ))
-              }
-            </ScrollMenu> */}

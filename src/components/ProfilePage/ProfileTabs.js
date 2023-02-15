@@ -4,7 +4,6 @@ import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-u
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import {ThreadView} from '../ThreadView/ThreadView';
 import {Comment} from '../Comment/Comment';
-
 import {getBookshelves, getPosts, getLikedPosts} from '../../api';
 // import {PopoverForm} from './BookshelfPopup';
 import {Bookshelf} from './Bookshelf';

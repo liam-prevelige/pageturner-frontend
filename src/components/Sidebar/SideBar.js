@@ -23,7 +23,7 @@ export const SideBar = () => {
 
   return (
     <>
-      <div className="flex flex-col w-275 justify-between px-3 bg-white mt-3">
+      <div className="flex flex-col w-275 justify-between px-3 bg-white pt-3">
         <div className='sticky top-0'>
           <div className="flex items-center justify-center h-24 w-24 p-1 rounded-full transform transition-colors duration-2 hover:bg-primary-twıtter_ıcon hover:bg-blue-100 cursor-pointer">
             <BookIcon />

@@ -4,7 +4,7 @@ import {Trending} from './Trending';
 
 export const RightBar = () => {
   return (
-    <div className="sticky top-0 pt-2">
+    <div className="pt-2 bg-white h-full">
       <Trending />
     </div>
   );

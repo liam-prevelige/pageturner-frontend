@@ -18,7 +18,7 @@ export const Trending = () => {
 
   return (
     <>
-      <div className="items-center p-3 m-3 mt-4 bg-slate-200 rounded-xl">
+      <div className="sticky top-4 items-center p-3 m-3 bg-slate-200 rounded-xl">
         <div className="flex items-center justify-between text-black">
           <span className="text-xl font-bold">Trending</span>
         </div>
