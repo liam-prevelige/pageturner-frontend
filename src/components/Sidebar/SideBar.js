@@ -8,6 +8,7 @@ export const SideBar = () => {
   const homePath = '/';
   const bookClubsPath = '/book-clubs';
   const profilePath = '/profile';
+  const notifications = '/notifications';
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
 
   const reloadPageFunc = () => {
@@ -42,8 +43,8 @@ export const SideBar = () => {
                   <li className="ml-4 sidebar-text">Book Clubs</li>
                 </div>
               </a>
-              <a href="">
-                <div className="flex items-center hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2">
+              <a href={notifications}>
+                <div className={path===notifications ? activeClassName : notActiveClassName}>
                   <NotificationsIcon />
                   <li className="ml-4 sidebar-text">Notifications</li>
                 </div>
