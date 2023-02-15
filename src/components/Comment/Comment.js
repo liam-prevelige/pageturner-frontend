@@ -8,7 +8,7 @@ import {formatDistance} from 'date-fns';
 import {FaHeart, FaRegHeart} from 'react-icons/fa';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
 import {IndividualBookDisplay} from './IndividualBookDisplay';
-
+import {Rating} from '@mui/material';
 export const Comment = ({commentId, noParent}) => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
@@ -97,6 +97,13 @@ export const Comment = ({commentId, noParent}) => {
            </div>
            <div className="ml-1 cursor-pointer">
              <div className="items-center text-black overflow-hidden" onClick={(e) => loadThread(e, commentData)}>
+               {commentData.rating && <div className="mt-2">
+                 <Rating
+                   name="read-only"
+                   readOnly
+                   value={commentData.rating || 0}
+                 />
+               </div>}
                {commentData.text}
                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
                {hasParentComment && <Parent commentId={commentData.pid}/>}
