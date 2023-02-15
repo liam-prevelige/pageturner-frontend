@@ -24,6 +24,7 @@ export const ProfileTabs = ({uid}) => {
   const fetchPosts = async () => {
     const profilePosts = await getPosts(uid);
     setPosts(profilePosts);
+    console.log(profilePosts);
   };
 
   const fetchLikedPosts = async () => {

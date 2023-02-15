@@ -13,17 +13,6 @@ import {
 } from '../../api';
 import {Auth} from '../Auth/Auth';
 
-// export const Banner = styled.div`
-//   flex-shrink: 0;
-//   width: 100%;
-//   height: min(33vw, 199px);
-//   background-image: url('https://1.bp.blogspot.com/-lg73Nw76yCc/V9_EnSSngLI/AAAAAAAAWxY/bQtB8s4wWPsvzsac3xZYbP--23d-KugzwCLcB/s1600/StarCIO%2BLess%2BCode.jpg');
-//   position: relative;
-// `;
-
-// Fake cover: https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg
-// Fake profile: https://www.billionsinstitute.com/wp-content/uploads/2014/10/Jennifer-Circle-Headshot-300X300.png
-
 export const ProfilePage = () => {
   const search = window.location.search;
   const queryParams = new URLSearchParams(search);
@@ -165,7 +154,7 @@ export const ProfilePage = () => {
   };
 
   const renderEditFollow = () => {
-    if (profile) {
+    if (profile && profile !== fakeProfile) {
       if (isMyProfile) {
         return (
           <div className='flex flex-col'>
@@ -179,7 +168,7 @@ export const ProfilePage = () => {
             </div>}
           </div>
         );
-      } else {
+      } else if (storedProfile) {
         if (!profile.followers.includes(storedProfile._id) && !profile.followers.some((e) => String(e._id) === String(storedProfile._id))) {
           return (
             <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
@@ -195,20 +184,6 @@ export const ProfilePage = () => {
         }
       }
     }
-
-
-    {profile &&
-      <div className="flex flex-col float-right font-bold">
-        {isMyProfile ?
-        (<>
-          <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-            {isEditMode ? 'Save Changes' : 'Edit Profile'}
-          </button>
-        </>) :
-        (<button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
-          Follow
-        </button>)}
-      </div>;}
   };
 
   return (
