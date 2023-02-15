@@ -95,27 +95,27 @@ export const Search = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              {results.users.length ? results.users.map((user, index) => (<Row key={index}>
+              {(results && results.users && results.users.length > 0) ? results.users.map((user, index) => (<Row key={index}>
                 <UserSearchResult userInfo={user}/>
               </Row>)) : <Row>No Results</Row>}
             </TabPanel>
             <TabPanel>
-              {results.groups.length ? results.groups.map((group, index) => (<Row key={index}>
+              {(results && results.groups && results.groups.length > 0) ? results.groups.map((group, index) => (<Row key={index}>
                 <GroupSearchResult groupInfo={group}/>
               </Row>)): <Row>No Results</Row>}
             </TabPanel>
             <TabPanel>
-              {results.bookshelves.length ? results.bookshelves.map((bookshelf, index) => (<Row key={index}>
+              {(results && results.bookshelves && results.bookshelves.length > 0) ? results.bookshelves.map((bookshelf, index) => (<Row key={index}>
                 <BookshelfSearchResult bookshelfInfo={bookshelf}/>
               </Row>)): <Row>No Results</Row>}
             </TabPanel>
             <TabPanel>
-              {results.comments.length ? results.comments.map((comment, index) => (<Row key={index}>
+              {(results && results.comments && results.comments.length > 0) ? results.comments.map((comment, index) => (<Row key={index}>
                 <Comment commentId={comment._id} noParent={true}/>
               </Row>)): <Row>No Results</Row>}
             </TabPanel>
             <TabPanel>
-              {results.books.length ? results.books.map((book, index) => (<Row key={index}>
+              {(results && results.books && results.books.length > 0) ? results.books.map((book, index) => (<Row key={index}>
                 <BookSearchResult bookInfo={book}/>
               </Row>)) : <Row>No Results</Row>}
             </TabPanel>

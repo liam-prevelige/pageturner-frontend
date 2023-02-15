@@ -8,7 +8,6 @@ import {formatDistance} from 'date-fns';
 import {FaHeart, FaRegHeart} from 'react-icons/fa';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
 import {IndividualBookDisplay} from './IndividualBookDisplay';
-import {Rating} from '@mui/material';
 
 export const Comment = ({commentId, noParent}) => {
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ export const Comment = ({commentId, noParent}) => {
 
   useEffect(() => {
     if (noParent || !commentData || !commentData.pid) return;
-    console.log(commentData);
     if (commentData.ptype && commentData.ptype === 'bookshelf') {
       setHasParentBookshelf(true);
       setHasParentComment(false);
@@ -50,8 +48,6 @@ export const Comment = ({commentId, noParent}) => {
     setProfileData(null);
     setCommentData(null);
     const comment = await getComment(cId);
-    if (!comment) return;
-    console.log(cId);
     const profile = await getProfile(comment.uid);
     setProfileData(profile);
     setCommentData(comment);
@@ -97,17 +93,10 @@ export const Comment = ({commentId, noParent}) => {
            <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadUserProfile(profileData._id)}>
              <span className="ml-1 font-bold text-black">{profileData.name}</span>
              <span className="ml-2 text-primary-gray_colors">@{profileData.tag}</span>
-             <span className="text-primary-gray_colors">{formatDistance(new Date(commentData.metadata.timestamp), new Date())}</span>
+             <span className="text-primary-gray_colors">• {formatDistance(new Date(commentData.metadata.timestamp), new Date())} ago</span>
            </div>
            <div className="ml-1 cursor-pointer">
              <div className="items-center text-black overflow-hidden" onClick={(e) => loadThread(e, commentData)}>
-               {commentData.rating && <div className="mt-2">
-                 <Rating
-                   name="read-only"
-                   readOnly
-                   value={commentData.rating || 0}
-                 />
-               </div>}
                {commentData.text}
                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
                {hasParentComment && <Parent commentId={commentData.pid}/>}
