@@ -32,11 +32,37 @@ export const BookInfo = () => {
     const id = queryParams.get('id');
     const retrievedBook = await getBook(id);
     if (retrievedBook) {
+      console.log(retrievedBook.authors);
+      fillMissingData(retrievedBook);
       if (retrievedBook.authors.length > 3) {
         retrievedBook.authors = retrievedBook.authors.slice(0, 3);
         retrievedBook.authors.push('...');
       }
       setBook(retrievedBook);
+    }
+  };
+
+  const fillMissingData = (retrievedBook) => {
+    if (!retrievedBook.imageLinks) {
+      retrievedBook.imageLinks = {thumbnail: 'https://cdn.pixabay.com/photo/2018/01/17/18/43/book-3088777__340.png'};
+    }
+    if (!retrievedBook.averageRating) {
+      retrievedBook.averageRating = 0;
+    }
+    if (!retrievedBook.publishedDate) {
+      retrievedBook.publishedDate = 'Unknown';
+    }
+    if (!retrievedBook.pageCount) {
+      retrievedBook.pageCount = 'Unknown';
+    }
+    if (!retrievedBook.authors) {
+      retrievedBook.authors = ['Author Unknown'];
+    }
+    if (!retrievedBook.categories) {
+      retrievedBook.categories = ['Uncategorized'];
+    }
+    if (!retrievedBook.description) {
+      retrievedBook.description = 'No description available';
     }
   };
 
@@ -51,7 +77,7 @@ export const BookInfo = () => {
 
   // Global review
   const submitPostCb = async () => {
-    if (setReview && setReview.length > 0) {
+    if (review && review.length > 0) {
       await postComment('global', book.bookId, 'book', review, {rating: rating});
       setReview('');
       setRating(0);
