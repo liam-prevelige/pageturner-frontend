@@ -20,6 +20,7 @@ import {HomePage} from './components/HomePage';
 import {ThreadView} from './components/ThreadView/ThreadView';
 import {RightBar} from './components/RightBar';
 import {BookClubsPage} from './components/BookClubsPage';
+import {Notification} from './components/Notification';
 
 /**
  * Core React component
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/group-profile" element={<GroupProfilePage />} />
             <Route path="/book-info/*" element={<BookInfo />} />
             <Route path="/thread/:commentIdParam" element={<ThreadView />}/>
+            <Route path="/notifications" element={<Notification />}/>
           </Routes>
         </main>
         <aside className="w-350">
