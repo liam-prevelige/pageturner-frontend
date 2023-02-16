@@ -65,6 +65,32 @@ export const updateLikes = async (cid) => {
 };
 
 /**
+ * /:user/update_bookmarks
+ *
+ * Update a user's bookmarked posts. Adds comment ID to user's bookmarked list
+ *
+ */
+export const updateBookmarks = async (cid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/update_bookmarks`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({cid: cid}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/update_likes failed');
+  }
+  return res.bookmarks;
+};
+
+/**
  * /:user/get_feed
  *
  * Gets all comments of user and user's following list
@@ -387,26 +413,6 @@ export const getRecs = async (isbn) => {
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /recommendations failed');
-  }
-  return body;
-};
-
-// Add a book to a user's list of bookmarks (saved)
-export const updateBookmarks = async (userEmail, isbn, exists) => {
-  await refreshToken();
-
-  const response = await fetch(`${API_URL}/user/update_bookmarks/${userEmail}/${isbn}/${exists}`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application.json',
-      'Content-Type': 'application/json',
-    },
-    cache: 'default',
-  });
-
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /user/update_bookmarks failed');
   }
   return body;
 };

@@ -10,6 +10,7 @@ import {Bookshelf} from './Bookshelf';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 
 export const ProfileTabs = ({uid}) => {
+  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
@@ -77,6 +78,14 @@ export const ProfileTabs = ({uid}) => {
             </TabPanel>
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowX: 'auto'}}>
+                {profile && <div className="bg-white h-full">
+                  {profile.bookmarks && profile.bookmarks.reverse().map((commentData, index) =>
+                    (<div key={index}>
+                      <Comment commentId={commentData}/>
+                      <div className="border-b ml-3 mr-3 border-slate-300"/>
+                    </div>
+                    ))}
+                </div>}
               </ScrollMenu>
             </TabPanel>
             <TabPanel width={'710px'}>
