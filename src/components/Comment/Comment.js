@@ -1,24 +1,26 @@
 import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Reply, Retweet, Share} from '../../assets/Icons';
+import {Share} from '../../assets/Icons';
 import {Parent} from './Parent';
-import {getProfile, getComment, updateLikes} from '../../api';
+import {getProfile, getComment, updateLikes, updateBookmarks} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
-import {FaHeart, FaRegHeart} from 'react-icons/fa';
+import {FaHeart, FaRegHeart, FaRegComment, FaBookmark, FaRegBookmark} from 'react-icons/fa';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
 import {IndividualBookDisplay} from './IndividualBookDisplay';
 import {Rating} from '@mui/material';
+
 export const Comment = ({commentId, noParent}) => {
   const navigate = useNavigate();
+  const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [profileData, setProfileData] = useState(null);
   const [commentData, setCommentData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const [hasParentComment, setHasParentComment] = useState(false);
   const [hasParentBookshelf, setHasParentBookshelf] = useState(false);
   const [hasParentBook, setHasParentBook] = useState(false);
 
-  const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
     const path = `/thread/${clickedCommentData._id}`;
@@ -53,13 +55,14 @@ export const Comment = ({commentId, noParent}) => {
     setCommentData(comment);
     if (myProfile != null) {
       setIsLiked(myProfile.likedPosts && myProfile.likedPosts.includes(comment._id));
+      setIsBookmarked(myProfile.bookmarks && myProfile.bookmarks.includes(comment._id));
     }
   };
 
   const updateLikesCb = async (e) => {
     e.stopPropagation();
     if (!myProfile || !myProfile.likedPosts) return;
-    await updateLikes(commentData._id); // TODO: Actually get the comment data from the API
+    await updateLikes(commentData._id); // Would be better if this returned the updated likedPosts array
     // Convert userLikedPosts to string array for index of
     const index = myProfile.likedPosts.indexOf(commentData._id);
     const changedComment = commentData;
@@ -72,6 +75,16 @@ export const Comment = ({commentId, noParent}) => {
     }
     setCommentData(changedComment);
     setIsLiked(myProfile.likedPosts.includes(commentData._id));
+    sessionStorage.setItem('profile', JSON.stringify(myProfile));
+  };
+
+  const updateBookmarksCb = async (e) => {
+    e.stopPropagation();
+    if (!myProfile) return;
+    const updatedBookmarks = await updateBookmarks(commentData._id);
+    console.log(updatedBookmarks);
+    myProfile.bookmarks = updatedBookmarks;
+    setIsBookmarked(myProfile.bookmarks.includes(commentData._id));
     sessionStorage.setItem('profile', JSON.stringify(myProfile));
   };
 
@@ -114,24 +127,24 @@ export const Comment = ({commentId, noParent}) => {
              <ul className="flex justify-between mt-2">
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
-                   {isLiked && <FaHeart className="fill-primary-like w-5 h-5"/>}
-                   {!isLiked && <FaRegHeart className="stroke-1 w-5 h-5"/>}
+                   {isLiked && <FaHeart className="fill-primary-like stroke-2 w-5 h-5"/>}
+                   {!isLiked && <FaRegHeart className="w-5 h-5"/>}
                  </div>
                  <span>{commentData.metadata.likes}</span>
                </li>
 
-               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-reply group cursor-pointer">
+               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-reply group cursor-pointer" onClick={(e) => loadThread(e, commentData)}>
                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-reply_hover">
-                   <Reply/>
+                   <FaRegComment className="w-5 h-5"/>
                  </div>
                  <span>{commentData.metadata.replies}</span>
                </li>
 
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-retweet group cursor-pointer">
-                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primay-retweet_hover cursor-pointer">
-                   <Retweet/>
+                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-retweet_hover" onClick={(e) => updateBookmarksCb(e)}>
+                   {isBookmarked && <FaBookmark className="fill-primary-retweet w-5 h-5"/>}
+                   {!isBookmarked && <FaRegBookmark className="w-5 h-5"/>}
                  </div>
-                 <span>{commentData.metadata.retweets}</span>
                </li>
 
                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors group cursor-pointer">
