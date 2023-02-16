@@ -226,7 +226,7 @@ export const removeGroupMember = async (groupProfile, memberId) => {
 export const postComment = async (scope, pid, ptype, text, otherData={}) => {
   await refreshToken();
   console.log('otherData', otherData);
-  await fetch(`${API_URL}/comments/post_comment`, {
+  const response = await fetch(`${API_URL}/comments/post_comment`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -235,6 +235,68 @@ export const postComment = async (scope, pid, ptype, text, otherData={}) => {
     },
     body: JSON.stringify(Object.assign({}, {pid, scope, ptype, text}, otherData)),
   });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /search failed');
+  }
+  return body;
+};
+
+/**
+ * /notifications/get_notification
+ *
+ * Gets all notifications on the requested parent object
+ * Requires user is logged in
+ *
+ * @param {string} commenterId - id of user who replied to post
+ * @param {string} cId - id of comment
+ */
+export const getNotifications = async () => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/notifications/get_notification`, {
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+  const notifications = await response.json();
+  if (!response.ok) {
+    throw new Error('Failed to get notifications');
+  }
+  return notifications;
+};
+
+/**
+ * /notifications/post_notification
+ *
+ * Sends notifications on replied posts
+ * Requires user is logged in
+ *
+ * @param {string} recipientId - id of person to send notification
+ * @param {string} cId - id of replied comment
+ */
+export const postNotification = async (recipientId, cId) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/notifications/post_notification`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({
+      recipientId: recipientId,
+      cId: cId,
+    }),
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /search failed');
+  }
+  return body;
 };
 
 // Search for a user based on a given query
