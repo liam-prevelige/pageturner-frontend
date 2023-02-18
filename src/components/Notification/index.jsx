@@ -22,9 +22,9 @@ export const Notification = () => {
         {notifications.reverse().map((notification, index) =>
           (<div key={index}>
             <div className='flex items-center text-sm space-x-2 pr-2'>
-              <StarSolid /> <span><b>User</b> replied to your post</span>
+              <StarSolid /> <span><b>{notification.commenterId}</b> replied to your post</span>
             </div>
-            <Comment commentId={notification} noParent={true}/>
+            <Comment commentId={notification.cId} noParent={true}/>
             <div className="border-b ml-3 mr-3 border-slate-300"></div>
           </div>
           ))}

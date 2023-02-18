@@ -282,6 +282,7 @@ export const getNotifications = async () => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/notifications/get_notification`, {
+    method: 'GET',
     headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
@@ -304,7 +305,7 @@ export const getNotifications = async () => {
  * @param {string} recipientId - id of person to send notification
  * @param {string} cId - id of replied comment
  */
-export const postNotification = async (recipientId, cId) => {
+export const postNotification = async (recipientId, cId, commenterId) => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/notifications/post_notification`, {
@@ -317,6 +318,7 @@ export const postNotification = async (recipientId, cId) => {
     body: JSON.stringify({
       recipientId: recipientId,
       cId: cId,
+      commenterId: commenterId,
     }),
   });
   const body = await response.json();
