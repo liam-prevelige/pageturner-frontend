@@ -742,14 +742,13 @@ export const getReplies = async (id) => {
     throw new Error('No id provided');
   }
 
-  const response = await fetch(`${API_URL}/comments/get_replies`, {
-    method: 'POST',
+  const response = await fetch(`${API_URL}/comments/replies/${id}`, {
+    method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    body: JSON.stringify({id}),
   });
 
   const body = await response.json();
