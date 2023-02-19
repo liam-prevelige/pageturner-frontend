@@ -21,6 +21,7 @@ import {ThreadView} from './components/ThreadView/ThreadView';
 import {RightBar} from './components/RightBar';
 import {BookClubsPage} from './components/BookClubsPage';
 import {Notification} from './components/Notification';
+import ReactGA from 'react-ga';
 
 /**
  * Core React component
@@ -29,42 +30,29 @@ import {Notification} from './components/Notification';
  */
 const App = () => {
   // const loggedIn = useState(JSON.parse(sessionStorage.getItem('profile')))[0] != null;
-  /* eslint-disable */
   return (
-    <div>
-      <head></head>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-41CBZM5XD6"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-41CBZM5XD6');
-      </script>
-      <div className="min-h-screen mx-auto max-w-7xl flex">
-        <Router>
-          <SideBar />
-          <main className="flex-1 flex flex-col bg-white">
-            <Routes>
-              <Route exact path="/" element={<HomePage />} />
-              <Route path='/book-clubs' element={<BookClubsPage />} />
-              <Route path="/feed" element={<Feed />} />
-              <Route path="/people" element={<People />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/group-profile" element={<GroupProfilePage />} />
-              <Route path="/book-info/*" element={<BookInfo />} />
-              <Route path="/thread/:commentIdParam" element={<ThreadView />}/>
-              <Route path="/notifications" element={<Notification />}/>
-            </Routes>
-          </main>
-          <aside className="w-350">
-            <RightBar />
-          </aside>
-        </Router>
-      </div>
+    <div className="min-h-screen mx-auto max-w-7xl flex">
+      <Router>
+        <SideBar />
+        <main className="flex-1 flex flex-col bg-white">
+          <Routes>
+            <Route exact path="/" element={<HomePage />} />
+            <Route path='/book-clubs' element={<BookClubsPage />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/people" element={<People />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/group-profile" element={<GroupProfilePage />} />
+            <Route path="/book-info/*" element={<BookInfo />} />
+            <Route path="/thread/:commentIdParam" element={<ThreadView />}/>
+            <Route path="/notifications" element={<Notification />}/>
+          </Routes>
+        </main>
+        <aside className="w-350">
+          <RightBar />
+        </aside>
+      </Router>
     </div>
   );
-  /* eslint-enable */
 };
 
 export default App;
