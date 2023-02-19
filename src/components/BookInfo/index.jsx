@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './bookInfo.css';
 import ReactLoading from 'react-loading';
-import {getBook, postComment, getReviews} from '../../api';
+import {getBook, postComment, getReplies} from '../../api';
 import {Comment} from '../Comment/Comment';
 import {Rating} from '@mui/material';
 import {BookshelfPopup} from './BookshelfPopup';
@@ -32,7 +32,6 @@ export const BookInfo = () => {
     const id = queryParams.get('id');
     const retrievedBook = await getBook(id);
     if (retrievedBook) {
-      console.log(retrievedBook.authors);
       fillMissingData(retrievedBook);
       if (retrievedBook.authors.length > 3) {
         retrievedBook.authors = retrievedBook.authors.slice(0, 3);
@@ -86,8 +85,7 @@ export const BookInfo = () => {
 
   const loadReviews = async (newBookId) => {
     if (!newBookId) return;
-    const newReviews = await getReviews(newBookId);
-    setReviews(newReviews);
+    setReviews(await getReplies(newBookId));
   };
 
   useEffect(() => {
@@ -163,9 +161,9 @@ export const BookInfo = () => {
           <div className="mt-4">
             <p className='font-semibold text-lg mb-2'>Reviews on PageTurner</p>
             <div className="bg-slate-100 rounded p-2">
-              {reviews.map((r, index) =>
+              {reviews.map((review, index) =>
                 (<div key={index}>
-                  <Comment commentId={r._id} noParent={true}/>
+                  <Comment comment={review} noParent={true}/>
                   <div className="border-b ml-3 mr-3 border-slate-300"></div>
                 </div>
                 ))}
