@@ -998,19 +998,20 @@ export const searchContent = async (searchString) => {
  *
  * @return {array} feed - array of comments
  */
-export const getGlobalFeed = async () => {
+export const getGlobalFeed = async (pageNumber) => {
   const response = await fetch(`${API_URL}/get_global_feed`, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
+    body: JSON.stringify({pageNumber: pageNumber}),
   });
 
-  const body = await response.json();
+  const res = await response.json();
   if (!response.ok) {
     throw new Error('Call to /get_global_feed failed');
   }
-  return body.feed;
+  return res.feed;
 };

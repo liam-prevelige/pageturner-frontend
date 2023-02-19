@@ -10,7 +10,9 @@ import {Comment} from './Comment';
 export const Timeline = () => {
   const [timeLine, setTimeLine] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(true);
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  const [pageNumber, setPageNumber] = useState(0);
 
   const fetchData = async () => {
     try {
@@ -18,7 +20,7 @@ export const Timeline = () => {
       if (profile != null) {
         timeLine = await getFeed();
       } else {
-        timeLine = await getGlobalFeed();
+        timeLine = await getGlobalFeed(pageNumber);
       }
       setTimeLine(timeLine);
     } catch (err) {
@@ -29,9 +31,35 @@ export const Timeline = () => {
   // Create event listener for newPost in sessionStorage
   window.addEventListener('newPost', () => {
     if (!isLoading) {
+      setPageNumber(0);
       setIsLoading(true);
     }
   });
+
+  document.addEventListener('scroll', function(e) {
+    if (document.body.scrollHeight <= Math.ceil(window.pageYOffset + window.innerHeight)) {
+      setPageNumber(pageNumber+1);
+      setIsUpdating(true);
+    }
+  });
+
+  const updateTimeline = async () => {
+    try {
+      const newTimelinePage = await getGlobalFeed(pageNumber);
+      const newTimeline = timeLine.concat(newTimelinePage);
+      setTimeLine(newTimeline);
+      console.log(pageNumber);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (isUpdating) {
+      setIsUpdating(false);
+      updateTimeline();
+    }
+  }, [isUpdating]);
 
   useEffect(() => {
     if (isLoading) {
