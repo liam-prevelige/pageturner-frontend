@@ -4,6 +4,7 @@ import {useParams} from 'react-router-dom';
 import {BackNav} from '../BackNav/BackNav';
 import {getReplies} from '../../api';
 import {ReplyBox} from '../ShareBox/ReplyBox';
+import ReactGA from 'react-ga';
 
 export const ThreadView = () => {
   // const commentId = '63d0ab8ff3d6963f6f68a93a'; // fake/default comment ID
@@ -25,6 +26,7 @@ export const ThreadView = () => {
 
   useEffect(() => {
     setCommentId(commentIdParam);
+    ReactGA.pageview(window.location.pathname);
   }, [commentIdParam]);
 
   useEffect(() => {

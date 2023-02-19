@@ -15,6 +15,7 @@ import {BookshelfPopup} from './BookshelfPopup';
 import {BackNav} from '../BackNav/BackNav';
 import {FaAngleDown, FaAngleUp} from 'react-icons/fa';
 import parse from 'html-react-parser';
+import ReactGA from 'react-ga';
 
 export const BookInfo = () => {
   const search = window.location.search;
@@ -91,6 +92,7 @@ export const BookInfo = () => {
   };
 
   useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
     if (!isBookInfo) {
       retrieveBookFromId();
     }
