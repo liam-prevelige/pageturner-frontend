@@ -10,11 +10,11 @@ import {Bookshelf} from '../ProfilePage/Bookshelf';
 import {IndividualBookDisplay} from './IndividualBookDisplay';
 import {Rating} from '@mui/material';
 
-export const Comment = ({commentId, noParent}) => {
+export const Comment = ({comment, commentId, noParent}) => {
   const navigate = useNavigate();
   const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [profileData, setProfileData] = useState(null);
-  const [commentData, setCommentData] = useState(null);
+  const [commentData, setCommentData] = useState(comment);
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [hasParentComment, setHasParentComment] = useState(false);
@@ -45,6 +45,13 @@ export const Comment = ({commentId, noParent}) => {
   }, [commentData]);
 
   const getData = async (cId) => {
+    // We should already have the comment info from props
+    if (commentData) {
+      setProfileData(commentData.profile);
+      return;
+    };
+
+    // This should only run if we don't have it for some reason
     if (!cId) return;
     // Turn on loading state while waiting for API
     setProfileData(null);
