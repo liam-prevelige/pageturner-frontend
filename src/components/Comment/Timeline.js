@@ -44,7 +44,7 @@ export const Timeline = () => {
     <div className="bg-white h-full">
       {timeLine && timeLine.map((commentData, index) =>
         (<div key={index}>
-          <Comment commentId={commentData}/>
+          <Comment comment={commentData}/>
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
         </div>
         ))}
