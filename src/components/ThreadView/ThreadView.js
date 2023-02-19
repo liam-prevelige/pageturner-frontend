@@ -14,8 +14,7 @@ export const ThreadView = () => {
 
   const loadReplies = async (newCommentId) => {
     if (!newCommentId) return;
-    const newReplies = await getReplies(newCommentId);
-    setReplies(newReplies);
+    setReplies(await getReplies(newCommentId));
   };
 
   // Create event listener for newPost in sessionStorage
@@ -42,9 +41,9 @@ export const ThreadView = () => {
         <ReplyBox pid={commentId}/>
       </div>
       <div className="bg-slate-100 h-full">
-        {replies.map((replyData, index) =>
+        {replies.map((reply, index) =>
           (<div key={index}>
-            <Comment commentId={replyData._id} noParent={true}/>
+            <Comment comment={reply} noParent={true}/>
             <div className="border-b ml-3 mr-3 border-slate-300"></div>
           </div>
           ))}
