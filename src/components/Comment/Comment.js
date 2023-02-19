@@ -126,7 +126,7 @@ export const Comment = ({comment, commentId, noParent}) => {
                </div>}
                {commentData.text}
                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
-               {hasParentComment && <Parent commentId={commentData.pid}/>}
+               {hasParentComment && <Parent comment={commentData.parent}/>}
                {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><Bookshelf bookshelfId={commentData.pid}/></div>}
                {hasParentBook && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><IndividualBookDisplay bid={commentData.pid}/></div>}
              </div>
