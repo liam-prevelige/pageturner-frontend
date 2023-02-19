@@ -3,6 +3,7 @@ import {getComment, getProfile, postComment, postNotification} from '../../api';
 
 export const ReplyBox = ({pid}) => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  console.log('ReplyBox profile', profile.notifications.filter((notification) => notification.isViewed === false));
   const [replyText, setReplyText] = useState('');
 
   const submitReplyCb = async () => {
@@ -19,7 +20,7 @@ export const ReplyBox = ({pid}) => {
       const reply = await getComment(commentId);
       const commenter = await getProfile(reply.uid);
 
-      await postNotification(postOwner._id, commentId, commenter.tag);
+      await postNotification(postOwner._id, commentId, commenter.tag, false);
     }
   };
 

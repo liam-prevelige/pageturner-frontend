@@ -305,7 +305,7 @@ export const getNotifications = async () => {
  * @param {string} recipientId - id of person to send notification
  * @param {string} cId - id of replied comment
  */
-export const postNotification = async (recipientId, cId, commenterId) => {
+export const postNotification = async (recipientId, cId, commenterId, isViewed) => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/notifications/post_notification`, {
@@ -319,6 +319,7 @@ export const postNotification = async (recipientId, cId, commenterId) => {
       recipientId: recipientId,
       cId: cId,
       commenterId: commenterId,
+      isViewed: isViewed,
     }),
   });
   const body = await response.json();
@@ -327,6 +328,33 @@ export const postNotification = async (recipientId, cId, commenterId) => {
   }
   return body;
 };
+
+/**
+ * /notifications/update_notification
+ *
+ * Counts received notifications
+ * Requires user is logged in
+ *
+ */
+export const updateNotifications = async () => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/notifications/update_notification`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  console.log(body);
+  if (!response.ok) {
+    throw new Error('Failed to update notifications');
+  }
+};
+
 
 // Search for a user based on a given query
 export const searchUsers = async (query) => {
