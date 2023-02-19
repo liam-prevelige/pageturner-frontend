@@ -23,6 +23,9 @@ import {BookClubsPage} from './components/BookClubsPage';
 import {Notification} from './components/Notification';
 import ReactGA from 'react-ga';
 
+const TRACKING_ID = 'UA-257505042-1';
+ReactGA.initialize(TRACKING_ID);
+
 /**
  * Core React component
  * Handles auth, navigation, etc.
