@@ -111,7 +111,7 @@ export const Search = () => {
             </TabPanel>
             <TabPanel>
               {(results && results.comments && results.comments.length > 0) ? results.comments.map((comment, index) => (<Row key={index}>
-                <Comment commentId={comment._id} noParent={true}/>
+                <Comment comment={comment} noParent={true}/>
               </Row>)): <Row>No Results</Row>}
             </TabPanel>
             <TabPanel>
