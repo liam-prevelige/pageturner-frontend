@@ -26,8 +26,11 @@ export const ThreadView = () => {
 
   useEffect(() => {
     setCommentId(commentIdParam);
-    ReactGA.pageview(window.location.pathname);
   }, [commentIdParam]);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     loadReplies(commentId); // setState hooks are async, so this is necessary
