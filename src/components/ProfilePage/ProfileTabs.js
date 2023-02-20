@@ -69,7 +69,7 @@ export const ProfileTabs = ({userId}) => {
                 <div className="bg-white h-full">
                   {bookshelves && bookshelves.map((bookshelfData) =>
                     (<div key={bookshelfData._id}>
-                      <Bookshelf bookshelfId={bookshelfData._id} isProfile={true}/>
+                      <Bookshelf bookshelfId={bookshelfData._id} isProfile={true} isMyProfile={profile && (!uid || profile._id==uid)}/>
                       <div className="border-b m-3 border-slate-300"/>
                     </div>
                     ))}

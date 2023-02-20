@@ -874,6 +874,34 @@ export const getBookshelf = async (bookshelfId) => {
 };
 
 /**
+ * Fetches one bookshelf given a user ID
+ *
+ * @return {dict} bookshelf - bookshelf object
+ */
+export const updateBookshelf = async (bookshelfId, newBookshelf) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/bookshelves/update_bookshelf`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({
+      shelfId: bookshelfId,
+      newBookshelf: newBookshelf,
+    }),
+  });
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /bookshelves/get_bookshelf failed');
+  }
+  return res.bookshelf;
+};
+
+/**
  * Fetches all bookshelves owned by a user
  *
  * @return {array} replies - get bookshelves owned by a user
