@@ -6,6 +6,7 @@ import {getNotifications, updateNotifications} from '../../api';
 import ReactGA from 'react-ga';
 
 export const Notification = () => {
+  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -43,31 +44,37 @@ export const Notification = () => {
     }
   };
 
+  if (!profile) {
+    return (<div className="font-bold text-xl mt-20">Sign in or make an account to see your notifications.</div>);
+  }
+
   return (
-    <div className="flex relative flex-col pt-5 bg-white">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-lg font-semibold text-slate-800">Notifications</h1>
-        <button
-          className="text-slate-500 hover:text-slate-700 transition-colors duration-150 focus:outline-none"
-          onClick={markAllAsViewed}
-        >
+    <>
+      <div className="flex relative flex-col pt-5 bg-white">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-lg font-semibold text-slate-800">Notifications</h1>
+          <button
+            className="text-slate-500 hover:text-slate-700 transition-colors duration-150 focus:outline-none"
+            onClick={markAllAsViewed}
+          >
           Mark all as viewed
-        </button>
-      </div>
-      <ul>
-        {notifications.reverse().map((notification, index) =>
-          (<div key={notification.cId+notification.type+index}>
-            <div className="flex items-center text-sm space-x-2 pr-2 mb-2 mt-1">
-              {notification.type === 'like' ? <FaHeart className="fill-primary-like stroke-2 w-5 h-5" /> : notification.type === 'follow' ? <ProfileIcon /> : <StarSolid />}
-              <span>
-                <b>{notification.commenterId}</b> {getMessage(notification)}
-              </span>
+          </button>
+        </div>
+        <ul>
+          {notifications.reverse().map((notification, index) =>
+            (<div key={notification.cId+notification.type+index}>
+              <div className="flex items-center text-sm space-x-2 pr-2 mb-2 mt-1">
+                {notification.type === 'like' ? <FaHeart className="fill-primary-like stroke-2 w-5 h-5" /> : notification.type === 'follow' ? <ProfileIcon /> : <StarSolid />}
+                <span>
+                  <b>{notification.commenterId}</b> {getMessage(notification)}
+                </span>
+              </div>
+              {notification.type !== 'follow' && <Comment commentId={notification.cId} noParent={true} />}
+              <div className="border-b ml-3 mr-3 border-slate-300"></div>
             </div>
-            {notification.type !== 'follow' && <Comment commentId={notification.cId} noParent={true} />}
-            <div className="border-b ml-3 mr-3 border-slate-300"></div>
-          </div>
-          ))}
-      </ul>
-    </div>
+            ))}
+        </ul>
+      </div>
+    </>
   );
 };

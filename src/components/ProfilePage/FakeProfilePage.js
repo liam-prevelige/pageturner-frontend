@@ -22,7 +22,7 @@ export const FakeProfilePage = () => {
 
   return (
     <>
-      <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+      <div className="mx-auto max-w-7xl mt-1 flex">
         <main className="flex flex-col">
           <>
             <div className="profile">
@@ -51,6 +51,17 @@ export const FakeProfilePage = () => {
           </>
         </main>
       </div >
+      <div className="absolute left-1/3 ml-16 top-1/3 justify-center align-center text-align-center">
+        <div className="bg-slate-300 bg-opacity-90 rounded p-10">
+          <div className="relative w-auto my-6 mx-auto">
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="flex p-2 border-b border-gray-300">
+                <h3 className="text-lg font-semibold">Sign In with Google to see more from PageTurner!</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
