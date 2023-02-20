@@ -2,27 +2,33 @@ import {React, useState, useEffect} from 'react';
 import {ProfileIcon, StarSolid} from '../../assets/Icons';
 import {FaHeart} from 'react-icons/fa';
 import {Comment} from '../Comment/Comment';
-import {getNotifications} from '../../api';
+import {getNotifications, updateNotifications} from '../../api';
 import ReactGA from 'react-ga';
 
 export const Notification = () => {
   const [notifications, setNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const markAllAsViewed = async () => {
     const updatedNotifications = notifications.map((notification) => ({...notification, isViewed: true}));
     console.log('updatedNotifications:', updatedNotifications);
     setNotifications([...updatedNotifications]);
     await updateNotifications();
+    setIsLoading(true);
+  };
+
+  const loadNotifications = async () => {
+    const newNotifications = await getNotifications();
+    setNotifications([...newNotifications]);
   };
 
   useEffect(() => {
-    ReactGA.pageview(window.location.pathname);
-    const loadNotifications = async () => {
-      const newNotifications = await getNotifications();
-      setNotifications([...newNotifications]);
-    };
-    loadNotifications();
-  }, []);
+    if (isLoading) {
+      ReactGA.pageview(window.location.pathname);
+      loadNotifications();
+      setIsLoading(false);
+    }
+  }, [isLoading]);
 
   const getMessage = (notification) => {
     switch (notification.type) {
@@ -50,7 +56,7 @@ export const Notification = () => {
       </div>
       <ul>
         {notifications.reverse().map((notification, index) =>
-          (<div key={index}>
+          (<div key={notification.cId+notification.type+index}>
             <div className="flex items-center text-sm space-x-2 pr-2 mb-2 mt-1">
               {notification.type === 'like' ? <FaHeart className="fill-primary-like stroke-2 w-5 h-5" /> : notification.type === 'follow' ? <ProfileIcon /> : <StarSolid />}
               <span>

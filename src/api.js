@@ -348,8 +348,6 @@ export const updateNotifications = async () => {
     },
   });
 
-  const body = await response.json();
-  console.log(body);
   if (!response.ok) {
     throw new Error('Failed to update notifications');
   }

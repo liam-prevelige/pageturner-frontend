@@ -77,8 +77,9 @@ export const ProfilePage = () => {
 
   const handleFollowUser = async () => {
     // const uid = queryParams.get('uid');
+    if (!profile) return;
     await addFollower(uid);
-    await postNotification(uid, null, storedProfile._id, false, 'follow');
+    await postNotification(uid, storedProfile._id, storedProfile.tag, false, 'follow');
     window.location.reload();
   };
 
