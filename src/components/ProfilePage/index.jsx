@@ -1,4 +1,5 @@
 import {React, useState, useRef, useEffect} from 'react';
+import ReactGA from 'react-ga';
 
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
@@ -70,6 +71,7 @@ export const ProfilePage = () => {
     } else {
       updateSessionProfile();
     }
+    ReactGA.pageview(window.location.pathname);
   }, []);
 
   const [newProfile, setNewProfile] = useState(profile);

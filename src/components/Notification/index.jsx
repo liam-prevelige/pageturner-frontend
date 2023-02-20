@@ -2,11 +2,13 @@ import {React, useState, useEffect} from 'react';
 import {StarSolid} from '../../assets/Icons';
 import {Comment} from '../Comment/Comment';
 import {getNotifications} from '../../api';
+import ReactGA from 'react-ga';
 
 export const Notification = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
     const loadNotifications = async () => {
       const newNotifications = await getNotifications();
       setNotifications([...newNotifications]);

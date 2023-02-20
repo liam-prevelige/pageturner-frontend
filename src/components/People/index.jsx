@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {DynamicSearch} from '../DynamicSearch';
 import {searchUsers, getUserBooks, removeFriend} from '../../api';
 import {BookDisplay} from '../BookDisplay';
@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import './People.css';
 import {Container, Row, Col, Button} from 'react-bootstrap';
 import Loading from 'react-loading';
+import ReactGA from 'react-ga';
 
 /**
  * Component containing the people page
@@ -15,6 +16,10 @@ export const People = () => {
   const [user, setUser] = useState(null);
   const [userBookshelf, setUserBookshelf] = useState(null);
   const [userReadBooks, setUserReadBooks] = useState(null);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   const [users, setUsers] = useState([]);
   const searchFn = async (query) => {

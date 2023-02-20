@@ -1,10 +1,15 @@
-import {React} from 'react';
+import {React, useEffect} from 'react';
 import {Search} from '../Search';
 import {ShareBox} from '../ShareBox/ShareBox';
 // import {ThreadView} from '../ThreadView/ThreadView';
 import {Timeline} from '../Comment/Timeline';
+import ReactGA from 'react-ga';
 
 export const HomePage = () => {
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
+
   return (
     <>
       <div className="min-h-screen max-w-7xl flex">
