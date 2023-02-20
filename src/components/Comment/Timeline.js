@@ -94,8 +94,8 @@ export const Timeline = () => {
   return (
     <div className="bg-white h-full">
       {timeline && timeline.map((commentData) =>
-        (<div key={commentData}>
-          <Comment commentId={commentData}/>
+        (<div key={commentData._id}>
+          <Comment comment={commentData}/>
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
         </div>
         ))}
