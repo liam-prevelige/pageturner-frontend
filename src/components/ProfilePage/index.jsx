@@ -67,7 +67,7 @@ export const ProfilePage = () => {
       retrieveProfileFromStorage();
     }
     ReactGA.pageview(window.location.pathname);
-  }, [queryParams]);
+  }, [profile]);
 
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
