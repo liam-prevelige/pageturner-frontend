@@ -72,7 +72,8 @@ export const Comment = ({comment, commentId, noParent}) => {
 
   const updateLikesCb = async (e) => {
     e.stopPropagation();
-    if (!myProfile || !myProfile.likedPosts) return;
+    if (!myProfile) return;
+    if (!myProfile.likedPosts) myProfile.likedPosts = [];
     await updateLikes(commentData._id); // Would be better if this returned the updated likedPosts array
     // Convert userLikedPosts to string array for index of
     const index = myProfile.likedPosts.indexOf(commentData._id);
