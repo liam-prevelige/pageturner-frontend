@@ -632,6 +632,7 @@ export const getPosts = async (uid) => {
   if (!response.ok) {
     throw new Error('Call to /get_posts failed');
   }
+  console.log('res.posts: ', res);
   return res.posts;
 };
 

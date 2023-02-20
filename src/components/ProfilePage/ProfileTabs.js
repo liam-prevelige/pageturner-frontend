@@ -9,8 +9,9 @@ import {getBookshelves, getPosts, getLikedPosts} from '../../api';
 import {Bookshelf} from './Bookshelf';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 
-export const ProfileTabs = ({uid}) => {
+export const ProfileTabs = ({userId}) => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  const uid = userId ? userId : profile._id;
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
@@ -25,7 +26,6 @@ export const ProfileTabs = ({uid}) => {
   const fetchPosts = async () => {
     const profilePosts = await getPosts(uid);
     setPosts(profilePosts);
-    console.log(profilePosts);
   };
 
   const fetchLikedPosts = async () => {
@@ -54,7 +54,7 @@ export const ProfileTabs = ({uid}) => {
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowY: 'auto'}}>
                 <div className="bg-white h-full">
-                  {bookshelves && bookshelves.reverse().map((bookshelfData) =>
+                  {bookshelves && bookshelves.map((bookshelfData) =>
                     (<div key={bookshelfData._id}>
                       <Bookshelf bookshelfId={bookshelfData._id} isProfile={true}/>
                       <div className="border-b m-3 border-slate-300"/>
@@ -66,9 +66,9 @@ export const ProfileTabs = ({uid}) => {
             {/* Posts Tab */}
             <TabPanel width={'710px'}>
               <div className="bg-white h-full">
-                {posts && posts.reverse().map((commentData, index) =>
-                  (<div key={index}>
-                    <Comment commentId={commentData}/>
+                {posts && posts.map((commentData) =>
+                  (<div key={commentData._id}>
+                    <Comment comment={commentData}/>
                     <div className="border-b ml-3 mr-3 border-slate-300"/>
                   </div>
                   ))}
@@ -77,8 +77,8 @@ export const ProfileTabs = ({uid}) => {
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowX: 'auto'}}>
                 {profile && <div className="bg-white h-full">
-                  {profile.bookmarks && profile.bookmarks.reverse().map((commentData, index) =>
-                    (<div key={index}>
+                  {profile.bookmarks && profile.bookmarks.reverse().map((commentData) =>
+                    (<div key={commentData._id}>
                       <Comment commentId={commentData}/>
                       <div className="border-b ml-3 mr-3 border-slate-300"/>
                     </div>
@@ -88,9 +88,9 @@ export const ProfileTabs = ({uid}) => {
             </TabPanel>
             <TabPanel width={'710px'}>
               <div className="bg-white h-full">
-                {likedPosts && likedPosts.reverse().map((commentData, index) =>
-                  (<div key={index}>
-                    <Comment commentId={commentData}/>
+                {likedPosts && likedPosts.reverse().map((commentId) =>
+                  (<div key={commentId}>
+                    <Comment commentId={commentId}/>
                     <div className="border-b ml-3 mr-3 border-slate-300"/>
                   </div>
                   ))}
