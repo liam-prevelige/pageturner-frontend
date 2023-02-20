@@ -30,13 +30,19 @@ export const ProfileTabs = ({userId}) => {
   };
 
   const fetchBookmarkedIds = async () => {
-    const fetchedBookmarksIds = await getBookmarks(uid);
-    if (fetchedBookmarksIds) setBookmarksIds(fetchedBookmarksIds.reverse());
+    let fetchedBookmarksIds = await getBookmarks(uid);
+    if (fetchedBookmarksIds) {
+      fetchedBookmarksIds = fetchedBookmarksIds.reverse();
+    }
+    setBookmarksIds(fetchedBookmarksIds);
   };
 
   const fetchLikedPosts = async () => {
-    const fetchedLikedPosts = await getLikedPosts(uid);
-    if (fetchedLikedPosts) setLikedPosts(fetchedLikedPosts.reverse());
+    let fetchedLikedPosts = await getLikedPosts(uid);
+    if (fetchedLikedPosts) {
+      fetchedLikedPosts = fetchedLikedPosts.reverse();
+    }
+    setLikedPosts(fetchedLikedPosts);
   };
 
   useEffect(() => {
