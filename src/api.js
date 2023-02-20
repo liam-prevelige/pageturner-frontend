@@ -97,24 +97,25 @@ export const updateBookmarks = async (cid) => {
  * Requires user is logged in
  *
  */
-export const getFeed = async () => {
+export const getFeed = async (pageNumber) => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/user/get_feed`, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Accept': 'application.json',
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
+    body: JSON.stringify({pageNumber: pageNumber}),
     cache: 'default',
   });
 
-  const body = await response.json();
+  const res = await response.json();
   if (!response.ok) {
     throw new Error('Call to /user/get_feed failed');
   }
-  return body.feed;
+  return res.feed;
 };
 
 /**

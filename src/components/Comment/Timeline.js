@@ -8,21 +8,22 @@ import {getFeed, getGlobalFeed} from '../../api';
 import {Comment} from './Comment';
 
 export const Timeline = () => {
-  const [timeLine, setTimeLine] = useState([]);
+  const [timeline, setTimeline] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUpdating, setIsUpdating] = useState(true);
-  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-  const [pageNumber, setPageNumber] = useState(0);
+  const [isAddingPage, setIsAddingPage] = useState(false);
+  const [globalPageNumber, setGlobalPageNumber] = useState(0);
+  const [privatePageNumber, setPrivatePageNumber] = useState(0);
+  const [isPrivateTimeline, setIsPrivateTimeline] = useState(false);
 
   const fetchData = async () => {
     try {
-      let timeLine = null;
-      if (profile != null) {
-        timeLine = await getFeed();
+      let newTimeline = null;
+      if (isPrivateTimeline) {
+        newTimeline = await getFeed(privatePageNumber);
       } else {
-        timeLine = await getGlobalFeed(pageNumber);
+        newTimeline = await getGlobalFeed(globalPageNumber);
       }
-      setTimeLine(timeLine);
+      setTimeline(newTimeline);
     } catch (err) {
       console.log(err);
     }
@@ -31,35 +32,62 @@ export const Timeline = () => {
   // Create event listener for newPost in sessionStorage
   window.addEventListener('newPost', () => {
     if (!isLoading) {
-      setPageNumber(0);
+      setGlobalPageNumber(0);
       setIsLoading(true);
     }
   });
 
   document.addEventListener('scroll', function(e) {
     if (document.body.scrollHeight <= Math.ceil(window.pageYOffset + window.innerHeight)) {
-      setPageNumber(pageNumber+1);
-      setIsUpdating(true);
+      setIsAddingPage(true);
     }
   });
 
-  const updateTimeline = async () => {
+  window.addEventListener('timelineChange', function(e) {
+    setIsPrivateTimeline(e.detail);
+    if (!isLoading) {
+      if (isPrivateTimeline) {
+        setPrivatePageNumber(0);
+      } else {
+        setGlobalPageNumber(0);
+      }
+      setIsLoading(true);
+    }
+  });
+
+  const getNewTimelinePage = async () => {
     try {
-      const newTimelinePage = await getGlobalFeed(pageNumber);
-      const newTimeline = timeLine.concat(newTimelinePage);
-      setTimeLine(newTimeline);
-      console.log(pageNumber);
+      console.log('starting page number', globalPageNumber);
+      if (isPrivateTimeline) {
+        const newTimelinePage = await getFeed(privatePageNumber+1);
+        const newTimeline = timeline.concat(newTimelinePage);
+        setTimeline(newTimeline);
+        console.log(newTimelinePage);
+        if (newTimelinePage.length > 0) {
+          setPrivatePageNumber(privatePageNumber+1);
+        }
+        console.log(privatePageNumber);
+      } else {
+        const newTimelinePage = await getGlobalFeed(globalPageNumber+1);
+        const newTimeline = timeline.concat(newTimelinePage);
+        setTimeline(newTimeline);
+        console.log(newTimelinePage);
+        if (newTimelinePage.length > 0) {
+          setGlobalPageNumber(globalPageNumber+1);
+        }
+        console.log(globalPageNumber);
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    if (isUpdating) {
-      setIsUpdating(false);
-      updateTimeline();
+    if (isAddingPage) {
+      setIsAddingPage(false);
+      getNewTimelinePage();
     }
-  }, [isUpdating]);
+  }, [isAddingPage]);
 
   useEffect(() => {
     if (isLoading) {
@@ -70,7 +98,7 @@ export const Timeline = () => {
 
   return (
     <div className="bg-white h-full">
-      {timeLine && timeLine.map((commentData, index) =>
+      {timeline && timeline.map((commentData, index) =>
         (<div key={index}>
           <Comment commentId={commentData}/>
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
