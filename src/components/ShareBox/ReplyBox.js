@@ -7,7 +7,6 @@ export const ReplyBox = ({pid}) => {
 
   const submitReplyCb = async () => {
     if (replyText && replyText.length > 0) {
-      // await postComment('global', pid, replyText);
       const {commentId} = await postComment('global', pid, 'comment', replyText);
       window.dispatchEvent(new Event('newReply'));
       setReplyText('');
@@ -15,7 +14,12 @@ export const ReplyBox = ({pid}) => {
       // Get the owner of the post
       const comment = await getComment(pid);
       const postOwner = await getProfile(comment.uid);
-      await postNotification(postOwner._id, commentId);
+
+      // Get the commenter id
+      const reply = await getComment(commentId);
+      const commenter = await getProfile(reply.uid);
+
+      await postNotification(postOwner._id, commentId, commenter.tag, false, 'reply');
     }
   };
 

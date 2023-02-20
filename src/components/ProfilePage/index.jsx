@@ -11,6 +11,7 @@ import {
   removeFollower,
   getFollowers,
   getFollowing,
+  postNotification,
 } from '../../api';
 import {Auth} from '../Auth/Auth';
 import {FakeProfilePage} from './FakeProfilePage';
@@ -74,6 +75,7 @@ export const ProfilePage = () => {
   const handleFollowUser = async () => {
     const uid = queryParams.get('uid');
     await addFollower(uid);
+    await postNotification(uid, null, storedProfile._id, false, 'follow');
     window.location.reload();
   };
 

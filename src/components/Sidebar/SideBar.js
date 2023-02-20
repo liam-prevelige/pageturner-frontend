@@ -1,19 +1,35 @@
 import {React, useState, useEffect} from 'react';
+import {getNotifications} from '../../api';
 import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon} from '../../assets/Icons';
 import {Auth} from '../Auth/Auth';
 
 export const SideBar = () => {
   const [path, setPath] = useState(window.location.pathname);
+  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  const [viewCount, setViewCount] = useState(0);
+
+  useEffect(() => {
+    getNotifications();
+  }, []);
+
+  useEffect(() => {
+    // Fetch notifications every 60 seconds
+    const intervalId = setInterval(() => {
+      getNotifications().then((notifications) => {
+        const isViewed = notifications.filter((notification) => notification.isViewed === false);
+        const isViewedLength = isViewed.length;
+        setViewCount(isViewedLength);
+      });
+    }, 60000);
+
+    // Cleanup interval when component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
   const homePath = '/';
   const bookClubsPath = '/book-clubs';
   const profilePath = '/profile';
-  const notifications = '/notifications';
-  const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-
-  const reloadPageFunc = () => {
-    window.location.reload();
-  };
+  const notificationsPath = '/notifications';
 
   const notActiveClassName = 'flex items-center text-xl text-black font-semibold hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2';
   const activeClassName = 'flex items-center text-xl text-primary-button font-bold hover:bg-blue-100 rounded-full pl-3 pr-8 py-3 transform transition-colors duration-2';
@@ -21,6 +37,11 @@ export const SideBar = () => {
   useEffect(() => {
     setPath(window.location.pathname);
   }, [window.location.pathname]);
+
+
+  const reloadPageFunc = () => {
+    window.location.reload();
+  };
 
   return (
     <>
@@ -32,21 +53,26 @@ export const SideBar = () => {
           <nav className="mb-5 text-xl text-black font-semibold">
             <ul>
               <a href={homePath}>
-                <div className={path===homePath ? activeClassName : notActiveClassName}>
+                <div className={path === homePath ? activeClassName : notActiveClassName}>
                   <HomeIcon />
                   <li className="ml-4 sidebar-text">Home</li>
                 </div>
               </a>
               <a href={bookClubsPath}>
-                <div className={path===bookClubsPath ? activeClassName : notActiveClassName}>
+                <div className={path === bookClubsPath ? activeClassName : notActiveClassName}>
                   <GroupIcon />
                   <li className="ml-4 sidebar-text">Book Clubs</li>
                 </div>
               </a>
-              <a href={notifications}>
-                <div className={path===notifications ? activeClassName : notActiveClassName}>
+              <a href={notificationsPath}>
+                <div className={path === notificationsPath ? activeClassName : notActiveClassName}>
                   <NotificationsIcon />
                   <li className="ml-4 sidebar-text">Notifications</li>
+                  {viewCount > 0 && (
+                    <span className="ml-2 text-sm font-medium text-red-600">
+                      {viewCount}
+                    </span>
+                  )}
                 </div>
               </a>
               <a href={profilePath}>
