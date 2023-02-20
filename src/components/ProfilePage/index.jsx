@@ -14,6 +14,7 @@ import {
 } from '../../api';
 import {Auth} from '../Auth/Auth';
 import {FakeProfilePage} from './FakeProfilePage';
+import {FollowModal} from './FollowModal';
 
 export const ProfilePage = () => {
   const search = window.location.search;
@@ -65,7 +66,7 @@ export const ProfilePage = () => {
       retrieveProfileFromStorage();
     }
     ReactGA.pageview(window.location.pathname);
-  }, []);
+  }, [queryParams]);
 
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
@@ -146,6 +147,11 @@ export const ProfilePage = () => {
     input.current.click();
   };
 
+  const handleResetStates = () => {
+    setShowFollowersModal(false);
+    setShowFollowingModal(false);
+  };
+
   const renderEditFollow = () => {
     if (!profile) {
       return null;
@@ -182,7 +188,7 @@ export const ProfilePage = () => {
 
   return (
     <>
-      {profile && (<div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+      {profile && (<div className="min-h-screen mx-auto max-w-7xl mt-1 flex" onClick={handleResetStates}>
         <main className="flex flex-col">
           <>
             <div className="profile">
@@ -267,93 +273,13 @@ export const ProfilePage = () => {
                   <div className="flex flex-row space-x-5">
                     <button className="text-base text-slate-500 mt-2" type="button" onClick={handleOpenFollowersModal}><strong className="text-black">{profile.followers.length}</strong> Followers</button>
                     <button className="text-base text-slate-500 mt-2" type="button" onClick={handleOpenFollowingModal}><strong className="text-black">{profile.following.length}</strong> Following</button>
-                    {showFollowersModal ? (
-                    <>
-                      <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                        <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                            <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
-                              <h3 className="text-3xl font=semibold">Followers</h3>
-                            </div>
-                            <div className="relative p-6 flex-auto">
-                              {
-                              // eslint-disable-next-line arrow-parens
-                                profile.followers.map((user, index) => (
-                                // eslint-disable-next-line react/jsx-key
-                                  <div key={index}>
-                                    <a href={'/profile?uid=' + profile.followers[index]._id} className='flex space-x-3 px-1 py-1 border-primary-container_border_color'>
-                                      <img src={profile.followers[index].profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(profileData._id)} />
-                                      <div className="flex-1">
-                                        <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadUserProfile(profileData._id)}>
-                                          <span className="ml-1 font-bold text-black">{profile.followers[index].name}</span>
-                                          <span className="ml-2 text-primary-gray_colors">@{profile.followers[index].tag}</span>
-                                        </div>
-                                      </div>
-                                    </a>
-                                  </div>
-                                ))
-                              }
-                            </div>
-                            <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                              <button
-                                className="text-red-500 background-transparent font-bold uppercase px-2 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                                type="button"
-                                onClick={() => setShowFollowersModal(false)}
-                              >
-                                Dismiss
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  ) : null}
-                    {showFollowingModal ? (
-                    <>
-                      <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                        <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                            <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
-                              <h3 className="text-3xl font=semibold">Following</h3>
-                            </div>
-                            <div className="relative p-3 flex-auto">
-                              {
-                              // eslint-disable-next-line arrow-parens
-                                profile.following.map((user, index) => (
-                                // eslint-disable-next-line react/jsx-key
-                                  <div key={index}>
-                                    <a href={'/profile?uid=' + profile.following[index]._id} className='flex space-x-3 px-1 py-1 border-primary-container_border_color'>
-                                      <img src={profile.following[index].profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(profileData._id)} />
-                                      <div className="flex-1">
-                                        <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadUserProfile(profileData._id)}>
-                                          <span className="ml-1 font-bold text-black">{profile.following[index].name}</span>
-                                          <span className="ml-2 text-primary-gray_colors">@{profile.following[index].tag}</span>
-                                        </div>
-                                      </div>
-                                    </a>
-                                  </div>
-                                ))
-                              }
-                            </div>
-                            <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                              <button
-                                className="text-red-500 background-transparent font-bold uppercase px-2 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                                type="button"
-                                onClick={() => setShowFollowingModal(false)}
-                              >
-                                Dismiss
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  ) : null}
+                    {showFollowersModal && <FollowModal title={'Followers'} users={profile.followers}/>}
+                    {showFollowingModal && <FollowModal title={'Following'} users={profile.following}/>}
                   </div>
                 </div>
               </div>
             </div>
-            <ProfileTabs uid={profile._id} />
+            <ProfileTabs userId={profile._id} />
           </>
         </main>
       </div >)}

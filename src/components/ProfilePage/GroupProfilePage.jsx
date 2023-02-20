@@ -201,7 +201,7 @@ export const GroupProfilePage = () => {
               </div>
             </div>
           </div>
-          <ProfileTabs />
+          <ProfileTabs userId={profile._id}/>
         </>
       </main>
     </div >

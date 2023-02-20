@@ -31,12 +31,12 @@ export const ProfileTabs = ({userId}) => {
 
   const fetchBookmarkedIds = async () => {
     const fetchedBookmarksIds = await getBookmarks(uid);
-    setBookmarksIds(fetchedBookmarksIds.reverse());
+    if (fetchedBookmarksIds) setBookmarksIds(fetchedBookmarksIds.reverse());
   };
 
   const fetchLikedPosts = async () => {
     const fetchedLikedPosts = await getLikedPosts(uid);
-    setLikedPosts(fetchedLikedPosts.reverse());
+    if (fetchedLikedPosts) setLikedPosts(fetchedLikedPosts.reverse());
   };
 
   useEffect(() => {
