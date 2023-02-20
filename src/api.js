@@ -305,7 +305,7 @@ export const getNotifications = async () => {
  * @param {string} recipientId - id of person to send notification
  * @param {string} cId - id of replied comment
  */
-export const postNotification = async (recipientId, cId, commenterId, isViewed) => {
+export const postNotification = async (recipientId, cId, commenterId, isViewed, type) => {
   await refreshToken();
 
   const response = await fetch(`${API_URL}/notifications/post_notification`, {
@@ -320,6 +320,7 @@ export const postNotification = async (recipientId, cId, commenterId, isViewed) 
       cId: cId,
       commenterId: commenterId,
       isViewed: isViewed,
+      type: type,
     }),
   });
   const body = await response.json();
@@ -332,7 +333,7 @@ export const postNotification = async (recipientId, cId, commenterId, isViewed) 
 /**
  * /notifications/update_notification
  *
- * Counts received notifications
+ * Notification has been read; reset to 0
  * Requires user is logged in
  *
  */

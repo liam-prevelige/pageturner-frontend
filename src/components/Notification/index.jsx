@@ -1,5 +1,6 @@
 import {React, useState, useEffect} from 'react';
-import {StarSolid} from '../../assets/Icons';
+import {ProfileIcon, StarSolid} from '../../assets/Icons';
+import {FaHeart} from 'react-icons/fa';
 import {Comment} from '../Comment/Comment';
 import {getNotifications} from '../../api';
 import ReactGA from 'react-ga';
@@ -23,6 +24,19 @@ export const Notification = () => {
     loadNotifications();
   }, []);
 
+  const getMessage = (notification) => {
+    switch (notification.type) {
+      case 'like':
+        return 'has liked your post';
+      case 'reply':
+        return 'has replied to your post';
+      case 'follow':
+        return 'is now following you';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="flex relative flex-col pt-5 bg-white">
       <div className="flex justify-between items-center mb-4">
@@ -37,10 +51,13 @@ export const Notification = () => {
       <ul>
         {notifications.reverse().map((notification, index) =>
           (<div key={index}>
-            <div className='flex items-center text-sm space-x-2 pr-2'>
-              <StarSolid /> <span><b>{notification.commenterId}</b> replied to your post</span>
+            <div className="flex items-center text-sm space-x-2 pr-2 mb-2 mt-1">
+              {notification.type === 'like' ? <FaHeart className="fill-primary-like stroke-2 w-5 h-5" /> : notification.type === 'follow' ? <ProfileIcon /> : <StarSolid />}
+              <span>
+                <b>{notification.commenterId}</b> {getMessage(notification)}
+              </span>
             </div>
-            <Comment commentId={notification.cId} noParent={true}/>
+            {notification.type !== 'follow' && <Comment commentId={notification.cId} noParent={true} />}
             <div className="border-b ml-3 mr-3 border-slate-300"></div>
           </div>
           ))}

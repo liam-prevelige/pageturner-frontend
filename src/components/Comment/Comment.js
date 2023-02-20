@@ -2,7 +2,7 @@ import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Share} from '../../assets/Icons';
 import {Parent} from './Parent';
-import {getProfile, getComment, updateLikes, updateBookmarks} from '../../api';
+import {getProfile, getComment, updateLikes, updateBookmarks, postNotification} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
 import {FaHeart, FaRegHeart, FaRegComment, FaBookmark, FaRegBookmark} from 'react-icons/fa';
@@ -79,6 +79,7 @@ export const Comment = ({comment, commentId, noParent}) => {
     } else {
       myProfile.likedPosts.push(commentData._id);
       changedComment.metadata.likes ++;
+      await postNotification(commentData.uid, commentData._id, myProfile.tag, false, 'like');
     }
     setCommentData(changedComment);
     setIsLiked(myProfile.likedPosts.includes(commentData._id));

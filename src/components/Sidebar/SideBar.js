@@ -13,14 +13,14 @@ export const SideBar = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch notifications every n seconds
+    // Fetch notifications every 60 seconds
     const intervalId = setInterval(() => {
       getNotifications().then((notifications) => {
         const isViewed = notifications.filter((notification) => notification.isViewed === false);
         const isViewedLength = isViewed.length;
         setViewCount(isViewedLength);
       });
-    });
+    }, 60000);
 
     // Cleanup interval when component unmounts
     return () => clearInterval(intervalId);
