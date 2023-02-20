@@ -1,14 +1,17 @@
-import {React, useState} from 'react';
+import {React, useState, useEffect} from 'react';
 import {Search} from '../Search';
 import {ShareBox} from '../ShareBox/ShareBox';
 // import {ThreadView} from '../ThreadView/ThreadView';
 import {Timeline} from '../Comment/Timeline';
 import {Switch, ChakraProvider} from '@chakra-ui/react';
 import {FaGlobeAmericas, FaUser} from 'react-icons/fa';
+import ReactGA from 'react-ga';
 
 export const HomePage = () => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
   const changeTimeline = (e) => {
     window.dispatchEvent(new CustomEvent('timelineChange', {detail: e.target.checked}));
   };

@@ -5,6 +5,7 @@ import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
 import {updateGroupProfile, removeGroupMember} from '../../api';
 import {getGroupProfile} from '../../api';
+import ReactGA from 'react-ga';
 
 export const GroupProfilePage = () => {
   const search = window.location.search;
@@ -37,6 +38,7 @@ export const GroupProfilePage = () => {
 
   useEffect(() => {
     retrieveProfileFromUid();
+    ReactGA.pageview(window.location.pathname);
   }, []);
 
   const [newProfile, setNewProfile] = useState(profile);

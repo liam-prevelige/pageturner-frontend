@@ -1,5 +1,6 @@
 import {React, useState, useEffect} from 'react';
 import {getBookClubs, createGroup} from '../../api';
+import ReactGA from 'react-ga';
 
 export const BookClubsPage = () => {
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
@@ -46,6 +47,7 @@ export const BookClubsPage = () => {
     if (storedProfile) {
       retrieveBookClubsFromUid();
     }
+    ReactGA.pageview(window.location.pathname);
   }, []);
 
   /**
