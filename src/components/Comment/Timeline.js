@@ -57,25 +57,20 @@ export const Timeline = () => {
 
   const getNewTimelinePage = async () => {
     try {
-      console.log('starting page number', globalPageNumber);
       if (isPrivateTimeline) {
         const newTimelinePage = await getFeed(privatePageNumber+1);
         const newTimeline = timeline.concat(newTimelinePage);
         setTimeline(newTimeline);
-        console.log(newTimelinePage);
         if (newTimelinePage.length > 0) {
           setPrivatePageNumber(privatePageNumber+1);
         }
-        console.log(privatePageNumber);
       } else {
         const newTimelinePage = await getGlobalFeed(globalPageNumber+1);
         const newTimeline = timeline.concat(newTimelinePage);
         setTimeline(newTimeline);
-        console.log(newTimelinePage);
         if (newTimelinePage.length > 0) {
           setGlobalPageNumber(globalPageNumber+1);
         }
-        console.log(globalPageNumber);
       }
     } catch (err) {
       console.log(err);
@@ -98,8 +93,8 @@ export const Timeline = () => {
 
   return (
     <div className="bg-white h-full">
-      {timeline && timeline.map((commentData, index) =>
-        (<div key={index}>
+      {timeline && timeline.map((commentData) =>
+        (<div key={commentData}>
           <Comment commentId={commentData}/>
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
         </div>

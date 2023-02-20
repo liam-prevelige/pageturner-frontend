@@ -10,7 +10,6 @@ export const HomePage = () => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
 
   const changeTimeline = (e) => {
-    console.log(e.target.checked);
     window.dispatchEvent(new CustomEvent('timelineChange', {detail: e.target.checked}));
   };
   return (
