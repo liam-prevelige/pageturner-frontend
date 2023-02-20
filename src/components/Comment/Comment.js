@@ -100,7 +100,7 @@ export const Comment = ({comment, commentId, noParent}) => {
   };
 
   const loadUserProfile = (uid) => {
-    const path = `/profile?uid=${uid}`;
+    const path = `/profile/${uid}`;
     navigate(path);
   };
 

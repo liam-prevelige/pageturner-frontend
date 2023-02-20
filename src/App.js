@@ -42,6 +42,7 @@ const App = () => {
             <Route path='/book-clubs' element={<BookClubsPage />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/:uid" element={<ProfilePage />} />
             <Route path="/group-profile" element={<GroupProfilePage />} />
             <Route path="/book-info/*" element={<BookInfo />} />
             <Route path="/thread/:commentIdParam" element={<ThreadView />}/>

@@ -7,7 +7,7 @@ export const UserSearchResult = (userInfo) => {
   const navigate = useNavigate();
 
   const loadUserProfile = (uid) => {
-    const path = `/profile?uid=${uid}`;
+    const path = `/profile/${uid}`;
     navigate(path);
   };
 
@@ -30,13 +30,13 @@ export const BookshelfSearchResult = ({bookshelfInfo}) => {
   const [userInfo, setUser] = useState(null);
 
   const loadUserProfile = (uid) => {
-    const path = `/profile?uid=${uid}`;
+    const path = `/profile/${uid}`;
     navigate(path);
   };
 
   const loadBookshelf = (id) => {
     // TODO fix this path
-    const path = `/profile?id=${id}`;
+    const path = `/profile/${id}`;
     navigate(path);
   };
 

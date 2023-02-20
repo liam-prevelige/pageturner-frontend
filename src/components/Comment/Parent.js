@@ -53,7 +53,7 @@ export const Parent = ({comment, commentId}) => {
 
   const loadUserProfile = (e, uid) => {
     e.stopPropagation();
-    const path = `/profile?uid=${uid}`;
+    const path = `/profile/${uid}`;
     navigate(path);
   };
 

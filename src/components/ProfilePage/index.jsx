@@ -16,25 +16,28 @@ import {
 import {Auth} from '../Auth/Auth';
 import {FakeProfilePage} from './FakeProfilePage';
 import {FollowModal} from './FollowModal';
+import {useParams} from 'react-router-dom';
 
 export const ProfilePage = () => {
-  const search = window.location.search;
-  const queryParams = new URLSearchParams(search);
+  // const search = window.location.search;
+  // const queryParams = new URLSearchParams(search);
+  const {uid} = useParams();
+  console.log(uid);
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
 
-  if (!storedProfile && !queryParams.get('uid')) {
+  if (!storedProfile && !uid) {
     return (<FakeProfilePage />);
   }
 
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false);
-  const isMyProfile = !queryParams.has('uid') || (storedProfile && queryParams.get('uid') === storedProfile._id);
+  const isMyProfile = !uid || (storedProfile && uid === storedProfile._id);
   const [profile, setProfile] = useState((isMyProfile && storedProfile) ? storedProfile : null);
   const [newEditedProfile, setNewEditedProfile] = useState(profile);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const retrieveProfileFromUid = async () => {
-    const uid = queryParams.get('uid');
+    // const uid = queryParams.get('uid');
     const retrievedProfile = await getProfile(uid);
     if (retrievedProfile) {
       const followers = await getFollowers(uid);
@@ -67,20 +70,20 @@ export const ProfilePage = () => {
       retrieveProfileFromStorage();
     }
     ReactGA.pageview(window.location.pathname);
-  }, [profile]);
+  }, [uid]);
 
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
 
   const handleFollowUser = async () => {
-    const uid = queryParams.get('uid');
+    // const uid = queryParams.get('uid');
     await addFollower(uid);
     await postNotification(uid, null, storedProfile._id, false, 'follow');
     window.location.reload();
   };
 
   const handleUnfollowUser = async () => {
-    const uid = queryParams.get('uid');
+    // const uid = queryParams.get('uid');
     await removeFollower(uid);
     window.location.reload();
   };
