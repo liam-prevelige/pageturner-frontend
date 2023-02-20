@@ -78,8 +78,8 @@ export const SideBar = () => {
               <a href={profilePath}>
                 <div className={path===profilePath ? activeClassName : notActiveClassName}>
                   <div className="rounded-full h-7 w-7 border border-slate-300">
-                    {profile ? <img className="rounded-full h-7 w-7" src={profile.profilePicture} /> :
-                    <img className="rounded-full h-7 w-7" src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" />
+                    {profile ? <img className="rounded-full object-fill h-7 w-7" src={profile.profilePicture} /> :
+                    <img className="rounded-full object-fill h-7 w-7" src="https://mastersofscale.com/wp-content/uploads/sites/2/2021/05/barack_obama-1.jpg" />
                     }
                   </div>
                   <li className="ml-4 sidebar-text">Profile</li>

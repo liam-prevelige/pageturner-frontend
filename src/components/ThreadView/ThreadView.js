@@ -7,8 +7,6 @@ import {ReplyBox} from '../ShareBox/ReplyBox';
 import ReactGA from 'react-ga';
 
 export const ThreadView = () => {
-  // const commentId = '63d0ab8ff3d6963f6f68a93a'; // fake/default comment ID
-  // const [queryParams, setQueryParams] = useState(new URLSearchParams(window.location.search)); // [queryParams, setQueryParams
   const [replies, setReplies] = useState([]);
   const {commentIdParam} = useParams();
   const [commentId, setCommentId] = useState(commentIdParam || '63d0ab8ff3d6963f6f68a93a'); // if no url param, fake/default comment ID

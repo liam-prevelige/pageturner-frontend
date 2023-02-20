@@ -9,6 +9,7 @@ export const IndividualBookDisplay = ({bid}) => {
 
   const navigate = useNavigate();
   const retrieveBookFromId = async () => {
+    if (!bid) return;
     const retrievedBook = await getBook(bid);
     setBook(retrievedBook);
   };

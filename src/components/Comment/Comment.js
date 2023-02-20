@@ -48,6 +48,10 @@ export const Comment = ({comment, commentId, noParent}) => {
     // We should already have the comment info from props
     if (commentData) {
       setProfileData(commentData.profile);
+      if (myProfile != null) {
+        setIsLiked(myProfile.likedPosts && myProfile.likedPosts.includes(commentData._id));
+        setIsBookmarked(myProfile.bookmarks && myProfile.bookmarks.includes(commentData._id));
+      }
       return;
     };
 
@@ -90,7 +94,6 @@ export const Comment = ({comment, commentId, noParent}) => {
     e.stopPropagation();
     if (!myProfile) return;
     const updatedBookmarks = await updateBookmarks(commentData._id);
-    console.log(updatedBookmarks);
     myProfile.bookmarks = updatedBookmarks;
     setIsBookmarked(myProfile.bookmarks.includes(commentData._id));
     sessionStorage.setItem('profile', JSON.stringify(myProfile));
