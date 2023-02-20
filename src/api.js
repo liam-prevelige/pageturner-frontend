@@ -831,12 +831,12 @@ export const getBookshelf = async (bookshelfId) => {
     },
     cache: 'default',
     body: JSON.stringify({
-      bookshelfId: bookshelfId,
+      shelfId: bookshelfId,
     }),
   });
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to /bookshelves/get_bookshelves failed');
+    throw new Error('Call to /bookshelves/get_bookshelf failed');
   }
   return body.bookshelf;
 };
@@ -856,7 +856,6 @@ export const getBookshelves = async (ownerId, ownerType) => {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem('auth_token'),
     },
-    cache: 'default',
     body: JSON.stringify({
       ownerId: ownerId,
       ownerType: ownerType,

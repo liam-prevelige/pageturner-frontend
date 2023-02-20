@@ -13,27 +13,23 @@ import {
   getFollowing,
 } from '../../api';
 import {Auth} from '../Auth/Auth';
+import {FakeProfilePage} from './FakeProfilePage';
 
 export const ProfilePage = () => {
   const search = window.location.search;
   const queryParams = new URLSearchParams(search);
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+
+  if (!storedProfile && !queryParams.get('uid')) {
+    return (<FakeProfilePage />);
+  }
+
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false);
   const isMyProfile = !queryParams.has('uid') || (storedProfile && queryParams.get('uid') === storedProfile._id);
   const [profile, setProfile] = useState((isMyProfile && storedProfile) ? storedProfile : null);
-
-  const fakeProfile = {
-    id: 1,
-    tag: 'barackobama',
-    name: 'Barack Obama',
-    bio: 'Hey there, it\'s Barack. Former POTUS, dad, and grandfather. I love books, wrote a couple (you may have heard of \'em), and believe in the power of stories to change the world. Let\'s chat about what we\'re reading!',
-    friends: Array.from(Array(9473).keys()),
-    following: Array.from(Array(891).keys()),
-    followers: Array.from(Array(891).keys()),
-    profilePicture: 'https://mastersofscale.com/wp-content/uploads/sites/2/2021/05/barack_obama-1.jpg',
-    cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
-  };
+  const [newEditedProfile, setNewEditedProfile] = useState(profile);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const retrieveProfileFromUid = async () => {
     const uid = queryParams.get('uid');
@@ -47,7 +43,7 @@ export const ProfilePage = () => {
     }
   };
 
-  const updateSessionProfile = async () => {
+  const retrieveProfileFromStorage = async () => {
     if (!storedProfile) {
       return;
     }
@@ -63,18 +59,13 @@ export const ProfilePage = () => {
   };
 
   useEffect(() => {
-    if (!storedProfile && !queryParams.get('uid')) {
-      setProfile(fakeProfile);
-    } else if (!isMyProfile) {
+    if (!isMyProfile) {
       retrieveProfileFromUid();
     } else {
-      updateSessionProfile();
+      retrieveProfileFromStorage();
     }
     ReactGA.pageview(window.location.pathname);
   }, []);
-
-  const [newProfile, setNewProfile] = useState(profile);
-  const [isEditMode, setIsEditMode] = useState(false);
 
   const coverPicInput = useRef(null);
   const profilePicInput = useRef(null);
@@ -106,47 +97,47 @@ export const ProfilePage = () => {
   const handleEditProfile = async () => {
     if (isEditMode) {
       let updatedProfile = null;
-      updatedProfile = await updateProfile(newProfile);
+      updatedProfile = await updateProfile(newEditedProfile);
       sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
-      setNewProfile(updatedProfile);
+      setNewEditedProfile(updatedProfile);
       window.location.reload();
     } else {
-      setNewProfile(profile);
+      setNewEditedProfile(profile);
     }
     setIsEditMode(!isEditMode);
   };
 
   const handleNameChange = (e) => {
-    setNewProfile({...newProfile, name: e.target.value});
+    setNewEditedProfile({...newEditedProfile, name: e.target.value});
   };
 
   const handleTagChange = (e) => {
-    setNewProfile({...newProfile, tag: e.target.value});
+    setNewEditedProfile({...newEditedProfile, tag: e.target.value});
   };
 
   const handleDescriptionChange = (e) => {
-    setNewProfile({...newProfile, description: e.target.value});
+    setNewEditedProfile({...newEditedProfile, description: e.target.value});
   };
 
   // TODO: Use variable to remove duplicate code for both images
   const handleCoverPicChange = (newImage) => {
-    // Convert image to base64 encoded binary data and save in newProfile
+    // Convert image to base64 encoded binary data and save in newEditedProfile
     const file = newImage;
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64Image = reader.result;
-      setNewProfile({...newProfile, cover: base64Image});
+      setNewEditedProfile({...newEditedProfile, cover: base64Image});
     };
     reader.readAsDataURL(file);
   };
 
   const handleProfilePicChange = (newImage) => {
-    // Convert image to base64 encoded binary data and save in newProfile
+    // Convert image to base64 encoded binary data and save in newEditedProfile
     const file = newImage;
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64Image = reader.result;
-      setNewProfile({...newProfile, profilePicture: base64Image});
+      setNewEditedProfile({...newEditedProfile, profilePicture: base64Image});
     };
     reader.readAsDataURL(file);
   };
@@ -156,34 +147,35 @@ export const ProfilePage = () => {
   };
 
   const renderEditFollow = () => {
-    if (profile && (storedProfile || queryParams.get('uid'))) {
-      if (isMyProfile) {
+    if (!profile) {
+      return null;
+    }
+    if (isMyProfile) {
+      return (
+        <div className='flex flex-col'>
+          <button className="mt-3 mr-3 text-primary-button font-bold rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
+            {isEditMode ? 'Save Changes' : 'Edit Profile'}
+          </button>
+          {profile && <div className="flex flex-row justify-end mt-1">
+            <Auth triggerReload = {() => {
+              reloadPageFunc();
+            }}/>
+          </div>}
+        </div>
+      );
+    } else if (storedProfile) {
+      if (!profile.followers.includes(storedProfile._id) && !profile.followers.some((e) => String(e._id) === String(storedProfile._id))) {
         return (
-          <div className='flex flex-col'>
-            <button className="mt-3 mr-3 text-primary-button font-bold rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-              {isEditMode ? 'Save Changes' : 'Edit Profile'}
-            </button>
-            {profile && <div className="flex flex-row justify-end mt-1">
-              <Auth triggerReload = {() => {
-                reloadPageFunc();
-              }}/>
-            </div>}
-          </div>
-        );
-      } else if (storedProfile) {
-        if (!profile.followers.includes(storedProfile._id) && !profile.followers.some((e) => String(e._id) === String(storedProfile._id))) {
-          return (
-            <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
+          <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleFollowUser}>
               Follow
-            </button>
-          );
-        } else {
-          return (
-            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleUnfollowUser}>
+          </button>
+        );
+      } else {
+        return (
+          <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleUnfollowUser}>
               Unfollow
-            </button>
-          );
-        }
+          </button>
+        );
       }
     }
   };
@@ -202,7 +194,7 @@ export const ProfilePage = () => {
                 {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.cover} /> :
                     (
                       <div className="h-64 w-full object-cover">
-                        <img className="h-64 w-full object-cover" src={newProfile.cover} />
+                        <img className="h-64 w-full object-cover" src={newEditedProfile.cover} />
 
                         <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
                           <div className="flex flex-col justify-center">
@@ -225,7 +217,7 @@ export const ProfilePage = () => {
                   {!isEditMode ? <img className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white" src={profile.profilePicture} /> :
                     (
                       <div className="rounded-full absolute h-40 w-40 -top-20 border border-4 border-white">
-                        <img className="rounded-full h-40 w-40" src={newProfile.profilePicture} />
+                        <img className="rounded-full h-40 w-40" src={newEditedProfile.profilePicture} />
                         <div className="relative flex flex-row justify-center -top-40 -ml-1 h-40 w-40 rounded-full object-cover" onClick={() => triggerClick(profilePicInput)}>
                           <div className="flex flex-col rounded-full justify-center">
                             <FaFileUpload className="h-20 w-20"/>
@@ -252,7 +244,7 @@ export const ProfilePage = () => {
                     <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.name}
-                      value={newProfile.name}
+                      value={newEditedProfile.name}
                       onChange={handleNameChange}/>
                   }
                   {!isEditMode ?
@@ -260,7 +252,7 @@ export const ProfilePage = () => {
                     <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.tag}
-                      value={newProfile.tag}
+                      value={newEditedProfile.tag}
                       onChange={handleTagChange}/>
                   }
                   {!isEditMode ?
@@ -268,7 +260,7 @@ export const ProfilePage = () => {
                     <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.description}
-                      value={newProfile.description}
+                      value={newEditedProfile.description}
                       onChange={handleDescriptionChange}/>
                   }
 

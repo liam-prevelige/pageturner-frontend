@@ -68,17 +68,7 @@ export const BookshelfPopup = ({bid, useIcon}) => {
 
   const fetchBookshelves = async () => {
     if (!profile) return;
-    // TODO: stop sequential fetching
-    // TODO: add ability for book club
     const loadedBookshelves = await getBookshelves(profile._id, 'user');
-    // console.log(bookshelfIds);
-    // const loadedBookshelves = [];
-    // for (const bookshelfId of bookshelfIds) {
-    //   const bookshelfData = await getBookshelf(bookshelfId);
-    //   loadedBookshelves = [...loadedBookshelves, bookshelfData];
-    //   console.log(bookshelfData);
-    // }
-    // console.log('loadedBookshelves', loadedBookshelves);
     setBookshelves(loadedBookshelves);
   };
 

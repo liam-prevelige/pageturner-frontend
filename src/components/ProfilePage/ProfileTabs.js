@@ -52,12 +52,10 @@ export const ProfileTabs = ({uid}) => {
           <TabPanels>
             {/* Bookshelves Tab */}
             <TabPanel width={'710px'}>
-              {/* <PopoverForm/> */}
-              {/* <div className="border-b m-3 border-slate-300"/> */}
               <ScrollMenu style={{overflowY: 'auto'}}>
                 <div className="bg-white h-full">
-                  {bookshelves && bookshelves.reverse().map((bookshelfData, index) =>
-                    (<div key={index}>
+                  {bookshelves && bookshelves.reverse().map((bookshelfData) =>
+                    (<div key={bookshelfData._id}>
                       <Bookshelf bookshelfId={bookshelfData._id} isProfile={true}/>
                       <div className="border-b m-3 border-slate-300"/>
                     </div>

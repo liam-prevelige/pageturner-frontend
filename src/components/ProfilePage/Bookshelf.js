@@ -1,26 +1,23 @@
 import {React, useState, useEffect} from 'react';
 
 import {getBookshelf} from '../../api';
-// import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import ReactLoading from 'react-loading';
-// import {Col} from 'react-bootstrap';
 import {BookDisplay} from './BookDisplay';
-// import {BookDisplay} from '../BookDisplay';
 
-export const Bookshelf = ({bookshelfId, isProfile}) => {
-  const [bookshelf, setBookshelf] = useState(null);
+export const Bookshelf = ({bookshelfId, isProfile, bookshelfData}) => {
+  const [bookshelf, setBookshelf] = useState(bookshelfData);
   // const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-  let format = 'flex max-w-xl mx-auto justify-start content-start overflow-x-auto';
-  if (isProfile) {
-    format = 'flex max-w-2xl mx-auto justify-start content-start overflow-x-auto';
-  }
+  const format = isProfile ? 'flex max-w-2xl mx-auto justify-start content-start overflow-x-auto' : 'flex max-w-xl mx-auto justify-start content-start overflow-x-auto';
   const fetchBookshelf = async () => {
+    if (!bookshelfId) return;
     const bookshelfData = await getBookshelf(bookshelfId);
     setBookshelf(bookshelfData);
   };
 
   useEffect(() => {
-    fetchBookshelf();
+    if (!bookshelf) {
+      fetchBookshelf();
+    }
   }, [bookshelfId]);
 
   return (
