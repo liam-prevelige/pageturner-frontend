@@ -54,10 +54,9 @@ export const ProfilePage = () => {
     const retrievedProfile = await getProfile(storedProfile._id);
     if (retrievedProfile) {
       sessionStorage.setItem('profile', JSON.stringify(retrievedProfile));
-      storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-      const followers = await getFollowers(uid);
+      const followers = await getFollowers(storedProfile._id);
       retrievedProfile.followers = followers;
-      const following = await getFollowing(uid);
+      const following = await getFollowing(storedProfile._id);
       retrievedProfile.following = following;
       setProfile(retrievedProfile);
     }

@@ -28,7 +28,6 @@ export const Comment = ({comment, commentId, noParent}) => {
   };
 
   useEffect(() => {
-    console.log(commentData);
     if (noParent || !commentData || !commentData.pid) return;
     if (commentData.ptype && commentData.ptype === 'bookshelf') {
       setHasParentBookshelf(true);
