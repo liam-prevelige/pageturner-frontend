@@ -9,16 +9,12 @@ export const ReplyBox = ({pid}) => {
     if (replyText && replyText.length > 0) {
       // await postComment('global', pid, replyText);
       const {commentId} = await postComment('global', pid, 'comment', replyText);
-      console.log('ReplyBox newCommentId', commentId);
       window.dispatchEvent(new Event('newReply'));
       setReplyText('');
 
       // Get the owner of the post
       const comment = await getComment(pid);
       const postOwner = await getProfile(comment.uid);
-      console.log('postOwner newCommentId', postOwner._id);
-
-
       await postNotification(postOwner._id, commentId);
     }
   };

@@ -4,7 +4,7 @@ import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-u
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import {Comment} from '../Comment/Comment';
 
-import {getBookshelves, getPosts, getLikedPosts} from '../../api';
+import {getBookshelves, getPosts, getBookmarks, getLikedPosts} from '../../api';
 // import {PopoverForm} from './BookshelfPopup';
 import {Bookshelf} from './Bookshelf';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
@@ -14,6 +14,7 @@ export const ProfileTabs = ({userId}) => {
   const uid = userId ? userId : profile._id;
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
+  const [bookmarksIds, setBookmarksIds] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
 
   const theme = createTheme();
@@ -28,14 +29,20 @@ export const ProfileTabs = ({userId}) => {
     setPosts(profilePosts);
   };
 
+  const fetchBookmarkedIds = async () => {
+    const fetchedBookmarksIds = await getBookmarks(uid);
+    setBookmarksIds(fetchedBookmarksIds.reverse());
+  };
+
   const fetchLikedPosts = async () => {
-    const likedPosts = await getLikedPosts(uid);
-    setLikedPosts(likedPosts);
+    const fetchedLikedPosts = await getLikedPosts(uid);
+    setLikedPosts(fetchedLikedPosts.reverse());
   };
 
   useEffect(() => {
     fetchBookshelves();
     fetchPosts();
+    fetchBookmarkedIds();
     fetchLikedPosts();
   }, [uid]);
 
@@ -76,19 +83,19 @@ export const ProfileTabs = ({userId}) => {
             </TabPanel>
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowX: 'auto'}}>
-                {profile && <div className="bg-white h-full">
-                  {profile.bookmarks && profile.bookmarks.reverse().map((commentData) =>
-                    (<div key={commentData._id}>
-                      <Comment commentId={commentData}/>
+                <div className="bg-white h-full">
+                  {bookmarksIds && bookmarksIds.map((bookmarkId) =>
+                    (<div key={bookmarkId}>
+                      <Comment commentId={bookmarkId}/>
                       <div className="border-b ml-3 mr-3 border-slate-300"/>
                     </div>
                     ))}
-                </div>}
+                </div>
               </ScrollMenu>
             </TabPanel>
             <TabPanel width={'710px'}>
               <div className="bg-white h-full">
-                {likedPosts && likedPosts.reverse().map((commentId) =>
+                {likedPosts && likedPosts.map((commentId) =>
                   (<div key={commentId}>
                     <Comment commentId={commentId}/>
                     <div className="border-b ml-3 mr-3 border-slate-300"/>

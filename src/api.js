@@ -252,7 +252,6 @@ export const removeGroupMember = async (groupProfile, memberId) => {
  */
 export const postComment = async (scope, pid, ptype, text, otherData={}) => {
   await refreshToken();
-  console.log('otherData', otherData);
   const response = await fetch(`${API_URL}/comments/post_comment`, {
     method: 'POST',
     headers: {
@@ -480,26 +479,6 @@ export const getRecs = async (isbn) => {
   return body;
 };
 
-// Gets a user's list of bookmarked books' content (saved)
-export const getBookmarks = async (userEmail) => {
-  await refreshToken();
-
-  const response = await fetch(`${API_URL}/user/get_bookmarks/${userEmail}`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application.json',
-      'Content-Type': 'application/json',
-    },
-    cache: 'default',
-  });
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error('Call to /user/get_bookmarks failed');
-  }
-
-  return body;
-};
-
 // Add a book to a user's list of read books
 export const updateRead = async (userEmail, isbn, exists) => {
   await refreshToken();
@@ -632,12 +611,35 @@ export const getPosts = async (uid) => {
   if (!response.ok) {
     throw new Error('Call to /get_posts failed');
   }
-  console.log('res.posts: ', res);
   return res.posts;
 };
 
+
 /**
- * Fetches a user's posts using their token
+ * Fetches a user's bookmarked posts
+ */
+export const getBookmarks = async (uid) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_bookmarks`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+    },
+    cache: 'default',
+    body: JSON.stringify({uid: uid}),
+  });
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_bookmarks failed');
+  }
+
+  return res.bookmarks;
+};
+
+/**
+ * Fetches a user's liked posts
  */
 export const getLikedPosts = async (uid) => {
   await refreshToken();
