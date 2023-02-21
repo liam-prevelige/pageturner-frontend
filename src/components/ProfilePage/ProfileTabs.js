@@ -25,6 +25,10 @@ export const ProfileTabs = ({userId}) => {
     setBookshelves(loadedBookshelves);
   };
 
+  window.addEventListener('bookshelfCreated', () => {
+    fetchBookshelves();
+  });
+
   const fetchPosts = async () => {
     const profilePosts = await getPosts(uid);
     setPosts(profilePosts);
@@ -87,7 +91,7 @@ export const ProfileTabs = ({userId}) => {
               <div className="bg-white h-full">
                 {posts && posts.map((commentData) =>
                   (<div key={commentData._id}>
-                    <Comment comment={commentData}/>
+                    <Comment comment={commentData} isMyProfile={profile && (!uid || profile._id==uid)}/>
                     <div className="border-b ml-3 mr-3 border-slate-300"/>
                   </div>
                   ))}

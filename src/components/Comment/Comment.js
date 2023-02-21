@@ -5,12 +5,12 @@ import {Parent} from './Parent';
 import {getProfile, getComment, updateLikes, updateBookmarks, postNotification} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
-import {FaHeart, FaRegHeart, FaRegComment, FaBookmark, FaRegBookmark} from 'react-icons/fa';
+import {FaHeart, FaRegHeart, FaRegComment, FaBookmark, FaRegBookmark, FaTrash} from 'react-icons/fa';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
 import {IndividualBookDisplay} from './IndividualBookDisplay';
 import {Rating} from '@mui/material';
 
-export const Comment = ({comment, commentId, noParent}) => {
+export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
   const navigate = useNavigate();
   const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [profileData, setProfileData] = useState(null);
@@ -20,6 +20,8 @@ export const Comment = ({comment, commentId, noParent}) => {
   const [hasParentComment, setHasParentComment] = useState(false);
   const [hasParentBookshelf, setHasParentBookshelf] = useState(false);
   const [hasParentBook, setHasParentBook] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
+  const [originalCommentData, setOriginalCommentData] = useState(null);
 
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
@@ -109,9 +111,26 @@ export const Comment = ({comment, commentId, noParent}) => {
     getData(commentId);
   }, [commentId]);
 
+  const deleteComment = () => {
+    setIsEdited(true);
+    setOriginalCommentData(commentData);
+    setCommentData({deleted: true});
+  };
+
+  const onSaveEdit = () => {
+    setIsEdited(false);
+  };
+
+  const onCancelEdit = () => {
+    setIsEdited(false);
+    setCommentData(originalCommentData);
+  };
+
   return (
     <>
-      {!(profileData && commentData) ? <ReactLoading type="spin" color="black" /> :
+      {(!commentData || !commentData.deleted) &&
+      <div>
+        {!(profileData && commentData) ? <ReactLoading type="spin" color="black" /> :
        <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color'>
          <img src={profileData.profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(profileData._id)} />
          <div className="flex-1">
@@ -166,9 +185,27 @@ export const Comment = ({comment, commentId, noParent}) => {
                  <span></span>
                </li>
              </ul>
+
+
            </div>
          </div>
        </div>}
+      </div>}
+      {commentData && profileData && isMyProfile && <div className="flex justify-center -mt-1 mb-3">
+        {isEdited ?
+        <div>
+          <div className="text-sm italic p-3">
+            Post Deleted
+          </div>
+          <div>
+            <button className="text-sm font-bold text-green-500 rounded-full border-2 border-green-500 transform transition-colors duration-200 hover:bg-green-500 hover:text-white pt-1 pb-1 pl-2 pr-2" onClick={onSaveEdit}>Save</button>
+            <button className="ml-3 text-sm font-bold text-slate-400 rounded-full border-2 border-slate-400 transform transition-colors duration-200 hover:bg-slate-400 hover:text-white pt-1 pb-1 pl-2 pr-2" onClick={onCancelEdit}>Cancel</button>
+          </div>
+        </div> :
+               <button className="flex inline-block p-2 rounded-full bg-red-400" onClick={() => deleteComment()}>
+                 <FaTrash className="inline-block h-full text-white align-middle align-text-middle"/>
+               </button>}
+      </div>}
     </>
   );
 };

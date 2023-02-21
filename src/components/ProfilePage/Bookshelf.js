@@ -10,7 +10,7 @@ export const Bookshelf = ({bookshelfId, isProfile, bookshelfData, isMyProfile}) 
   const [originalBookshelf, setOriginalBookshelf] = useState(bookshelfData);
 
   // const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-  const format = isProfile ? 'flex w-[42rem] mx-auto justify-start content-start overflow-x-auto' : 'flex w-[36rem] mx-auto justify-start content-start overflow-x-auto';
+  const format = isProfile ? 'flex w-[42rem] mx-auto justify-start content-start overflow-x-auto' : 'flex max-w-[34rem] mx-auto justify-start content-start overflow-x-auto';
   const [isEditMode, setIsEditMode] = useState(false);
 
   const fetchBookshelf = async () => {
