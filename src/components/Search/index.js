@@ -25,6 +25,9 @@ export const Search = () => {
     // Clear results to null
     setResults(null);
     setBooks(null);
+
+    // Reset tab
+    setTabIndex(0);
   };
 
   // Hit search endpoint and manage state until results are available
