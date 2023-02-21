@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {SearchIcon} from '../../assets/Icons';
-import {searchContent} from '../../api';
+import {searchContent, searchBooks} from '../../api';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import ReactLoading from 'react-loading';
 import {UserSearchResult, BookshelfSearchResult, GroupSearchResult, BookSearchResult} from './SearchResults';
@@ -10,6 +10,7 @@ import {Comment} from '../Comment/Comment';
 export const Search = () => {
   const [searchInput, setSearchInput] = useState('');
   const [results, setResults] = useState(null);
+  const [books, setBooks] = useState(null);
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -23,6 +24,7 @@ export const Search = () => {
 
     // Clear results to null
     setResults(null);
+    setBooks(null);
   };
 
   // Hit search endpoint and manage state until results are available
@@ -40,12 +42,31 @@ export const Search = () => {
     setResults(res);
   };
 
-  // Execute the search when the user hits 'enter'
+  // Hit book search endpoint and manage state until results are available
+  const performBookSearch = async () => {
+    // Clear books to null
+    setBooks(null);
+
+    // Get search results for books
+    const res = await searchBooks(searchInput);
+
+    // Set books (will change from loading icon to results)
+    setBooks(res.books);
+  };
+
+  // Execute the content search when the user hits 'enter'
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && searchInput !== '') {
       performSearch();
     }
   };
+
+  // Execute the book search when the user clicks the 'books' tab if books is null
+  useEffect(() => {
+    if (tabIndex === 4 && books === null) {
+      performBookSearch();
+    }
+  }, [tabIndex]);
 
   return (<div>
     <div className="flex items-center space-x-5 p-3 m-3 rounded-full bg-slate-200 text-black focus-within:ring-2 focus-within:ring-primary-button focus:ring-1">
@@ -102,9 +123,9 @@ export const Search = () => {
               </Row>)): <Row>No Results</Row>}
             </TabPanel>
             <TabPanel>
-              {(results && results.books && results.books.length > 0) ? results.books.map((book, index) => (<Row key={index}>
+              {(books && books.length > 0) ? books.map((book, index) => (<Row key={index}>
                 <BookSearchResult bookInfo={book}/>
-              </Row>)) : <Row>No Results</Row>}
+              </Row>)) : books ? <Row>No Results</Row> : <ReactLoading type="spin" color="black"/>}
             </TabPanel>
           </TabPanels>
         </Tabs>
