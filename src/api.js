@@ -927,6 +927,28 @@ export const getBookClubs = async (uid) => {
 };
 
 /**
+ * Fetches top public book clubs
+ *
+ * @return {array} replies - array of book clubs / groups the user is a part of
+ */
+export const getTopClubs = async () => {
+  const response = await fetch(`${API_URL}/groups/get_top_clubs`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+  });
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_book_clubs failed');
+  }
+  return body;
+};
+
+/**
  * Returns info about a single book
  *
  * @param {string} bookId - the ID of the book to get
