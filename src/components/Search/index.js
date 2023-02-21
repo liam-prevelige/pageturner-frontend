@@ -55,7 +55,7 @@ export const Search = () => {
 
   // Execute the search when the user hits 'enter'
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && searchInput !== '') {
       performSearch();
     }
   };
