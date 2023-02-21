@@ -114,7 +114,30 @@ export const BookClubsPage = () => {
         </div>
       </div>);
     } else { // user is not logged in
-      return (<div className="font-bold text-xl mb-2 pt-30">Sign in or make an account to see your book clubs.</div>);
+      return (<div>
+        <div className="font-bold text-xl mb-2 pt-30">
+        Sign in or make an account to see your book clubs
+        </div>
+        <div>
+          {topClubs.map((groupData, index) =>
+            (<div key={index}>
+              <a href={'/group-profile?id=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg">
+                <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                  <p className="text-gray-400 text-base">
+                    {'@' + groupData.tag}
+                  </p>
+                  <p className="text-gray-700 text-base">
+                    {groupData.description}
+                  </p>
+                </div>
+              </a>
+              <div className="border-b ml-3 mr-3 border-slate-300"></div>
+            </div>
+            ))}
+        </div>
+      </div>);
     }
   };
 
