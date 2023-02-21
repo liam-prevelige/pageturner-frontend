@@ -1,6 +1,6 @@
 import {React, useState, useEffect} from 'react';
 
-import {getBookshelf} from '../../api';
+import {getBookshelf, updateBookshelf} from '../../api';
 import ReactLoading from 'react-loading';
 import {BookDisplay} from './BookDisplay';
 import {FaEdit, FaTrash} from 'react-icons/fa';
@@ -10,14 +10,20 @@ export const Bookshelf = ({bookshelfId, isProfile, bookshelfData, isMyProfile}) 
   const [originalBookshelf, setOriginalBookshelf] = useState(bookshelfData);
 
   // const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-  const format = isProfile ? 'flex max-w-2xl min-w-2xl mx-auto justify-start content-start overflow-x-auto' : 'flex max-w-xl min-w-xl mx-auto justify-start content-start overflow-x-auto';
+  const format = isProfile ? 'flex w-[42rem] mx-auto justify-start content-start overflow-x-auto' : 'flex w-[36rem] mx-auto justify-start content-start overflow-x-auto';
   const [isEditMode, setIsEditMode] = useState(false);
 
   const fetchBookshelf = async () => {
     if (!bookshelfId) return;
-    const bookshelfData = await getBookshelf(bookshelfId);
-    setBookshelf(bookshelfData);
-    setOriginalBookshelf(bookshelfData);
+    const newBookshelfData = await getBookshelf(bookshelfId);
+    if (!newBookshelfData && !bookshelf) {
+      const deletedBookshelf = {name: '[Bookshelf Deleted by Owner]', books: []};
+      setBookshelf(deletedBookshelf);
+      setOriginalBookshelf(deletedBookshelf);
+      return;
+    }
+    setBookshelf(newBookshelfData);
+    setOriginalBookshelf(newBookshelfData);
   };
 
   const deleteBook = (bid) => {
@@ -27,13 +33,19 @@ export const Bookshelf = ({bookshelfId, isProfile, bookshelfData, isMyProfile}) 
   };
 
   const deleteBookshelf = () => {
-    const emptyBookshelf = {title: '', books: []};
+    const emptyBookshelf = {name: '', books: [], isDeleted: true};
     setBookshelf(emptyBookshelf);
   };
 
   const onSaveEdit = async () => {
     await updateBookshelf(originalBookshelf._id, bookshelf);
     setIsEditMode(false);
+  };
+
+  const handleNameChange = (e) => {
+    const newBookshelf = {...bookshelf};
+    newBookshelf.name = e.target.value;
+    setBookshelf(newBookshelf);
   };
 
   const onCancelEdit = () => {
@@ -52,9 +64,17 @@ export const Bookshelf = ({bookshelfId, isProfile, bookshelfData, isMyProfile}) 
       {!bookshelf ? <ReactLoading type="spin" color="black" /> :
       <div>
         <div className="flex flex-row justify-between">
-          <div className="text-base text-black font-bold m-1">{bookshelf.name}</div>
+          {!isEditMode ?
+                    <div className="text-base text-slate-700 font-bold m-1">{bookshelf.name}</div> :
+                    <input className="text-base font-bold rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={bookshelf.name}
+                      value={bookshelf.name}
+                      onChange={handleNameChange}/>
+          }
           {isEditMode && <button className="text-sm font-bold text-red-400 rounded-full border-2 border-red-400 transform transition-colors duration-200 hover:bg-red-400 hover:text-white pt-1 pb-1 pl-2 pr-2" onClick={deleteBookshelf}>Delete Bookshelf</button>}
         </div>
+        {isMyProfile && bookshelf.books.length === 0 && !isEditMode && !bookshelf.isDeleted && <div className="text-sm text-center italic">This bookshelf is empty. Search for books on the homepage to start adding!</div>}
         <div className={format}>
           {bookshelf.books.map((bid) => (
             <div key={bid} style={{marginLeft: '5px', marginRight: '5px'}}>

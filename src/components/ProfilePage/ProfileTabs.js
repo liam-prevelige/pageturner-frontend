@@ -3,6 +3,7 @@ import {React, useState, useEffect} from 'react';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import {Comment} from '../Comment/Comment';
+import {PopoverForm} from './BookshelfPopup';
 
 import {getBookshelves, getPosts, getBookmarks, getLikedPosts} from '../../api';
 // import {PopoverForm} from './BookshelfPopup';
@@ -67,6 +68,11 @@ export const ProfileTabs = ({userId}) => {
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowY: 'auto'}}>
                 <div className="bg-white h-full">
+                  {(profile && (!uid || profile._id==uid)) &&
+                    <div className="flex border-b wrap-content mb-3 -mt-2 p-3">
+                      <PopoverForm/>
+                      <div className="ml-3 mt-1">Create Bookshelf</div>
+                    </div>}
                   {bookshelves && bookshelves.map((bookshelfData) =>
                     (<div key={bookshelfData._id}>
                       <Bookshelf bookshelfId={bookshelfData._id} isProfile={true} isMyProfile={profile && (!uid || profile._id==uid)}/>

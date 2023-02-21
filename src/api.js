@@ -898,7 +898,7 @@ export const updateBookshelf = async (bookshelfId, newBookshelf) => {
   if (!response.ok) {
     throw new Error('Call to /bookshelves/get_bookshelf failed');
   }
-  return res.bookshelf;
+  return res.success;
 };
 
 /**
