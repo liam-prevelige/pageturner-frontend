@@ -36,19 +36,6 @@ export const Search = () => {
     // Get search results for all content
     const res = await searchContent(searchInput);
 
-    // Determine which tab to show by default
-    let highestResCount = 0;
-    let initIndex = 0;
-    // IMPORTANT: the order here must match the order of tabs defined in JSX
-    const types = ['users', 'groups', 'bookshelves', 'comments', 'books'];
-    types.forEach((type, index) => {
-      if (res[type].length > highestResCount) {
-        highestResCount = res[type].length;
-        initIndex = index;
-      }
-    });
-    setTabIndex(initIndex);
-
     // Set results (will change from loading icon to results)
     setResults(res);
   };
