@@ -28,17 +28,24 @@ export const BookInfo = () => {
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
+  const [notFound, setNotFound] = useState(false);
 
   const retrieveBookFromId = async () => {
     const id = queryParams.get('id');
-    const retrievedBook = await getBook(id);
-    if (retrievedBook) {
-      fillMissingData(retrievedBook);
-      if (retrievedBook.authors.length > 3) {
-        retrievedBook.authors = retrievedBook.authors.slice(0, 3);
-        retrievedBook.authors.push('...');
+    try {
+      const retrievedBook = await getBook(id);
+      if (retrievedBook) {
+        fillMissingData(retrievedBook);
+        if (retrievedBook.authors.length > 3) {
+          retrievedBook.authors = retrievedBook.authors.slice(0, 3);
+          retrievedBook.authors.push('...');
+        }
+        setBook(retrievedBook);
+      } else {
+        setNotFound(true);
       }
-      setBook(retrievedBook);
+    } catch {
+      setNotFound(true);
     }
   };
 
@@ -104,7 +111,7 @@ export const BookInfo = () => {
 
   return (
     <>
-      {!book ? <ReactLoading type="spin" color="black" /> : (
+      {!book ? notFound ? <div>Unable to Load Resource</div> : <ReactLoading type="spin" color="black" /> : (
       <div>
         <div className='gradient_bg'>
           <BackNav />
