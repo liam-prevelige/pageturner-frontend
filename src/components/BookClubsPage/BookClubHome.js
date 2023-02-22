@@ -2,7 +2,7 @@ import {React, useEffect, useState} from 'react';
 import {ClubShareBox} from './ClubShareBox';
 import {ClubTimeline} from './ClubTimeline';
 import {useNavigate, useParams} from 'react-router-dom';
-import {getBookClub} from '../../api';
+import {getBookClub, getPostCount} from '../../api';
 import {FaArrowRight} from 'react-icons/fa';
 import {BackNav} from '../BackNav/BackNav';
 
@@ -23,6 +23,17 @@ export const BookClubHome = () => {
     const path = `/book-clubs/${clubId}/about`;
     navigate(path);
   };
+
+  const updatePostCount = async () => {
+    if (!club) return;
+    console.log('club not null');
+    const numPosts = await getPostCount(club._id, 'club');
+    setNumPosts(numPosts);
+  };
+
+  useEffect(() => {
+    updatePostCount();
+  }, [club]);
 
   useEffect(() => {
     fetchClub();
@@ -62,7 +73,7 @@ export const BookClubHome = () => {
               <ClubShareBox club={club} />
             </div>
             <div className='relative z-0'>
-              <ClubTimeline club={club} numPostsCb={setNumPosts} />
+              <ClubTimeline club={club} />
             </div>
           </div>
         </main>

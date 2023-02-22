@@ -130,7 +130,7 @@ export const GroupProfilePage = () => {
             <div className="profile">
               <div className="profile-info">
                 <div className="profile-head">
-                  <BackNav profile={profile}/>
+                  <BackNav profile={profile} type={'club'}/>
                 </div>
 
                 {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.banner_picture} /> :

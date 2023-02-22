@@ -670,6 +670,29 @@ export const getPosts = async (uid) => {
   return res.posts;
 };
 
+/**
+ * Fetches a user or club's number of posts
+ */
+export const getPostCount = async (id, type) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_post_count`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({id: id, type: type}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_posts failed');
+  }
+  return res.count;
+};
+
 
 /**
  * Fetches a user's bookmarked posts
@@ -964,7 +987,7 @@ export const getBookshelves = async (ownerId, ownerType) => {
 export const getBookClub = async (clubId) => {
   await refreshToken();
 
-  const response = await fetch(`${API_URL}/groups/get_book_clubs`, {
+  const response = await fetch(`${API_URL}/groups/get_book_club`, {
     method: 'POST',
     headers: {
       'Accept': 'application.json',

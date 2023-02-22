@@ -1,5 +1,5 @@
 import {React, useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {Share} from '../../assets/Icons';
 import {Parent} from './Parent';
 import {getProfile, getComment, updateLikes, updateBookmarks, postNotification, deleteComment} from '../../api';
@@ -12,6 +12,7 @@ import {Rating} from '@mui/material';
 
 export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
   const navigate = useNavigate();
+  const {clubId} = useParams();
   const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [profileData, setProfileData] = useState(null);
   const [commentData, setCommentData] = useState(comment);
@@ -27,7 +28,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
 
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
-    const path = `/thread/${clickedCommentData._id}`;
+    const path = clubId ? `/thread/${clubId}/${clickedCommentData._id}` : `/thread/${clickedCommentData._id}`;
     navigate(path);
   };
 

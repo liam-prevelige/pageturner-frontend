@@ -7,7 +7,7 @@ import React, {useEffect, useState} from 'react';
 import {getClubFeed} from '../../api';
 import {Comment} from '../Comment/Comment';
 
-export const ClubTimeline = ({club, numPostsCb}) => {
+export const ClubTimeline = ({club}) => {
   const [timeline, setTimeline] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddingPage, setIsAddingPage] = useState(false);
@@ -16,7 +16,6 @@ export const ClubTimeline = ({club, numPostsCb}) => {
   const fetchData = async () => {
     try {
       const newTimeline = await getClubFeed(club._id, pageNumber);
-      numPostsCb(newTimeline.length); // TODO: Make this actually work, currently based on number of pages
       setTimeline(newTimeline);
     } catch (err) {
       console.log(err);

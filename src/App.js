@@ -48,6 +48,7 @@ const App = () => {
             <Route path="/profile/:uid" element={<ProfilePage />} />
             <Route path="/group-profile" element={<GroupProfilePage />} />
             <Route path="/book-info/*" element={<BookInfo />} />
+            <Route path="/thread/:clubId/:commentIdParam" element={<ThreadView />}/>
             <Route path="/thread/:commentIdParam" element={<ThreadView />}/>
             <Route path="/notifications" element={<Notification />}/>
           </Routes>
