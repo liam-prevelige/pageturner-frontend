@@ -72,7 +72,13 @@ export const Bookshelf = ({bookshelfId, isProfile, bookshelfData, isMyProfile}) 
                       value={bookshelf.name}
                       onChange={handleNameChange}/>
           }
-          {isEditMode && <button className="text-sm font-bold text-red-400 rounded-full border-2 border-red-400 transform transition-colors duration-200 hover:bg-red-400 hover:text-white pt-1 pb-1 pl-2 pr-2" onClick={deleteBookshelf}>Delete Bookshelf</button>}
+          {isEditMode ?
+            <button className="text-sm font-bold text-red-400 rounded-full border-2 border-red-400 transform transition-colors duration-200 hover:bg-red-400 hover:text-white pt-1 pb-1 pl-2 pr-2" onClick={deleteBookshelf}>
+              Delete Bookshelf
+            </button> :
+            <div>
+              {isMyProfile && <FaEdit className="cursor-pointer w-5 h-5 fill-green-500" onClick={() => setIsEditMode(true)}/>}
+            </div>}
         </div>
         {isMyProfile && bookshelf.books.length === 0 && !isEditMode && !bookshelf.isDeleted && <div className="text-sm text-center italic">This bookshelf is empty. Search for books on the homepage to start adding!</div>}
         <div className={format}>
@@ -88,14 +94,12 @@ export const Bookshelf = ({bookshelfId, isProfile, bookshelfData, isMyProfile}) 
           ))
           }
         </div>
-        {isMyProfile &&
+        {isMyProfile && isEditMode &&
         <div className="flex m-3 justify-end">
-          {isEditMode ?
           <div>
             <button className="text-sm font-bold text-green-500 rounded-full border-2 border-green-500 transform transition-colors duration-200 hover:bg-green-500 hover:text-white pt-1 pb-1 pl-2 pr-2" onClick={onSaveEdit}>Save</button>
             <button className="ml-3 text-sm font-bold text-slate-400 rounded-full border-2 border-slate-400 transform transition-colors duration-200 hover:bg-slate-400 hover:text-white pt-1 pb-1 pl-2 pr-2" onClick={onCancelEdit}>Cancel</button>
-          </div> :
-          <FaEdit className="cursor-pointer w-5 h-5 fill-green-500" onClick={() => setIsEditMode(true)}/>}
+          </div>
         </div>}
       </div>}
     </>
