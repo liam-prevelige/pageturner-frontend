@@ -943,7 +943,7 @@ export const getBook = async (bookId) => {
 
   const body = await response.json();
   if (!response.ok) {
-    throw new Error('Call to /books/search failed');
+    throw new Error('Call to /books failed');
   }
   return body;
 };
@@ -989,6 +989,29 @@ export const searchContent = async (searchString) => {
   const body = await response.json();
   if (!response.ok) {
     throw new Error('Call to /search failed');
+  }
+  return body;
+};
+
+/**
+ * Search books
+ *
+ * @param {string} searchString - the string to search with
+ */
+export const searchBooks = async (searchString) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/search_books/${searchString}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /search_books failed');
   }
   return body;
 };
