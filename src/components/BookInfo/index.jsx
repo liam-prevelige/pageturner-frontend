@@ -30,6 +30,7 @@ export const BookInfo = () => {
   const [rating, setRating] = useState(0);
   const [notFound, setNotFound] = useState(false);
   const [ratingMissing, setRatingMissing] = useState(false);
+  const [reviewMissing, setReviewMissing] = useState(false);
 
   const retrieveBookFromId = async () => {
     const id = queryParams.get('id');
@@ -74,31 +75,28 @@ export const BookInfo = () => {
     }
   };
 
-  // Local review
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!rating) {
-      setRatingMissing(true);
-      return;
-    }
-    setReviews([...reviews, {review, rating}]);
-    setReview('');
-    setRating(0);
-    loadReviews(book.bookId);
-  };
-
   // Global review
   const submitPostCb = async () => {
-    if (review && review.length > 0) {
+    if (!rating) {
+      setRatingMissing(true);
+    }
+    if (review.length === 0) {
+      setReviewMissing(true);
+    }
+
+    if (rating && review.length > 0) {
       await postComment('global', book.bookId, 'book', review, {rating: rating});
       setReview('');
       setRating(0);
+      loadReviews(book.bookId);
     }
   };
 
   const loadReviews = async (newBookId) => {
     if (!newBookId) return;
-    setReviews(await getReplies(newBookId));
+    let newReviews = await getReplies(newBookId);
+    newReviews = newReviews.sort((a, b) => new Date(b.metadata.timestamp) - new Date(a.metadata.timestamp));
+    setReviews(newReviews);
   };
 
   useEffect(() => {
@@ -156,9 +154,12 @@ export const BookInfo = () => {
             </div>}
           </div>
 
-          {loggedIn && <form onSubmit={handleSubmit}>
+          {loggedIn &&
             <div className="form-group m-2">
-              <textarea placeholder='Add a review' className="form-control resize-none bg-gray-100 p-2" rows="2" value={review} onChange={(event) => setReview(event.target.value)} />
+              <textarea placeholder='Add a review' className="form-control resize-none bg-gray-100 p-2" rows="2" value={review}
+                onChange={(event) => {
+                  setReview(event.target.value); setReviewMissing(false);
+                }} />
               <div className="m-1">
                 <Rating
                   name="simple-controlled"
@@ -170,15 +171,16 @@ export const BookInfo = () => {
                 />
               </div>
               {ratingMissing && <div>Please provide a star rating to post this review.</div>}
+              {reviewMissing && <div>Please provide text for this review.</div>}
               <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>Post Review</button>
             </div>
-          </form>}
+          }
 
           <div className="mt-4">
             <p className='font-semibold text-lg mb-2'>Reviews on PageTurner</p>
             <div className="bg-slate-100 rounded p-2">
-              {reviews.map((review, index) =>
-                (<div key={index}>
+              {reviews.map((review) =>
+                (<div key={review._id}>
                   <Comment comment={review} noParent={true}/>
                   <div className="border-b ml-3 mr-3 border-slate-300"></div>
                 </div>
