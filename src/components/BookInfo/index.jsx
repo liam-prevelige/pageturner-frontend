@@ -29,6 +29,7 @@ export const BookInfo = () => {
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
   const [notFound, setNotFound] = useState(false);
+  const [ratingMissing, setRatingMissing] = useState(false);
 
   const retrieveBookFromId = async () => {
     const id = queryParams.get('id');
@@ -76,6 +77,10 @@ export const BookInfo = () => {
   // Local review
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!rating) {
+      setRatingMissing(true);
+      return;
+    }
     setReviews([...reviews, {review, rating}]);
     setReview('');
     setRating(0);
@@ -160,9 +165,11 @@ export const BookInfo = () => {
                   value={rating}
                   onChange={(event) => {
                     setRating(parseInt(event.target.value));
+                    setRatingMissing(false);
                   }}
                 />
               </div>
+              {ratingMissing && <div>Please provide a star rating to post this review.</div>}
               <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>Post Review</button>
             </div>
           </form>}
