@@ -1,5 +1,5 @@
 import {React, useState, useEffect} from 'react';
-import {getBookClubs, createGroup} from '../../api';
+import {getBookClubs, getTopClubs, createGroup} from '../../api';
 import ReactGA from 'react-ga';
 
 export const BookClubsPage = () => {
@@ -8,6 +8,7 @@ export const BookClubsPage = () => {
   const [newTag, setNewTag] = useState('');
   const [tagExists, setTagExists] = useState(false);
   const [bookClubs, setBookClubs] = useState([]);
+  const [topClubs, setTopClubs] = useState([]);
 
   /**
    * fake book club account for backup/development purposes
@@ -41,12 +42,22 @@ export const BookClubsPage = () => {
   };
 
   /**
+  * Gets the top public book clubs
+  */
+  const retrieveTopClubs = async () => {
+    const response = await getTopClubs();
+    const retrievedBookClubs = response['result'];
+    setTopClubs(retrievedBookClubs);
+  };
+
+  /**
    * finds the user's book clubs every time the page loads
    */
   useEffect(() => {
     if (storedProfile) {
       retrieveBookClubsFromUid();
     }
+    retrieveTopClubs();
     ReactGA.pageview(window.location.pathname);
   }, []);
 
@@ -77,9 +88,55 @@ export const BookClubsPage = () => {
           ))
       );
     } else if (storedProfile && bookClubs.length == 0) { // user is logged in but has no book clubs
-      return (<div className="font-bold text-xl mb-2 pt-30">You are not in any book clubs. Join one or create your own!</div>);
+      return (<div>
+        <div className="font-bold text-xl mb-2 pt-30">
+          You are not in any book clubs. Join one or create your own! Here are the most popular:
+        </div>
+        <div>
+          {topClubs.map((groupData, index) =>
+            (<div key={index}>
+              <a href={'/group-profile?id=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg">
+                <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                  <p className="text-gray-400 text-base">
+                    {'@' + groupData.tag}
+                  </p>
+                  <p className="text-gray-700 text-base">
+                    {groupData.description}
+                  </p>
+                </div>
+              </a>
+              <div className="border-b ml-3 mr-3 border-slate-300"></div>
+            </div>
+            ))}
+        </div>
+      </div>);
     } else { // user is not logged in
-      return (<div className="font-bold text-xl mb-2 pt-30">Sign in or make an account to see your book clubs.</div>);
+      return (<div>
+        <div className="font-bold text-xl mb-2 pt-30">
+        Sign in or make an account to see your book clubs. Here are the most popular:
+        </div>
+        <div>
+          {topClubs.map((groupData, index) =>
+            (<div key={index}>
+              <a href={'/group-profile?id=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg">
+                <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                  <p className="text-gray-400 text-base">
+                    {'@' + groupData.tag}
+                  </p>
+                  <p className="text-gray-700 text-base">
+                    {groupData.description}
+                  </p>
+                </div>
+              </a>
+              <div className="border-b ml-3 mr-3 border-slate-300"></div>
+            </div>
+            ))}
+        </div>
+      </div>);
     }
   };
 
