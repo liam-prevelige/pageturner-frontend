@@ -9,6 +9,7 @@ import {FaHeart, FaRegHeart, FaRegComment, FaBookmark, FaRegBookmark, FaTrash, F
 import {Bookshelf} from '../ProfilePage/Bookshelf';
 import {IndividualBookDisplay} from './IndividualBookDisplay';
 import {Rating} from '@mui/material';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
   const [originalCommentData, setOriginalCommentData] = useState(null);
   const [isDeleted, setIsDeleted] = useState(!comment && !commentId);
   const [footerOpen, setFooterOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
@@ -143,9 +145,12 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
     setFooterOpen(!footerOpen);
   };
 
-  // useEffect(() => {
-  //   console.log('isDeleted', isDeleted);
-  // }, [isDeleted]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
 
   return (
     <>
@@ -208,7 +213,9 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
 
                 <li className="flex items-center text-sm space-x-0 text-primary-gray_colors group cursor-pointer">
                   <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-tweets_hover_colors1 cursor-pointer">
-                    <Share/>
+                    <CopyToClipboard text={`https://pageturner.herokuapp.com/thread/${commentData._id}`} onCopy={() => setCopied(true)}>
+                      <button>{copied ? <div className="m-2">Link Copied</div> : <Share />}</button>
+                    </CopyToClipboard>
                   </div>
                   <span></span>
                 </li>
