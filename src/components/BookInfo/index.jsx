@@ -127,7 +127,7 @@ export const BookInfo = () => {
                   precision={0.5}
                   readOnly
                 />
-                <BookshelfPopup/>
+                <BookshelfPopup bid={book.bookId} useIcon={false}/>
               </div>
             </div>
             {isCollapsed && <div>

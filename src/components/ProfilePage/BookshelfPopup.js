@@ -26,6 +26,7 @@ const Form = ({firstFieldRef, onCancel}) => {
 
   const submitBookshelf = async () => {
     await createBookshelf(name, profile._id, 'user');
+    window.dispatchEvent(new Event('bookshelfCreated'));
     onCancel();
   };
 
@@ -61,12 +62,13 @@ export const PopoverForm = () => {
         onOpen={onOpen}
         onClose={onClose}
         placement='right'
-        closeOnBlur={false}
+        closeOnBlur={true}
+        className="relative z-20"
       >
         <PopoverTrigger>
           <IconButton size='sm' icon={<FaPlus />} />
         </PopoverTrigger>
-        <PopoverContent p={5}>
+        <PopoverContent p={5} zIndex={50}>
           <FocusLock returnFocus persistentFocus={false}>
             <PopoverArrow />
             <PopoverCloseButton />

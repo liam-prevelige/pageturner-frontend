@@ -3,6 +3,7 @@ import {React, useState, useEffect} from 'react';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import {Comment} from '../Comment/Comment';
+import {PopoverForm} from './BookshelfPopup';
 
 import {getBookshelves, getPosts, getBookmarks, getLikedPosts} from '../../api';
 // import {PopoverForm} from './BookshelfPopup';
@@ -23,6 +24,10 @@ export const ProfileTabs = ({userId}) => {
     const loadedBookshelves = await getBookshelves(uid, 'user');
     setBookshelves(loadedBookshelves);
   };
+
+  window.addEventListener('bookshelfCreated', () => {
+    fetchBookshelves();
+  });
 
   const fetchPosts = async () => {
     const profilePosts = await getPosts(uid);
@@ -66,10 +71,15 @@ export const ProfileTabs = ({userId}) => {
             {/* Bookshelves Tab */}
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowY: 'auto'}}>
-                <div className="bg-white h-full">
+                <div className="bg-white h-full w-[42rem] min-h-[16rem]">
+                  {(profile && (!uid || profile._id==uid)) &&
+                    <div className="flex border-b mb-3 -mt-2 p-3 relative z-50 wrap-content">
+                      <PopoverForm/>
+                      <div className="ml-3 mt-1">Create Bookshelf</div>
+                    </div>}
                   {bookshelves && bookshelves.map((bookshelfData) =>
                     (<div key={bookshelfData._id}>
-                      <Bookshelf bookshelfId={bookshelfData._id} isProfile={true}/>
+                      <Bookshelf bookshelfId={bookshelfData._id} isProfile={true} isMyProfile={profile && (!uid || profile._id==uid)}/>
                       <div className="border-b m-3 border-slate-300"/>
                     </div>
                     ))}
@@ -81,7 +91,7 @@ export const ProfileTabs = ({userId}) => {
               <div className="bg-white h-full">
                 {posts && posts.map((commentData) =>
                   (<div key={commentData._id}>
-                    <Comment comment={commentData}/>
+                    <Comment comment={commentData} isMyProfile={profile && (!uid || profile._id==uid)}/>
                     <div className="border-b ml-3 mr-3 border-slate-300"/>
                   </div>
                   ))}
