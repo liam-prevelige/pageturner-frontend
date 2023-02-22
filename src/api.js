@@ -594,6 +594,33 @@ export const getComment = async (id) => {
   return body.comment;
 };
 
+// Deletes a comment from the database
+// Note: this will be an issue with likedPosts, bookmarks, and feed. We need to delete the comment from all of these somehow or change architecture
+// Note: For now, we just skip nonexistent comments in UI
+export const deleteComment = async (id) => {
+  await refreshToken();
+
+  if (!id) {
+    throw new Error('No id provided');
+  }
+  const response = await fetch(`${API_URL}/comments/delete_comment`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({id: id}),
+  });
+
+  const body = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /comments/delete_comment failed');
+  }
+  return body.success;
+};
+
 /**
  * Fetches profile information
  *

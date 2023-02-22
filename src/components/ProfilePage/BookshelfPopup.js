@@ -63,11 +63,12 @@ export const PopoverForm = () => {
         onClose={onClose}
         placement='right'
         closeOnBlur={true}
+        className="relative z-20"
       >
         <PopoverTrigger>
           <IconButton size='sm' icon={<FaPlus />} />
         </PopoverTrigger>
-        <PopoverContent p={5}>
+        <PopoverContent p={5} zIndex={50}>
           <FocusLock returnFocus persistentFocus={false}>
             <PopoverArrow />
             <PopoverCloseButton />

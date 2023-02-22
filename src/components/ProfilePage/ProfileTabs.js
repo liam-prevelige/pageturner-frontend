@@ -71,9 +71,9 @@ export const ProfileTabs = ({userId}) => {
             {/* Bookshelves Tab */}
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowY: 'auto'}}>
-                <div className="bg-white h-full">
+                <div className="bg-white h-full w-[42rem] min-h-[16rem]">
                   {(profile && (!uid || profile._id==uid)) &&
-                    <div className="flex border-b wrap-content mb-3 -mt-2 p-3">
+                    <div className="flex border-b mb-3 -mt-2 p-3 relative z-50 wrap-content">
                       <PopoverForm/>
                       <div className="ml-3 mt-1">Create Bookshelf</div>
                     </div>}

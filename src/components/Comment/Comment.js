@@ -2,10 +2,10 @@ import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Share} from '../../assets/Icons';
 import {Parent} from './Parent';
-import {getProfile, getComment, updateLikes, updateBookmarks, postNotification} from '../../api';
+import {getProfile, getComment, updateLikes, updateBookmarks, postNotification, deleteComment} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
-import {FaHeart, FaRegHeart, FaRegComment, FaBookmark, FaRegBookmark, FaTrash} from 'react-icons/fa';
+import {FaHeart, FaRegHeart, FaRegComment, FaBookmark, FaRegBookmark, FaTrash, FaEdit} from 'react-icons/fa';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
 import {IndividualBookDisplay} from './IndividualBookDisplay';
 import {Rating} from '@mui/material';
@@ -22,6 +22,8 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
   const [hasParentBook, setHasParentBook] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
   const [originalCommentData, setOriginalCommentData] = useState(null);
+  const [isDeleted, setIsDeleted] = useState(!comment && !commentId);
+  const [footerOpen, setFooterOpen] = useState(false);
 
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
@@ -63,6 +65,11 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
     setProfileData(null);
     setCommentData(null);
     const comment = await getComment(cId);
+    console.log(comment);
+    if (!comment) {
+      setIsDeleted(true);
+      return;
+    }
     const profile = await getProfile(comment.uid);
     setProfileData(profile);
     setCommentData(comment);
@@ -111,87 +118,106 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
     getData(commentId);
   }, [commentId]);
 
-  const deleteComment = () => {
+  const deleteCommentCb = () => {
     setIsEdited(true);
     setOriginalCommentData(commentData);
-    setCommentData({deleted: true});
+    setIsDeleted(true);
   };
 
-  const onSaveEdit = () => {
+  const onSaveEdit = async () => {
+    await deleteComment(originalCommentData._id);
+    setProfileData(null);
     setIsEdited(false);
+    setFooterOpen(false);
   };
 
   const onCancelEdit = () => {
     setIsEdited(false);
     setCommentData(originalCommentData);
+    setFooterOpen(false);
+    setIsDeleted(false);
   };
+
+  const handleEditCb = (e) => {
+    e.stopPropagation();
+    setFooterOpen(!footerOpen);
+  };
+
+  // useEffect(() => {
+  //   console.log('isDeleted', isDeleted);
+  // }, [isDeleted]);
 
   return (
     <>
-      {(!commentData || !commentData.deleted) &&
+      {!isDeleted &&
       <div>
         {!(profileData && commentData) ? <ReactLoading type="spin" color="black" /> :
-       <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color'>
-         <img src={profileData.profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(profileData._id)} />
-         <div className="flex-1">
-           <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadUserProfile(profileData._id)}>
-             <span className="ml-1 font-bold text-black">{profileData.name}</span>
-             <span className="ml-2 text-primary-gray_colors">@{profileData.tag}</span>
-             <span className="text-primary-gray_colors">• {formatDistance(new Date(commentData.metadata.timestamp), new Date())} ago</span>
-           </div>
-           <div className="ml-1 cursor-pointer">
-             <div className="items-center text-black overflow-hidden" onClick={(e) => loadThread(e, commentData)}>
-               {commentData.rating && <div className="mt-2">
-                 <Rating
-                   name="read-only"
-                   readOnly
-                   value={commentData.rating || 0}
-                 />
-               </div>}
-               {commentData.text}
-               {/* Created parent class vs using comment again to prevent issues with recursive calls */}
-               {hasParentComment && <Parent comment={commentData.parent}/>}
-               {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><Bookshelf bookshelfId={commentData.pid}/></div>}
-               {hasParentBook && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><IndividualBookDisplay bid={commentData.pid}/></div>}
-             </div>
+        <div className='flex flex-row space-x-3 px-4 py-3 border-primary-container_border_color'>
+          <img src={profileData.profilePicture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadUserProfile(profileData._id)} />
+          <div className="flex flex-col w-full">
+            <div className="flex cursor-pointer" onClick={() => loadUserProfile(profileData._id)}>
+              <div className="flex flex-row justify-between text-sm w-full">
+                <div className="flex flex-row space-x-2">
+                  <span className="ml-1 font-bold text-black">{profileData.name}</span>
+                  <span className="ml-2 text-primary-gray_colors">@{profileData.tag}</span>
+                  <span className="text-primary-gray_colors">• {formatDistance(new Date(commentData.metadata.timestamp), new Date())} ago</span>
+                </div>
+                <div className="flex flex-row align-text-end justify-end align-end">
+                  {myProfile && commentData && commentData.uid === myProfile._id && <FaEdit className="w-6 h-4 text-green-500" onClick={(e) => handleEditCb(e)}/>}
+                </div>
+              </div>
+            </div>
+            <div className="ml-1 cursor-pointer">
+              <div className="items-center text-black overflow-hidden" onClick={(e) => loadThread(e, commentData)}>
+                {commentData.rating && <div className="mt-2">
+                  <Rating
+                    name="read-only"
+                    readOnly
+                    value={commentData.rating || 0}
+                  />
+                </div>}
+                {commentData.text}
+                {/* Created parent class vs using comment again to prevent issues with recursive calls */}
+                {hasParentComment && <Parent comment={commentData.parent}/>}
+                {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><Bookshelf bookshelfId={commentData.pid}/></div>}
+                {hasParentBook && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><IndividualBookDisplay bid={commentData.pid}/></div>}
+              </div>
 
-             <ul className="flex justify-between mt-2">
-               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
-                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
-                   {isLiked && <FaHeart className="fill-primary-like stroke-2 w-5 h-5"/>}
-                   {!isLiked && <FaRegHeart className="w-5 h-5"/>}
-                 </div>
-                 <span>{commentData.metadata.likes}</span>
-               </li>
+              <ul className="flex justify-between mt-2">
+                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-like group cursor-pointer">
+                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-like_hover cursor-pointer" onClick={(e) => updateLikesCb(e)}>
+                    {isLiked && <FaHeart className="fill-primary-like stroke-2 w-5 h-5"/>}
+                    {!isLiked && <FaRegHeart className="w-5 h-5"/>}
+                  </div>
+                  <span>{commentData.metadata.likes}</span>
+                </li>
 
-               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-reply group cursor-pointer" onClick={(e) => loadThread(e, commentData)}>
-                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-reply_hover">
-                   <FaRegComment className="w-5 h-5"/>
-                 </div>
-                 <span>{commentData.metadata.replies}</span>
-               </li>
+                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-reply group cursor-pointer" onClick={(e) => loadThread(e, commentData)}>
+                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-reply_hover">
+                    <FaRegComment className="w-5 h-5"/>
+                  </div>
+                  <span>{commentData.metadata.replies}</span>
+                </li>
 
-               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-retweet group cursor-pointer">
-                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-retweet_hover" onClick={(e) => updateBookmarksCb(e)}>
-                   {isBookmarked && <FaBookmark className="fill-primary-retweet w-5 h-5"/>}
-                   {!isBookmarked && <FaRegBookmark className="w-5 h-5"/>}
-                 </div>
-               </li>
+                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors hover:text-primary-retweet group cursor-pointer">
+                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-retweet_hover" onClick={(e) => updateBookmarksCb(e)}>
+                    {isBookmarked && <FaBookmark className="fill-primary-retweet w-5 h-5"/>}
+                    {!isBookmarked && <FaRegBookmark className="w-5 h-5"/>}
+                  </div>
+                </li>
 
-               <li className="flex items-center text-sm space-x-0 text-primary-gray_colors group cursor-pointer">
-                 <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-tweets_hover_colors1 cursor-pointer">
-                   <Share/>
-                 </div>
-                 <span></span>
-               </li>
-             </ul>
-
-
-           </div>
-         </div>
-       </div>}
+                <li className="flex items-center text-sm space-x-0 text-primary-gray_colors group cursor-pointer">
+                  <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-tweets_hover_colors1 cursor-pointer">
+                    <Share/>
+                  </div>
+                  <span></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>}
       </div>}
-      {commentData && profileData && isMyProfile && <div className="flex justify-center -mt-1 mb-3">
+      {footerOpen && <div className="flex justify-center -mt-1 mb-3">
         {isEdited ?
         <div>
           <div className="text-sm italic p-3">
@@ -202,7 +228,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
             <button className="ml-3 text-sm font-bold text-slate-400 rounded-full border-2 border-slate-400 transform transition-colors duration-200 hover:bg-slate-400 hover:text-white pt-1 pb-1 pl-2 pr-2" onClick={onCancelEdit}>Cancel</button>
           </div>
         </div> :
-               <button className="flex inline-block p-2 rounded-full bg-red-400" onClick={() => deleteComment()}>
+               <button className="flex inline-block p-2 rounded-full bg-red-400" onClick={deleteCommentCb}>
                  <FaTrash className="inline-block h-full text-white align-middle align-text-middle"/>
                </button>}
       </div>}

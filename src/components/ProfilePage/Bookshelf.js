@@ -65,7 +65,7 @@ export const Bookshelf = ({bookshelfId, isProfile, bookshelfData, isMyProfile}) 
       <div>
         <div className="flex flex-row justify-between">
           {!isEditMode ?
-                    <div className="text-base text-slate-700 font-bold m-1">{bookshelf.name}</div> :
+                    <div className="text-base text-black font-bold m-1">{bookshelf.name}</div> :
                     <input className="text-base font-bold rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={bookshelf.name}
