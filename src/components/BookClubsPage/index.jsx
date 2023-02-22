@@ -47,7 +47,6 @@ export const BookClubsPage = () => {
   const retrieveTopClubs = async () => {
     const response = await getTopClubs();
     const retrievedBookClubs = response['result'];
-    console.log(retrievedBookClubs);
     setTopClubs(retrievedBookClubs);
   };
 
