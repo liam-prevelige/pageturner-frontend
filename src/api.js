@@ -981,6 +981,32 @@ export const getBookClub = async (clubId) => {
   return res.result;
 };
 
+/**
+ * Fetches feed for a given book club
+ *
+ * @param {string} clubId - club id
+ * @param {string} pageNumber - page number
+ * @return {array} feed - array of posts in the club feed
+ */
+export const getClubFeed = async (clubId, pageNumber) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/groups/get_club_feed`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({clubId: clubId, pageNumber: pageNumber}),
+  });
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_club_feed failed');
+  }
+  return res.feed;
+};
 
 /**
  * Fetches book clubs that a user is a member of, given the user's id

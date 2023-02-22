@@ -10,6 +10,7 @@ export const BookClubHome = () => {
   const navigate = useNavigate();
   const {clubId} = useParams();
   const [club, setClub] = useState(null);
+  const [numPosts, setNumPosts] = useState(0);
 
   const fetchClub = async () => {
     if (!clubId) return;
@@ -33,7 +34,7 @@ export const BookClubHome = () => {
       {club && <div className="min-h-screen max-w-7xl flex">
         <main className="flex-1 flex flex-col">
           <div className="h-full border-r w-full border-l">
-            <div className="sticky top-0 z-10 flex flex-row w-full justify-between border-slate-300 border-b border-slate-300 p-4" style={{backgroundImage: `url(\'${club.banner_picture}\')`, backgroundSize: 'cover'}}>
+            <div className="sticky top-0 z-20 flex flex-row w-full justify-between border-slate-300 border-b border-slate-300 p-4" style={{backgroundImage: `url(\'${club.banner_picture}\')`, backgroundSize: 'cover'}}>
               <div className='flex flex-col bg-white rounded p-3'>
                 <div className="font-bold text-3xl text-black mb-1">
                   {club.name}
@@ -42,7 +43,7 @@ export const BookClubHome = () => {
                   @{club.tag}
                 </div>
                 <div className="text-sm text-slate-600">
-                  {club.members.length} Members&nbsp; • &nbsp;{club.members.length} Posts
+                  {club.members.length} Members&nbsp; • &nbsp;{numPosts} Posts
                 </div>
               </div>
               <div className="flex flex-col justify-center cursor-pointer" onClick={(e) => loadClubProfile(e)}>
@@ -57,11 +58,11 @@ export const BookClubHome = () => {
                 Recent Activity
               </div>
             </div>
-            <div className="relative z-0 flex space-x-4 px-4 py-2 border-b border-slate-300">
+            <div className="relative z-10 flex space-x-4 px-4 py-2 border-b border-slate-300">
               <ClubShareBox club={club} />
             </div>
             <div className='relative z-0'>
-              <ClubTimeline club={club} />
+              <ClubTimeline club={club} numPostsCb={setNumPosts} />
             </div>
           </div>
         </main>

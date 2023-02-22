@@ -16,7 +16,7 @@ export const ClubShareBox = ({club}) => {
   const submitPostCb = async () => {
     if (postText && postText.length > 0) {
       // (scope, pid, ptype, text)
-      await postComment(club._id, pid, ptype, postText);
+      await postComment(club._id, pid, ptype, postText, {subtext: 'Posted in ' + club.name});
       window.dispatchEvent(new Event('newClubPost'));
       // Reset state
       setPostText('');

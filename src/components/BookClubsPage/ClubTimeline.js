@@ -4,25 +4,19 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import {getFeed, getGlobalFeed} from '../../api';
+import {getClubFeed} from '../../api';
 import {Comment} from '../Comment/Comment';
 
-export const ClubTimeline = ({club}) => {
+export const ClubTimeline = ({club, numPostsCb}) => {
   const [timeline, setTimeline] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddingPage, setIsAddingPage] = useState(false);
-  const [globalPageNumber, setGlobalPageNumber] = useState(0);
-  const [privatePageNumber, setPrivatePageNumber] = useState(0);
-  const [isPrivateTimeline, setIsPrivateTimeline] = useState(false);
+  const [pageNumber, setPageNumber] = useState(0);
 
   const fetchData = async () => {
     try {
-      let newTimeline = null;
-      if (isPrivateTimeline) {
-        newTimeline = await getFeed(privatePageNumber);
-      } else {
-        newTimeline = await getGlobalFeed(globalPageNumber);
-      }
+      const newTimeline = await getClubFeed(club._id, pageNumber);
+      numPostsCb(newTimeline.length); // TODO: Make this actually work, currently based on number of pages
       setTimeline(newTimeline);
     } catch (err) {
       console.log(err);
@@ -32,7 +26,7 @@ export const ClubTimeline = ({club}) => {
   // Create event listener for newPost in sessionStorage
   window.addEventListener('newClubPost', () => {
     if (!isLoading) {
-      setGlobalPageNumber(0);
+      setPageNumber(0);
       setIsLoading(true);
     }
   });
@@ -43,34 +37,13 @@ export const ClubTimeline = ({club}) => {
     }
   });
 
-  window.addEventListener('timelineChange', function(e) {
-    setIsPrivateTimeline(e.detail);
-    if (!isLoading) {
-      if (isPrivateTimeline) {
-        setPrivatePageNumber(0);
-      } else {
-        setGlobalPageNumber(0);
-      }
-      setIsLoading(true);
-    }
-  });
-
   const getNewTimelinePage = async () => {
     try {
-      if (isPrivateTimeline) {
-        const newTimelinePage = await getFeed(privatePageNumber+1);
-        const newTimeline = timeline.concat(newTimelinePage);
-        setTimeline(newTimeline);
-        if (newTimelinePage.length > 0) {
-          setPrivatePageNumber(privatePageNumber+1);
-        }
-      } else {
-        const newTimelinePage = await getGlobalFeed(globalPageNumber+1);
-        const newTimeline = timeline.concat(newTimelinePage);
-        setTimeline(newTimeline);
-        if (newTimelinePage.length > 0) {
-          setGlobalPageNumber(globalPageNumber+1);
-        }
+      const newTimelinePage = await getClubFeed(club._id, pageNumber+1);
+      const newTimeline = timeline.concat(newTimelinePage);
+      setTimeline(newTimeline);
+      if (newTimelinePage.length > 0) {
+        setPrivatePageNumber(pageNumber+1);
       }
     } catch (err) {
       console.log(err);
