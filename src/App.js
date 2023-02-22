@@ -40,6 +40,7 @@ const App = () => {
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route path='/book-clubs' element={<BookClubsPage />} />
+            <Route path='/book-clubs/:clubId' element={<BookClubsPage />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/:uid" element={<ProfilePage />} />

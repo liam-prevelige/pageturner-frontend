@@ -13,7 +13,7 @@ export const ShareBox = () => {
   const [pid, setPid] = useState('');
   const [ptype, setPtype] = useState('');
 
-  const placeholderText = profile ? 'What have you been reading?' : 'Sign in to share your thoughts!';
+  const placeholderText = profile ? 'Share your thoughts!' : 'Sign in to share your thoughts!';
 
   const submitPostCb = async () => {
     if (postText && postText.length > 0) {

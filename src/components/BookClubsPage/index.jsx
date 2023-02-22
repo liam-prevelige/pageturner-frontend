@@ -1,13 +1,17 @@
 import {React, useState, useEffect} from 'react';
 import {getBookClubs, createGroup} from '../../api';
+import {useNavigate} from 'react-router-dom';
 import ReactGA from 'react-ga';
 
 export const BookClubsPage = () => {
+  const navigate = useNavigate();
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [creatingGroup, setCreatingGroup] = useState(false);
   const [newTag, setNewTag] = useState('');
   const [tagExists, setTagExists] = useState(false);
   const [bookClubs, setBookClubs] = useState([]);
+  const [leftColumn, setLeftColumn] = useState([]);
+  const [rightColumn, setRightColumn] = useState([]);
 
   /**
    * fake book club account for backup/development purposes
@@ -40,6 +44,29 @@ export const BookClubsPage = () => {
     }
   };
 
+  const loadBookClubHome = (e, clubId) => {
+    e.stopPropagation();
+    const path = `/thread/${clubId}`;
+    navigate(path);
+  };
+
+  // Split bookClubs into two maps of alternating indexes for each column
+  useEffect(() => {
+    if (bookClubs.length > 0) {
+      const leftColumn = [];
+      const rightColumn = [];
+      for (let i = 0; i < bookClubs.length; i++) {
+        if (i % 2 === 0) {
+          leftColumn.push(bookClubs[i]);
+        } else {
+          rightColumn.push(bookClubs[i]);
+        }
+      }
+      setLeftColumn(leftColumn);
+      setRightColumn(rightColumn);
+    }
+  }, [bookClubs]);
+
   /**
    * finds the user's book clubs every time the page loads
    */
@@ -58,23 +85,45 @@ export const BookClubsPage = () => {
   const renderGroups = (bookClubs) => {
     if (storedProfile && bookClubs.length > 0) { // if the user is logged in and has book clubs
       return (
-        bookClubs.map((groupData, index) =>
-          (<div key={index}>
-            <a href={'/group-profile?id=' + groupData._id} className="block rounded overflow-hidden bg-white shadow-lg">
-              <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                <p className="text-gray-400 text-base">
-                  {'@' + groupData.tag}
-                </p>
-                <p className="text-gray-700 text-base">
-                  {groupData.description}
-                </p>
+        <div className="row flex justify-center align-middle w-full">
+          <div className="col-md-6 flex flex-col w-1/2">
+            {leftColumn.map((groupData) =>
+              (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
+                <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
+                  <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                    <p className="text-gray-400 text-base">
+                      {'@' + groupData.tag}
+                    </p>
+                    <p className="text-gray-700 text-base">
+                      {groupData.description}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </a>
-            <div className="border-b ml-3 mr-3 border-slate-300"></div>
+              ))}
           </div>
-          ))
+          <div className="col-md-6 flex flex-col w-1/2">
+            {rightColumn.map((groupData) =>
+              (<div key={groupData._id} className="mb-3 w-full">
+                <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3" onClick={(e) => loadBookClubHome(e, groupData._id)}>
+                  <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                    <p className="text-gray-400 text-base">
+                      {'@' + groupData.tag}
+                    </p>
+                    <p className="text-gray-700 text-base">
+                      {groupData.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              ))}
+          </div>
+        </div>
+
       );
     } else if (storedProfile && bookClubs.length == 0) { // user is logged in but has no book clubs
       return (<div className="font-bold text-xl mb-2 pt-30">You are not in any book clubs. Join one or create your own!</div>);
@@ -153,9 +202,14 @@ export const BookClubsPage = () => {
         );
       } else { // user is logged in but not creating a group
         return (
-          <button className="w-full mt-3 mr-3 text-green-500 rounded-full shadow-md py-2 px-4 border-2 border-green-500 transform transition-colors duration-500 hover:bg-green-500 hover:text-white" onClick={toggleCreatingGroup}>
-            Create Group
-          </button>
+          <div className="flex flex-row w-full justify-between border-slate-300 border-b border-slate-300 p-4">
+            <div className="bg-white font-bold text-3xl text-black">
+              Book Clubs
+            </div>
+            <button className="wrap-text mr-3 text-green-500 rounded-full shadow-md py-2 px-4 border-2 border-green-500 transform transition-colors duration-200 hover:bg-green-500 hover:text-white" onClick={toggleCreatingGroup}>
+              Create Group
+            </button>
+          </div>
         );
       }
     } else { // user is not logged in
@@ -164,10 +218,10 @@ export const BookClubsPage = () => {
   };
 
   return (
-    <div className="bg-slate-100 h-full bg-white pt-10">
+    <div className="h-full bg-white pt-10">
       {renderCreateGroup()}
       <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
-        <div className="bg-slate-100 h-full bg-white pt-10">
+        <div className="h-full w-full bg-white pt-10">
           {renderGroups(bookClubs)}
         </div>
       </div>
