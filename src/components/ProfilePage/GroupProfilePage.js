@@ -4,7 +4,7 @@ import {BackNav} from '../BackNav/BackNav';
 import {ClubTimeline} from '../BookClubsPage/ClubTimeline';
 import {FaFileUpload} from 'react-icons/fa';
 import {useParams} from 'react-router-dom';
-import {changeClubMember, getProfilesFromIds} from '../../api';
+import {changeClubMember, getProfilesFromIds, updateGroupProfile} from '../../api';
 import {getGroupProfile} from '../../api';
 import ReactGA from 'react-ga';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
@@ -84,18 +84,13 @@ export const GroupProfilePage = () => {
     setNewProfile({...newProfile, description: e.target.value});
   };
 
-  // TODO: Use variable to remove duplicate code for both images
   const handleCoverPicChange = (newImage) => {
-    // Convert image to base64 encoded binary data and save in newProfile
+    // Convert image to base64 encoded binary data and save in newEditedProfile
     const file = newImage;
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64Image = reader.result;
-      if (isGroup) {
-        setNewProfile({...newProfile, banner_picture: base64Image});
-      } else {
-        setNewProfile({...newProfile, cover: base64Image});
-      }
+      setNewProfile({...newProfile, banner_picture: base64Image});
     };
     reader.readAsDataURL(file);
   };
@@ -163,7 +158,7 @@ export const GroupProfilePage = () => {
                 {!isEditMode ? <img className="h-64 w-full object-cover rounded" src={profile.banner_picture} /> :
                     (
                         <div className="h-64 w-full object-cover">
-                          <img className="h-64 w-full object-cover" src={newProfile.cover} />
+                          <img className="h-64 w-full object-cover" src={newProfile.banner_picture} />
 
                           <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
                             <div className="flex flex-col justify-center">

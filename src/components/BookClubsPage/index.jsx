@@ -106,8 +106,8 @@ export const BookClubsPage = () => {
           </div>
           <div className="col-md-6 flex flex-col w-1/2">
             {rightColumn.map((groupData) =>
-              (<div key={groupData._id} className="mb-3 w-full">
-                <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3" onClick={(e) => loadBookClubHome(e, groupData._id)}>
+              (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
+                <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
                   <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
                   <div className="px-6 py-4">
                     <div className="font-bold text-xl mb-2">{groupData.name}</div>
