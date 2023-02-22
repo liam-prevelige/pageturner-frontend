@@ -12,6 +12,8 @@ export const ClubShareBox = ({club}) => {
   const [attachedBookshelf, setAttachedBookshelf] = useState({});
   const [pid, setPid] = useState('');
   const [ptype, setPtype] = useState('');
+  const canPost = profile && club.members.includes(profile._id);
+  const placeholderText = canPost ? 'Share your thoughts with ' + club.name + '!' : 'Post to ' + club.name + ' by clicking \'More Info\' above and joining the club!';
 
   const submitPostCb = async () => {
     if (postText && postText.length > 0) {
@@ -51,7 +53,7 @@ export const ClubShareBox = ({club}) => {
         <img className="rounded-full h-11 w-11 mt-1" src="https://www.ssrl-uark.com/wp-content/uploads/2014/06/no-profile-image.png" />
       }
       <div className="flex flex-1 flex-col mt-2 text-black">
-        <textarea id="postInput" type="text" rows="1" className="bg-white tweet-box w-full outline-none overflow-y-auto flex-1 rounded-xl text-m p-2 resize-none" placeholder={'Share your thoughts with ' + club.name + '!'} value={postText} onChange={(e) => updatePostText(e)} disabled={profile==null}/>
+        <textarea id="postInput" type="text" rows="1" className="bg-white tweet-box w-full outline-none overflow-y-auto flex-1 rounded-xl text-m p-2 resize-none" placeholder={placeholderText} value={postText} onChange={(e) => updatePostText(e)} disabled={!canPost}/>
         {isAttachedBookshelf &&
         <div>
           <div className="flex items-center justify-end">
@@ -69,7 +71,7 @@ export const ClubShareBox = ({club}) => {
               <AttachBookshelfPopup/>
             </div>
           </div>
-          <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" disabled={profile==null} onClick={submitPostCb}>
+          <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" disabled={!canPost} onClick={submitPostCb}>
             Share
           </button>
         </div>

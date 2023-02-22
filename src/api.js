@@ -215,6 +215,31 @@ export const updateGroupProfile = async (newProfile) => {
 };
 
 /**
+ * Adds/removes a member from a group
+ *
+ * @param {dict} groupProfile - profile of the group that the given user is joining/leaving
+ * @param {string} memberId - Id of member being added/removed
+ */
+export const changeClubMember = async (clubId) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/groups/change_member`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({clubId}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  return res.club;
+};
+
+/**
  * Removes a member/admin from a group
  *
  * @param {dict} groupProfile - profile of the group that the given user is leaving
@@ -644,6 +669,31 @@ export const getProfile = async (uid) => {
     throw new Error('Call to /get_profile failed');
   }
   return body.result;
+};
+
+/**
+ * Fetches profile information from a list of ids
+ *
+ * @param {array} profileIds listed as strings
+ */
+export const getProfilesFromIds = async (profileIds) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_profiles_from_ids`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({profileIds: profileIds}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_profile failed');
+  }
+  return res.profiles;
 };
 
 

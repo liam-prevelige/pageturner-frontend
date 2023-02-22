@@ -68,16 +68,17 @@ export const GroupSearchResult = (groupInfo) => {
   const navigate = useNavigate();
 
   const loadGroup = (gid) => {
-    const path = `/group-profile?id=${gid}`;
+    const path = `/book-clubs/${gid}`;
     navigate(path);
   };
 
   return (
     <div className='flex space-x-3 px-4 py-3 border-primary-container_border_color'>
-      <img src={groupInfo.groupInfo.banner_picture} className="cursor-pointer w-11 h-11 rounded-full" onClick={() => loadGroup(groupInfo.groupInfo._id)} />
+      <img src={groupInfo.groupInfo.banner_picture} className="cursor-pointer w-11 h-11" onClick={() => loadGroup(groupInfo.groupInfo._id)} />
       <div className="flex-1">
-        <div className="flex items-center text-sm space-x-2 cursor-pointer" onClick={() => loadGroup(groupInfo.groupInfo._id)}>
+        <div className="flex flex-col items-start text-sm space-x-2 cursor-pointer" onClick={() => loadGroup(groupInfo.groupInfo._id)}>
           <span className="ml-1 font-bold text-black">{groupInfo.groupInfo.name}</span>
+          <span className="ml-1 text-slate-600">@{groupInfo.groupInfo.tag}</span>
         </div>
       </div>
     </div>

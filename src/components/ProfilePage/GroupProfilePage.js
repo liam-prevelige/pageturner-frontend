@@ -1,22 +1,26 @@
 import {React, useState, useRef, useEffect} from 'react';
 
 import {BackNav} from '../BackNav/BackNav';
-import {ProfileTabs} from './ProfileTabs';
+import {ClubTimeline} from '../BookClubsPage/ClubTimeline';
 import {FaFileUpload} from 'react-icons/fa';
 import {useParams} from 'react-router-dom';
-import {updateGroupProfile, removeGroupMember} from '../../api';
+import {changeClubMember, getProfilesFromIds} from '../../api';
 import {getGroupProfile} from '../../api';
 import ReactGA from 'react-ga';
+import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
+import {ThemeProvider, createTheme} from '@mui/material/styles';
+import {FollowModal} from '../ProfilePage/FollowModal';
 
 export const GroupProfilePage = () => {
   const {clubId} = useParams();
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
-
+  const theme = createTheme();
   const [profile, setProfile] = useState(null);
+  const [adminObjects, setAdminObjects] = useState([]);
+  const [memberObjects, setMemberObjects] = useState([]);
 
   const retrieveProfileFromUid = async () => {
     const retrievedProfileArray = await getGroupProfile(clubId);
-    console.log(retrievedProfileArray);
     const retrievedProfile = retrievedProfileArray[0];
     if (retrievedProfile) {
       setProfile(retrievedProfile);
@@ -30,16 +34,30 @@ export const GroupProfilePage = () => {
 
   const [newProfile, setNewProfile] = useState(profile);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [showAdminsModal, setShowAdminsModal] = useState(false);
+  const [showMembersModal, setShowMembersModal] = useState(false);
 
   const coverPicInput = useRef(null);
 
-  /**
-   * removes the user (storedProfile) from this book club
-   */
-  const handleLeaveGroup = async () => {
-    const updatedProfile = await removeGroupMember(profile, storedProfile._id);
-    setNewProfile(updatedProfile);
-    window.location.reload();
+  const handleChangeMembership = async () => {
+    if (!storedProfile) return;
+    const updatedProfile = await changeClubMember(profile._id);
+    setProfile(updatedProfile);
+  };
+
+  useEffect(() => {
+  }, [profile]);
+
+  const handleOpenAdminsModal = async () => {
+    const admins = await getProfilesFromIds(profile.admins);
+    setAdminObjects(admins);
+    setShowAdminsModal(true);
+  };
+
+  const handleOpenMembersModal = async () => {
+    const members = await getProfilesFromIds(profile.members);
+    setMemberObjects(members);
+    setShowMembersModal(true);
   };
 
   const handleEditProfile = async () => {
@@ -86,6 +104,11 @@ export const GroupProfilePage = () => {
     input.current.click();
   };
 
+  const handleResetStates = () => {
+    setShowMembersModal(false);
+    setShowAdminsModal(false);
+  };
+
   /**
    * renders different button functionality depending on if the user is a group admin, member, non-member
    * @param {*} groupProfile the group profile with a list of members and admins
@@ -93,30 +116,34 @@ export const GroupProfilePage = () => {
    */
   const groupButtonOptions = () => {
     // TODO: add functionality to buttons
-    if (profile.members.includes(storedProfile._id)) {
-      if (profile.admins.includes(storedProfile._id)) {
+    if (storedProfile && profile.members.includes(storedProfile._id)) {
+      if (storedProfile && profile.admins.includes(storedProfile._id)) {
         return (
-          <div>
+          <div className="flex flex-col">
             <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" onClick={handleEditProfile}>
-              {isEditMode ? 'Save Changes' : 'Edit Profile'}
+              {isEditMode ? 'Save Changes' : 'Edit Book Club'}
             </button>
-            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleLeaveGroup}>
-            Leave Group
+            <button className="mt-3 mr-3 text-red-500 rounded-full wrap-content shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleChangeMembership}>
+              Leave Group
             </button>
           </div>
         );
       } else {
         return (
-          <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleLeaveGroup}>
-          Leave Group
-          </button>
+          <div>
+            <button className="mt-3 mr-3 text-red-500 rounded-full shadow-md py-2 px-4 border-2 border-red-500 transform transition-colors duration-500 hover:bg-red-500 hover:text-white" onClick={handleChangeMembership}>
+            Leave Group
+            </button>
+          </div>
         );
       }
     } else {
       return (
-        <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white">
-          Join Group
-        </button>
+        <div>
+          <button className="mt-3 mr-3 text-primary-button rounded-full shadow-md py-2 px-4 border-2 border-primary-button transform transition-colors duration-500 hover:bg-primary-button hover:text-white" disabled={!profile} onClick={handleChangeMembership}>
+            Join Group
+          </button>
+        </div>
       );
     }
   };
@@ -124,7 +151,7 @@ export const GroupProfilePage = () => {
   return (
     <>
       {profile &&
-      <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+      <div className="min-h-screen mx-auto max-w-7xl mt-1 flex" onClick={handleResetStates}>
         <main className="flex flex-col">
           <>
             <div className="profile">
@@ -133,7 +160,7 @@ export const GroupProfilePage = () => {
                   <BackNav profile={profile} type={'club'}/>
                 </div>
 
-                {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.banner_picture} /> :
+                {!isEditMode ? <img className="h-64 w-full object-cover rounded" src={profile.banner_picture} /> :
                     (
                         <div className="h-64 w-full object-cover">
                           <img className="h-64 w-full object-cover" src={newProfile.cover} />
@@ -154,43 +181,58 @@ export const GroupProfilePage = () => {
                         </div>
                     )
                 }
-
-                {groupButtonOptions()}
-
-                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-6 ml-5 mr-5">
-                  {!isEditMode ?
+                <div className="flex flex-row">
+                  <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-3 ml-5 mr-5">
+                    {!isEditMode ?
                     <span className="text-xl font-bold">{profile.name}</span> :
                     <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.name}
                       value={newProfile.name}
                       onChange={handleNameChange}/>
-                  }
-                  {!isEditMode ?
+                    }
+                    {!isEditMode ?
                     <span className="text-base text-slate-500">@{profile.tag}</span> :
                     <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.tag}
                       value={newProfile.tag}
                       onChange={handleTagChange}/>
-                  }
-                  {!isEditMode ?
+                    }
+                    {!isEditMode ?
                     <span className="text-base text-black mt-2">{profile.description}</span> :
                     <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
                       type="text"
                       placeholder={profile.description}
                       value={newProfile.description}
                       onChange={handleDescriptionChange}/>
-                  }
+                    }
 
-                  <div className="flex flex-row space-x-5">
-                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.members.length}</strong>{(profile.members.length == 1 ? ' Member' : ' Members')}</button>
-                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.admins.length}</strong>{(profile.members.length == 1 ? ' Admin' : ' Admins')}</button>
+                    <div className="flex flex-row space-x-5">
+                      <button className="text-base text-slate-500 mt-2" onClick={handleOpenAdminsModal}><strong className="text-black">{profile.admins.length}</strong>{(profile.members.length == 1 ? ' Admin' : ' Admins')}</button>
+                      <button className="text-base text-slate-500 mt-2" onClick={handleOpenMembersModal}><strong className="text-black">{profile.members.length}</strong>{(profile.members.length == 1 ? ' Member' : ' Members')}</button>
+                      {showAdminsModal && <FollowModal title={'Admins'} users={adminObjects}/>}
+                      {showMembersModal && <FollowModal title={'Members'} users={memberObjects}/>}
+                    </div>
                   </div>
+                  {groupButtonOptions()}
                 </div>
               </div>
             </div>
-            <ProfileTabs userId={profile._id}/>
+            <ThemeProvider theme={theme}>
+              <ChakraProvider resetCSS={false}>
+                <Tabs isFitted className="m-3" variant='line' colorScheme='cyan'>
+                  <TabList>
+                    <Tab>Posts</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel width={'710px'}>
+                      <ClubTimeline club={profile} />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </ChakraProvider>
+            </ThemeProvider>
           </>
         </main>
       </div >}

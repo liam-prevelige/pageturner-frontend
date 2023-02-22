@@ -5,6 +5,7 @@ export const FollowModal = ({title, users}) => {
   const navigate = useNavigate();
 
   const loadUserProfile = (e, uid) => {
+    e.stopPropagation();
     const path = `/profile/${uid}`;
     navigate(path);
   };
