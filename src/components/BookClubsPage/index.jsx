@@ -90,7 +90,7 @@ export const BookClubsPage = () => {
     } else if (storedProfile && bookClubs.length == 0) { // user is logged in but has no book clubs
       return (<div>
         <div className="font-bold text-xl mb-2 pt-30">
-          You are not in any book clubs. Join one or create your own!
+          You are not in any book clubs. Join one or create your own! Here are the most popular:
         </div>
         <div>
           {topClubs.map((groupData, index) =>
@@ -115,7 +115,7 @@ export const BookClubsPage = () => {
     } else { // user is not logged in
       return (<div>
         <div className="font-bold text-xl mb-2 pt-30">
-        Sign in or make an account to see your book clubs
+        Sign in or make an account to see your book clubs. Here are the most popular:
         </div>
         <div>
           {topClubs.map((groupData, index) =>
