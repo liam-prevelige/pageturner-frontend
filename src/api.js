@@ -958,6 +958,33 @@ export const getBookshelves = async (ownerId, ownerType) => {
 /**
  * Fetches book clubs that a user is a member of, given the user's id
  *
+ * @param {string} clubId - user id
+ * @return {object} club - one book club object
+ */
+export const getBookClub = async (clubId) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/groups/get_book_clubs`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({clubId: clubId}),
+  });
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_book_clubs failed');
+  }
+  return res.result;
+};
+
+
+/**
+ * Fetches book clubs that a user is a member of, given the user's id
+ *
  * @param {string} uid - user id
  * @return {array} replies - array of book clubs / groups the user is a part of
  */

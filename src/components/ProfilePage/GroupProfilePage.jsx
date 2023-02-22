@@ -3,33 +3,20 @@ import {React, useState, useRef, useEffect} from 'react';
 import {BackNav} from '../BackNav/BackNav';
 import {ProfileTabs} from './ProfileTabs';
 import {FaFileUpload} from 'react-icons/fa';
+import {useParams} from 'react-router-dom';
 import {updateGroupProfile, removeGroupMember} from '../../api';
 import {getGroupProfile} from '../../api';
 import ReactGA from 'react-ga';
 
 export const GroupProfilePage = () => {
-  const search = window.location.search;
-  const queryParams = new URLSearchParams(search);
+  const {clubId} = useParams();
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
 
-  const defaultProfile = {
-    banner_picture: 'https://images.theconversation.com/files/45159/original/rptgtpxd-1396254731.jpg?ixlib=rb-1.1.0&q=30&auto=format&w=754&h=502&fit=crop&dpr=2',
-    tag: 'deafult',
-    name: storedProfile.name + '\'s New Group',
-    description: 'Click here to edit your new group!',
-    members: [storedProfile._id],
-    admins: [storedProfile._id],
-    posts: Array.from(Array(0).keys()),
-    bookshelves: Array.from(Array(0).keys()),
-    creator_id: storedProfile._id,
-    private: false,
-  };
-
-  const [profile, setProfile] = useState(defaultProfile);
+  const [profile, setProfile] = useState(null);
 
   const retrieveProfileFromUid = async () => {
-    const id = queryParams.get('id');
-    const retrievedProfileArray = await getGroupProfile(id);
+    const retrievedProfileArray = await getGroupProfile(clubId);
+    console.log(retrievedProfileArray);
     const retrievedProfile = retrievedProfileArray[0];
     if (retrievedProfile) {
       setProfile(retrievedProfile);
@@ -135,75 +122,78 @@ export const GroupProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
-      <main className="flex flex-col">
-        <>
-          <div className="profile">
-            <div className="profile-info">
-              <div className="profile-head">
-                <BackNav profile={profile}/>
-              </div>
+    <>
+      {profile &&
+      <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
+        <main className="flex flex-col">
+          <>
+            <div className="profile">
+              <div className="profile-info">
+                <div className="profile-head">
+                  <BackNav profile={profile}/>
+                </div>
 
-              {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.banner_picture} /> :
-                  (
-                      <div className="h-64 w-full object-cover">
-                        <img className="h-64 w-full object-cover" src={newProfile.cover} />
+                {!isEditMode ? <img className="h-64 w-full object-cover" src={profile.banner_picture} /> :
+                    (
+                        <div className="h-64 w-full object-cover">
+                          <img className="h-64 w-full object-cover" src={newProfile.cover} />
 
-                        <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
-                          <div className="flex flex-col justify-center">
-                            <FaFileUpload className="h-20 w-20"/>
+                          <div className="relative flex flex-row justify-center -top-64 h-64 object-center w-full object-cover bg-slate-300 bg-opacity-30" onClick={() => triggerClick(coverPicInput)}>
+                            <div className="flex flex-col justify-center">
+                              <FaFileUpload className="h-20 w-20"/>
+                            </div>
                           </div>
+                          <input
+                            type="file"
+                            className='invisible'
+                            ref={coverPicInput}
+                            onChange={(event) => {
+                              handleCoverPicChange(event.target.files[0]);
+                            }}
+                          />
                         </div>
-                        <input
-                          type="file"
-                          className='invisible'
-                          ref={coverPicInput}
-                          onChange={(event) => {
-                            handleCoverPicChange(event.target.files[0]);
-                          }}
-                        />
-                      </div>
-                  )
-              }
-
-              {groupButtonOptions()}
-
-              <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-6 ml-5 mr-5">
-                {!isEditMode ?
-                  <span className="text-xl font-bold">{profile.name}</span> :
-                  <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.name}
-                    value={newProfile.name}
-                    onChange={handleNameChange}/>
-                }
-                {!isEditMode ?
-                  <span className="text-base text-slate-500">@{profile.tag}</span> :
-                  <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.tag}
-                    value={newProfile.tag}
-                    onChange={handleTagChange}/>
-                }
-                {!isEditMode ?
-                  <span className="text-base text-black mt-2">{profile.description}</span> :
-                  <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
-                    type="text"
-                    placeholder={profile.description}
-                    value={newProfile.description}
-                    onChange={handleDescriptionChange}/>
+                    )
                 }
 
-                <div className="flex flex-row space-x-5">
-                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.members.length}</strong>{(profile.members.length == 1 ? ' Member' : ' Members')}</button>
-                  <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.admins.length}</strong>{(profile.members.length == 1 ? ' Admin' : ' Admins')}</button>
+                {groupButtonOptions()}
+
+                <div id="aboutInfo" className="flex flex-1 flex-col text-black mt-6 ml-5 mr-5">
+                  {!isEditMode ?
+                    <span className="text-xl font-bold">{profile.name}</span> :
+                    <input className="text-xl font-bold rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.name}
+                      value={newProfile.name}
+                      onChange={handleNameChange}/>
+                  }
+                  {!isEditMode ?
+                    <span className="text-base text-slate-500">@{profile.tag}</span> :
+                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.tag}
+                      value={newProfile.tag}
+                      onChange={handleTagChange}/>
+                  }
+                  {!isEditMode ?
+                    <span className="text-base text-black mt-2">{profile.description}</span> :
+                    <input className="text-base mt-2 rounded p-2 text-slate-500 border border-slate-300"
+                      type="text"
+                      placeholder={profile.description}
+                      value={newProfile.description}
+                      onChange={handleDescriptionChange}/>
+                  }
+
+                  <div className="flex flex-row space-x-5">
+                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.members.length}</strong>{(profile.members.length == 1 ? ' Member' : ' Members')}</button>
+                    <button className="text-base text-slate-500 mt-2"><strong className="text-black">{profile.admins.length}</strong>{(profile.members.length == 1 ? ' Admin' : ' Admins')}</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <ProfileTabs userId={profile._id}/>
-        </>
-      </main>
-    </div >
+            <ProfileTabs userId={profile._id}/>
+          </>
+        </main>
+      </div >}
+    </>
   );
 };

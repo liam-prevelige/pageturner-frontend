@@ -19,6 +19,7 @@ import {HomePage} from './components/HomePage';
 import {ThreadView} from './components/ThreadView/ThreadView';
 import {RightBar} from './components/RightBar';
 import {BookClubsPage} from './components/BookClubsPage';
+import {BookClubHome} from './components/BookClubsPage/BookClubHome';
 import {Notification} from './components/Notification';
 import ReactGA from 'react-ga';
 
@@ -40,7 +41,8 @@ const App = () => {
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route path='/book-clubs' element={<BookClubsPage />} />
-            <Route path='/book-clubs/:clubId' element={<BookClubsPage />} />
+            <Route path='/book-clubs/:clubId' element={<BookClubHome />} />
+            <Route path='/book-clubs/:clubId/about' element={<GroupProfilePage />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/:uid" element={<ProfilePage />} />

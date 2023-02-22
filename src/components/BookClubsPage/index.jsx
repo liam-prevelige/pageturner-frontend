@@ -46,7 +46,7 @@ export const BookClubsPage = () => {
 
   const loadBookClubHome = (e, clubId) => {
     e.stopPropagation();
-    const path = `/thread/${clubId}`;
+    const path = `/book-clubs/${clubId}`;
     navigate(path);
   };
 
