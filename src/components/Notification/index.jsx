@@ -1,11 +1,13 @@
 import {React, useState, useEffect} from 'react';
 import {FaHeart, FaComment, FaUser} from 'react-icons/fa';
 import {Comment} from '../Comment/Comment';
-import {getNotifications, updateNotifications} from '../../api';
+import {getNotifications, updateNotifications, getComment, getProfile} from '../../api';
 import ReactGA from 'react-ga';
 import {formatDistance} from 'date-fns';
+import {useNavigate} from 'react-router-dom';
 
 export const Notification = () => {
+  const navigate = useNavigate();
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +24,18 @@ export const Notification = () => {
     const newNotifications = await getNotifications();
     setNotifications(newNotifications.reverse());
     markAllAsViewed();
+  };
+
+  const loadProfile = async (cId) => {
+    const path = `/profile/${cId}`;
+    navigate(path);
+  };
+
+  const loadProfileOther = async (cId) => {
+    const comment = await getComment(cId);
+    const userId = await getProfile(comment.uid);
+    const path = `/profile/${userId._id}`;
+    navigate(path);
   };
 
   useEffect(() => {
@@ -72,9 +86,13 @@ export const Notification = () => {
                 <FaUser className="w-4 h-4 text-blue-800"/> :
                 <FaComment className="w-4 h-4 text-green-800" />}
                 <div className="flex flex-row">
-                  <div onClick={() => loadProfile(notification.commenterId)}>
+                  {notification.type === 'follow' ?
+                  <div className='cursor-pointer' onClick={() => loadProfile(notification.cId)}>
                     <b>@{notification.commenterId}&nbsp;</b>
-                  </div>
+                  </div> :
+                  <div className='cursor-pointer' onClick={() => loadProfileOther(notification.cId)}>
+                    <b>@{notification.commenterId}&nbsp;</b>
+                  </div>}
                   {getMessage(notification)}
                   {notification.timestamp && (' ' + formatDistance(new Date(notification.timestamp), new Date()) + ' ago')}
                 </div>

@@ -25,13 +25,13 @@ export const HomePage = () => {
             },
             {
               element: document.querySelector('.profilepage'),
-              title: 'Your profile',
+              title: 'Profile Page',
               intro: 'Your profile is a space to highlight your personal information, posts, reviews, bookshelves, and likes. When you\'re ready to edit your profile, simply click on this tab.',
               position: 'right',
             },
             {
               element: document.querySelector('.searchbar'),
-              title: 'Search for content',
+              title: 'Search Content',
               intro: 'Discover fascinating content with our search bar! Search results are divided into People, Groups, Bookshelves, Comments, and Books. Give it a try and find your first book!',
               position: 'bottom',
             },
