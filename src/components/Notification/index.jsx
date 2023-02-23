@@ -1,9 +1,9 @@
 import {React, useState, useEffect} from 'react';
-import {ProfileIcon, StarSolid} from '../../assets/Icons';
-import {FaHeart} from 'react-icons/fa';
+import {FaHeart, FaComment, FaUser} from 'react-icons/fa';
 import {Comment} from '../Comment/Comment';
 import {getNotifications, updateNotifications} from '../../api';
 import ReactGA from 'react-ga';
+import {formatDistance} from 'date-fns';
 
 export const Notification = () => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
@@ -12,15 +12,16 @@ export const Notification = () => {
 
   const markAllAsViewed = async () => {
     const updatedNotifications = notifications.map((notification) => ({...notification, isViewed: true}));
-    console.log('updatedNotifications:', updatedNotifications);
-    setNotifications([...updatedNotifications]);
-    await updateNotifications();
-    setIsLoading(true);
+    // setNotifications([...]);
+    await updateNotifications(updatedNotifications);
+    // setIsLoading(true);
   };
 
   const loadNotifications = async () => {
+    if (!profile) return;
     const newNotifications = await getNotifications();
-    setNotifications([...newNotifications]);
+    setNotifications(newNotifications.reverse());
+    markAllAsViewed();
   };
 
   useEffect(() => {
@@ -34,11 +35,11 @@ export const Notification = () => {
   const getMessage = (notification) => {
     switch (notification.type) {
       case 'like':
-        return 'has liked your post';
+        return 'liked your post';
       case 'reply':
-        return 'has replied to your post';
+        return 'replied to you';
       case 'follow':
-        return 'is now following you';
+        return 'started following you';
       default:
         return '';
     }
@@ -50,27 +51,36 @@ export const Notification = () => {
 
   return (
     <>
-      <div className="flex relative flex-col pt-5 bg-white">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-lg font-semibold text-slate-800">Notifications</h1>
-          <button
+      <div className="flex relative flex-col pt-4 bg-white">
+        <div className="flex mb-4 border-b border-slate-300 p-4 mr-5">
+          <div className="bg-white font-bold text-3xl text-black">
+            Notifications
+          </div>
+          <div className=""/>
+          {/* <button
             className="text-slate-500 hover:text-slate-700 transition-colors duration-150 focus:outline-none"
-            onClick={markAllAsViewed}
-          >
-          Mark all as viewed
-          </button>
+            onClick={markAllAsViewed}>
+              Mark all as viewed
+          </button> */}
         </div>
-        <ul>
-          {notifications.reverse().map((notification, index) =>
+        <ul className="ml-3">
+          {notifications && notifications.map((notification, index) =>
             (<div key={notification.cId+notification.type+index}>
               <div className="flex items-center text-sm space-x-2 pr-2 mb-2 mt-1">
-                {notification.type === 'like' ? <FaHeart className="fill-primary-like stroke-2 w-5 h-5" /> : notification.type === 'follow' ? <ProfileIcon /> : <StarSolid />}
-                <span>
-                  <b>{notification.commenterId}</b> {getMessage(notification)}
-                </span>
+                {notification.type === 'like' ? <FaHeart className="fill-primary-like stroke-2 w-4 h-4" /> :
+                notification.type === 'follow' ?
+                <FaUser className="w-4 h-4 text-blue-800"/> :
+                <FaComment className="w-4 h-4 text-green-800" />}
+                <div className="flex flex-row">
+                  <div onClick={() => loadProfile(notification.commenterId)}>
+                    <b>@{notification.commenterId}&nbsp;</b>
+                  </div>
+                  {getMessage(notification)}
+                  {notification.timestamp && (' ' + formatDistance(new Date(notification.timestamp), new Date()) + ' ago')}
+                </div>
               </div>
-              {notification.type !== 'follow' && <Comment commentId={notification.cId} noParent={true} />}
-              <div className="border-b ml-3 mr-3 border-slate-300"></div>
+              {notification.type !== 'follow' && <Comment comment={notification.comment}/>}
+              <div className="border-b -ml-3 mr-3 mb-3 border-slate-300"></div>
             </div>
             ))}
         </ul>
