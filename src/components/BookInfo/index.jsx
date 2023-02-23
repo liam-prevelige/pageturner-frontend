@@ -8,7 +8,7 @@ import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './bookInfo.css';
 import ReactLoading from 'react-loading';
-import {getBook, postComment, getReplies} from '../../api';
+import {getBook, postComment, getReviews} from '../../api';
 import {Comment} from '../Comment/Comment';
 import {Rating} from '@mui/material';
 import {BookshelfPopup} from './BookshelfPopup';
@@ -94,7 +94,7 @@ export const BookInfo = () => {
 
   const loadReviews = async (newBookId) => {
     if (!newBookId) return;
-    let newReviews = await getReplies(newBookId);
+    let newReviews = await getReviews(newBookId);
     newReviews = newReviews.sort((a, b) => new Date(b.metadata.timestamp) - new Date(a.metadata.timestamp));
     setReviews(newReviews);
   };

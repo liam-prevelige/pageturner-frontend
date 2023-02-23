@@ -866,7 +866,7 @@ export const getGroupProfile = async (id) => {
  * Fetches replies to a comment, given the comment's id
  *
  * @param {string} id - id of comment
- * @return {array} replies - array of comment IDs replying to the comment
+ * @return {array} replies - array of comments replying to the comment
  */
 export const getReplies = async (id) => {
   await refreshToken();
@@ -891,6 +891,37 @@ export const getReplies = async (id) => {
   }
   return body.replies;
 };
+
+/**
+ * Fetches reviews on a book
+ *
+ * @param {string} bookId - id of book
+ * @return {array} replies - array of reviews
+ */
+export const getReviews = async (bookId) => {
+  await refreshToken();
+
+  if (!bookId) {
+    throw new Error('No bookId provided');
+  }
+
+  const response = await fetch(`${API_URL}/reviews/${bookId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+  });
+
+  const body = await response.json();
+
+  if (!response.ok) {
+    throw new Error('Call to /reviews failed');
+  }
+  return body.reviews;
+};
+
 
 /**
 * Creates a new bookshelf
