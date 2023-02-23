@@ -5,7 +5,7 @@ import {
   FormControl,
   Input,
 } from '@chakra-ui/react';
-import {getBookshelves, addBookToBookshelf, createBookshelf} from '../../api';
+import {getBookshelves, addBookToBookshelf, createBookshelf, postComment} from '../../api';
 import {FaPlus} from 'react-icons/fa';
 import {IconButton} from '@chakra-ui/react';
 
@@ -38,7 +38,7 @@ export const BookshelfPopup = ({bid, useIcon}) => {
     } else if (newBookshelfName.length != 0) {
       const newBookshelfId = await createBookshelf(newBookshelfName, profile._id, 'user');
       await addBookToBookshelf(bid, newBookshelfId);
-      postComment('public', newBookshelfId, 'bookshelf', 'Created a new bookshelf');
+      postComment('global', newBookshelfId, 'bookshelf', 'Created a new bookshelf');
       // TODO create post with bookshelf
     }
     handleClose();
