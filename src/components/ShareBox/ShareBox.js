@@ -1,8 +1,10 @@
 import {React, useState} from 'react';
 // import {Media, Emoji} from '../../assets/Icons';
 import {AttachBookshelfPopup} from './AttachBookshelfPopup';
+import {AttachBookPopup} from './AttachBookPopup';
 import {postComment} from '../../api';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
+import {BookDisplay} from '../ProfilePage/BookDisplay';
 import {FaTimes} from 'react-icons/fa';
 
 export const ShareBox = () => {
@@ -10,6 +12,8 @@ export const ShareBox = () => {
   const [postText, setPostText] = useState('');
   const [isAttachedBookshelf, setIsAttachedBookshelf] = useState(false);
   const [attachedBookshelf, setAttachedBookshelf] = useState({});
+  const [isAttachedBook, setIsAttachedBook] = useState(false);
+  const [attachedBook, setAttachedBook] = useState({});
   const [pid, setPid] = useState('');
   const [ptype, setPtype] = useState('');
 
@@ -36,11 +40,25 @@ export const ShareBox = () => {
     setPtype('');
   };
 
+  const removeBook = () => {
+    setIsAttachedBook(false);
+    setAttachedBook({});
+    setPid('');
+    setPtype('');
+  };
+
   window.addEventListener('attachBookshelf', (e) => {
     setIsAttachedBookshelf(true);
     setAttachedBookshelf(e.detail);
     setPid(e.detail._id);
     setPtype('bookshelf');
+  });
+
+  window.addEventListener('attachBook', (e) => {
+    setIsAttachedBook(true);
+    setAttachedBook(e.detail);
+    setPid(e.detail.volumeId);
+    setPtype('book');
   });
 
   const updatePostText = (e) => {
@@ -65,10 +83,24 @@ export const ShareBox = () => {
             <Bookshelf bookshelfId={attachedBookshelf._id}/>
           </div>
         </div>}
+        {isAttachedBook &&
+        <div>
+          <div className="flex items-center justify-end">
+            <button className="flex bg-red-300 w-7 h-7 -mb-4 -mr-2 justify-center rounded-full border-2 border-red-300" onClick={removeBook}>
+              <FaTimes className="mt-0.5 w-5 h-5 text-white rounded-full"/>
+            </button>
+          </div>
+          <div className='rounded bg-slate-200 mb-3 p-2'>
+            <BookDisplay bid={attachedBook.id} disableClickThrough />
+          </div>
+        </div>}
         <div className="items-center flex justify-between">
           <div className="flex items-center justify-center">
             <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
               <AttachBookshelfPopup/>
+            </div>
+            <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
+              <AttachBookPopup/>
             </div>
           </div>
           <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" disabled={profile==null} onClick={submitPostCb}>

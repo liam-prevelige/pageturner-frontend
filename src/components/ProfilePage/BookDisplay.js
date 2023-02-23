@@ -5,7 +5,7 @@ import {getBook} from '../../api';
 
 // import {BookInfo} from '../../BookInfo';
 
-export const BookDisplay = ({bid}) => {
+export const BookDisplay = ({bid, disableClickThrough}) => {
   const [book, setBook] = useState(null);
   const navigate = useNavigate();
 
@@ -17,6 +17,9 @@ export const BookDisplay = ({bid}) => {
 
   const loadBook = (e) => {
     e.stopPropagation();
+    if (disableClickThrough) {
+      return;
+    }
     const path = `/book-info?id=${bid}`;
     navigate(path);
   };
