@@ -72,13 +72,15 @@ export const SideBar = () => {
                 </div>
               </a>
               <a href={profilePath}>
-                <div className={path===profilePath ? activeClassName : notActiveClassName}>
-                  <div className="rounded-full h-7 w-7 border border-slate-300">
-                    {profile ? <img className="rounded-full object-fill h-7 w-7" src={profile.profilePicture} /> :
+                <div className='profilepage '>
+                  <div className={path===profilePath ? activeClassName : notActiveClassName}>
+                    <div className="rounded-full h-7 w-7 border border-slate-300">
+                      {profile ? <img className="rounded-full object-fill h-7 w-7" src={profile.profilePicture} /> :
                     <img className="rounded-full object-fill h-7 w-7" src="https://mastersofscale.com/wp-content/uploads/sites/2/2021/05/barack_obama-1.jpg" />
-                    }
+                      }
+                    </div>
+                    <li className="ml-4 sidebar-text">Profile</li>
                   </div>
-                  <li className="ml-4 sidebar-text">Profile</li>
                 </div>
               </a>
             </ul>
