@@ -174,7 +174,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
               </div>
             </div>
             <div className="ml-1 cursor-pointer">
-              <div className="items-center text-black overflow-hidden flex-wrap break-all max-w-xl" onClick={(e) => loadThread(e, commentData)}>
+              <div className="items-center text-black overflow-hidden flex-wrap max-w-xl" onClick={(e) => loadThread(e, commentData)}>
                 {commentData.rating && <div className="mt-2">
                   <Rating
                     name="read-only"

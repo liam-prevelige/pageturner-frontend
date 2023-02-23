@@ -9,6 +9,7 @@ export const SideBar = () => {
   const [viewCount, setViewCount] = useState(0);
 
   useEffect(() => {
+    if (!profile) return;
     // Fetch notifications every 60 seconds
     const intervalId = setInterval(() => {
       getNotifications().then((notifications) => {
