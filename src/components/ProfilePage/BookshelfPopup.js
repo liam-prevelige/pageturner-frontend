@@ -1,6 +1,6 @@
 import {React, useRef, useState} from 'react';
 import FocusLock from 'react-focus-lock';
-import {createBookshelf} from '../../api';
+import {createBookshelf, postComment} from '../../api';
 
 import {
   Popover,
@@ -25,8 +25,10 @@ const Form = ({firstFieldRef, onCancel}) => {
   const [name, setName] = useState('');
 
   const submitBookshelf = async () => {
-    await createBookshelf(name, profile._id, 'user');
+    const newBookshelfId = await createBookshelf(name, profile._id, 'user');
     window.dispatchEvent(new Event('bookshelfCreated'));
+    // TODO: Create a comment with this bookshelf attached
+    postComment('public', newBookshelfId, 'bookshelf', 'Created a new bookshelf');
     onCancel();
   };
 

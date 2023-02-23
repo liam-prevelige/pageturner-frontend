@@ -38,6 +38,8 @@ export const BookshelfPopup = ({bid, useIcon}) => {
     } else if (newBookshelfName.length != 0) {
       const newBookshelfId = await createBookshelf(newBookshelfName, profile._id, 'user');
       await addBookToBookshelf(bid, newBookshelfId);
+      postComment('public', newBookshelfId, 'bookshelf', 'Created a new bookshelf');
+      // TODO create post with bookshelf
     }
     handleClose();
   };
