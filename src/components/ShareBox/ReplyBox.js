@@ -1,14 +1,18 @@
 import {React, useState} from 'react';
 import {getComment, getProfile, postComment, postNotification} from '../../api';
+import {useParams} from 'react-router-dom';
 
-export const ReplyBox = ({pid}) => {
+export const ReplyBox = () => {
+  const {clubId, commentIdParam} = useParams();
+  const pid = commentIdParam;
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [replyText, setReplyText] = useState('');
   const placeholderText = profile ? 'My thoughts are...' : 'Sign in to share your thoughts!';
 
   const submitReplyCb = async () => {
     if (replyText && replyText.length > 0) {
-      const {commentId} = await postComment('global', pid, 'comment', replyText);
+      const scope = clubId ? clubId : 'global';
+      const {commentId} = await postComment(scope, pid, 'comment', replyText);
       window.dispatchEvent(new Event('newReply'));
       setReplyText('');
 

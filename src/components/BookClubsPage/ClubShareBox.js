@@ -1,25 +1,25 @@
 import {React, useState} from 'react';
 // import {Media, Emoji} from '../../assets/Icons';
-import {AttachBookshelfPopup} from './AttachBookshelfPopup';
+import {AttachBookshelfPopup} from '../ShareBox/AttachBookshelfPopup';
 import {postComment} from '../../api';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
 import {FaTimes} from 'react-icons/fa';
 
-export const ShareBox = () => {
+export const ClubShareBox = ({club}) => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [postText, setPostText] = useState('');
   const [isAttachedBookshelf, setIsAttachedBookshelf] = useState(false);
   const [attachedBookshelf, setAttachedBookshelf] = useState({});
   const [pid, setPid] = useState('');
   const [ptype, setPtype] = useState('');
-
-  const placeholderText = profile ? 'Share your thoughts!' : 'Sign in to share your thoughts!';
+  const canPost = profile && club.members.includes(profile._id);
+  const placeholderText = canPost ? 'Share your thoughts with ' + club.name + '!' : 'Post to ' + club.name + ' by clicking \'More Info\' above and joining the club!';
 
   const submitPostCb = async () => {
     if (postText && postText.length > 0) {
       // (scope, pid, ptype, text)
-      await postComment('global', pid, ptype, postText);
-      window.dispatchEvent(new Event('newPost'));
+      await postComment(club._id, pid, ptype, postText);
+      window.dispatchEvent(new Event('newClubPost'));
       // Reset state
       setPostText('');
       setIsAttachedBookshelf(false);
@@ -53,7 +53,7 @@ export const ShareBox = () => {
         <img className="rounded-full h-11 w-11 mt-1" src="https://www.ssrl-uark.com/wp-content/uploads/2014/06/no-profile-image.png" />
       }
       <div className="flex flex-1 flex-col mt-2 text-black">
-        <textarea id="postInput" type="text" rows="1" className="bg-white tweet-box w-full outline-none overflow-y-auto flex-1 rounded-xl text-m p-2 resize-none" placeholder={placeholderText} value={postText} onChange={(e) => updatePostText(e)} disabled={profile==null}/>
+        <textarea id="postInput" type="text" rows="1" className="bg-white tweet-box w-full outline-none overflow-y-auto flex-1 rounded-xl text-m p-2 resize-none" placeholder={placeholderText} value={postText} onChange={(e) => updatePostText(e)} disabled={!canPost}/>
         {isAttachedBookshelf &&
         <div>
           <div className="flex items-center justify-end">
@@ -71,7 +71,7 @@ export const ShareBox = () => {
               <AttachBookshelfPopup/>
             </div>
           </div>
-          <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" disabled={profile==null} onClick={submitPostCb}>
+          <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" disabled={!canPost} onClick={submitPostCb}>
             Share
           </button>
         </div>

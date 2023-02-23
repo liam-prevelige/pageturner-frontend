@@ -215,6 +215,31 @@ export const updateGroupProfile = async (newProfile) => {
 };
 
 /**
+ * Adds/removes a member from a group
+ *
+ * @param {dict} groupProfile - profile of the group that the given user is joining/leaving
+ * @param {string} memberId - Id of member being added/removed
+ */
+export const changeClubMember = async (clubId) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/groups/change_member`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({clubId}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /update_profile failed');
+  }
+  return res.club;
+};
+
+/**
  * Removes a member/admin from a group
  *
  * @param {dict} groupProfile - profile of the group that the given user is leaving
@@ -646,6 +671,31 @@ export const getProfile = async (uid) => {
   return body.result;
 };
 
+/**
+ * Fetches profile information from a list of ids
+ *
+ * @param {array} profileIds listed as strings
+ */
+export const getProfilesFromIds = async (profileIds) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_profiles_from_ids`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({profileIds: profileIds}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_profile failed');
+  }
+  return res.profiles;
+};
+
 
 /**
  * Fetches a user's posts using their token
@@ -668,6 +718,29 @@ export const getPosts = async (uid) => {
     throw new Error('Call to /get_posts failed');
   }
   return res.posts;
+};
+
+/**
+ * Fetches a user or club's number of posts
+ */
+export const getPostCount = async (id, type) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/user/get_post_count`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({id: id, type: type}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /get_posts failed');
+  }
+  return res.count;
 };
 
 
@@ -953,6 +1026,59 @@ export const getBookshelves = async (ownerId, ownerType) => {
     throw new Error('Call to /bookshelves/get_bookshelves failed');
   }
   return body.bookshelves;
+};
+
+/**
+ * Fetches book clubs that a user is a member of, given the user's id
+ *
+ * @param {string} clubId - user id
+ * @return {object} club - one book club object
+ */
+export const getBookClub = async (clubId) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/groups/get_book_club`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({clubId: clubId}),
+  });
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_book_clubs failed');
+  }
+  return res.result;
+};
+
+/**
+ * Fetches feed for a given book club
+ *
+ * @param {string} clubId - club id
+ * @param {string} pageNumber - page number
+ * @return {array} feed - array of posts in the club feed
+ */
+export const getClubFeed = async (clubId, pageNumber) => {
+  await refreshToken();
+
+  const response = await fetch(`${API_URL}/groups/get_club_feed`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application.json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    cache: 'default',
+    body: JSON.stringify({clubId: clubId, pageNumber: pageNumber}),
+  });
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /user/get_club_feed failed');
+  }
+  return res.feed;
 };
 
 /**

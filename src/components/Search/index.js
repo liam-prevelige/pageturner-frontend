@@ -6,6 +6,7 @@ import ReactLoading from 'react-loading';
 import {UserSearchResult, BookshelfSearchResult, GroupSearchResult, BookSearchResult} from './SearchResults';
 import Row from 'react-bootstrap/Row';
 import {Comment} from '../Comment/Comment';
+import {ThemeProvider, createTheme} from '@mui/material/styles';
 
 export const Search = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -13,6 +14,7 @@ export const Search = () => {
   const [books, setBooks] = useState(null);
   const [show, setShow] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
+  const theme = createTheme();
 
   // Handler for text change in search bar
   const handleInputChange = async (newInput) => {
@@ -78,7 +80,7 @@ export const Search = () => {
         <input
           className="focus:outline-none bg-transparent w-full"
           type="text"
-          placeholder="Search PageTurner"
+          placeholder="Search PageTurner for books, people, clubs, and more..."
           value={searchInput}
           onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -88,51 +90,53 @@ export const Search = () => {
     {show && (results == null ? <div className="flex margin-auto justify-content-center">
       <ReactLoading type="spin" color="black" />
     </div> : <div>
-      <ChakraProvider resetCSS={false}>
-        <Tabs
-          isFitted
-          className="m-3"
-          variant='line'
-          colorScheme='cyan'
-          index={tabIndex}
-          onChange={(index) => setTabIndex(index)}
-        >
-          <TabList>
-            <Tab>People</Tab>
-            <Tab>Groups</Tab>
-            <Tab>Bookshelves</Tab>
-            <Tab>Comments</Tab>
-            <Tab>Books</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              {(results && results.users && results.users.length > 0) ? results.users.map((user, index) => (<Row key={index}>
-                <UserSearchResult userInfo={user}/>
-              </Row>)) : <Row>No Results</Row>}
-            </TabPanel>
-            <TabPanel>
-              {(results && results.groups && results.groups.length > 0) ? results.groups.map((group, index) => (<Row key={index}>
-                <GroupSearchResult groupInfo={group}/>
-              </Row>)): <Row>No Results</Row>}
-            </TabPanel>
-            <TabPanel>
-              {(results && results.bookshelves && results.bookshelves.length > 0) ? results.bookshelves.map((bookshelf, index) => (<Row key={index}>
-                <BookshelfSearchResult bookshelfInfo={bookshelf}/>
-              </Row>)): <Row>No Results</Row>}
-            </TabPanel>
-            <TabPanel>
-              {(results && results.comments && results.comments.length > 0) ? results.comments.map((comment, index) => (<Row key={index}>
-                <Comment comment={comment} noParent={true}/>
-              </Row>)): <Row>No Results</Row>}
-            </TabPanel>
-            <TabPanel>
-              {(books && books.length > 0) ? books.map((book, index) => (<Row key={index}>
-                <BookSearchResult bookInfo={book}/>
-              </Row>)) : books ? <Row>No Results</Row> : <ReactLoading type="spin" color="black"/>}
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </ChakraProvider>
+      <ThemeProvider theme={theme}>
+        <ChakraProvider resetCSS={false}>
+          <Tabs
+            isFitted
+            className="m-3"
+            variant='line'
+            colorScheme='cyan'
+            index={tabIndex}
+            onChange={(index) => setTabIndex(index)}
+          >
+            <TabList>
+              <Tab>People</Tab>
+              <Tab>Groups</Tab>
+              <Tab>Bookshelves</Tab>
+              <Tab>Comments</Tab>
+              <Tab>Books</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                {(results && results.users && results.users.length > 0) ? results.users.map((user, index) => (<Row key={index}>
+                  <UserSearchResult userInfo={user}/>
+                </Row>)) : <Row>No Results</Row>}
+              </TabPanel>
+              <TabPanel>
+                {(results && results.groups && results.groups.length > 0) ? results.groups.map((group, index) => (<Row key={index}>
+                  <GroupSearchResult groupInfo={group}/>
+                </Row>)): <Row>No Results</Row>}
+              </TabPanel>
+              <TabPanel>
+                {(results && results.bookshelves && results.bookshelves.length > 0) ? results.bookshelves.map((bookshelf, index) => (<Row key={index}>
+                  <BookshelfSearchResult bookshelfInfo={bookshelf}/>
+                </Row>)): <Row>No Results</Row>}
+              </TabPanel>
+              <TabPanel>
+                {(results && results.comments && results.comments.length > 0) ? results.comments.map((comment, index) => (<Row key={index}>
+                  <Comment comment={comment} noParent={true}/>
+                </Row>)): <Row>No Results</Row>}
+              </TabPanel>
+              <TabPanel>
+                {(books && books.length > 0) ? books.map((book, index) => (<Row key={index}>
+                  <BookSearchResult bookInfo={book}/>
+                </Row>)) : books ? <Row>No Results</Row> : <ReactLoading type="spin" color="black"/>}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </ChakraProvider>
+      </ThemeProvider>
     </div>)}
   </div>);
 };

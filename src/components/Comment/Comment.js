@@ -1,5 +1,5 @@
 import {React, useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {Share} from '../../assets/Icons';
 import {Parent} from './Parent';
 import {getProfile, getComment, updateLikes, updateBookmarks, postNotification, deleteComment} from '../../api';
@@ -13,6 +13,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
   const navigate = useNavigate();
+  const {clubId} = useParams();
   const myProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [profileData, setProfileData] = useState(null);
   const [commentData, setCommentData] = useState(comment);
@@ -29,7 +30,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
 
   const loadThread = (e, clickedCommentData) => {
     e.stopPropagation();
-    const path = `/thread/${clickedCommentData._id}`;
+    const path = clubId ? `/thread/${clubId}/${clickedCommentData._id}` : `/thread/${clickedCommentData._id}`;
     navigate(path);
   };
 
@@ -173,7 +174,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
               </div>
             </div>
             <div className="ml-1 cursor-pointer">
-              <div className="items-center text-black overflow-hidden" onClick={(e) => loadThread(e, commentData)}>
+              <div className="items-center text-black overflow-hidden flex-wrap break-all max-w-xl" onClick={(e) => loadThread(e, commentData)}>
                 {commentData.rating && <div className="mt-2">
                   <Rating
                     name="read-only"
@@ -181,11 +182,12 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
                     value={commentData.rating || 0}
                   />
                 </div>}
+                {commentData.subtext && <div className="text-sm italic text-primary-gray_colors">{commentData.subtext}</div>}
                 {commentData.text}
                 {/* Created parent class vs using comment again to prevent issues with recursive calls */}
-                {hasParentComment && <Parent comment={commentData.parent}/>}
-                {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><Bookshelf bookshelfId={commentData.pid}/></div>}
-                {hasParentBook && <div className='rounded bg-slate-200 mb-3 mt-3 p-2'><IndividualBookDisplay bid={commentData.pid}/></div>}
+                {hasParentComment && <Parent className="max-w-xl" comment={commentData.parent}/>}
+                {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2 max-w-xl'><Bookshelf bookshelfId={commentData.pid}/></div>}
+                {hasParentBook && <div className='rounded bg-slate-200 mb-3 mt-3 p-2 max-w-xl'><IndividualBookDisplay bid={commentData.pid}/></div>}
               </div>
 
               <ul className="flex justify-between mt-2">
