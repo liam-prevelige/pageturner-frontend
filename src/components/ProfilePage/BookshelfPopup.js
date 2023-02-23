@@ -27,7 +27,6 @@ const Form = ({firstFieldRef, onCancel}) => {
   const submitBookshelf = async () => {
     const newBookshelfId = await createBookshelf(name, profile._id, 'user');
     window.dispatchEvent(new Event('bookshelfCreated'));
-    // TODO: Create a comment with this bookshelf attached
     postComment('global', newBookshelfId, 'bookshelf', 'Created a new bookshelf');
     onCancel();
   };
