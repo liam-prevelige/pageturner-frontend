@@ -72,7 +72,6 @@ export const BookClubsPage = () => {
   * Gets the top public book clubs
   */
   const retrieveTopClubs = async () => {
-    console.log('getting top clubs');
     const response = await getTopClubs();
     const trendingClubs = response.result;
     console.log(trendingClubs);
@@ -102,189 +101,92 @@ export const BookClubsPage = () => {
     ReactGA.pageview(window.location.pathname);
   }, []);
 
-  /**
-   * renders functionality for displauing the groups a user is involved in
-   * @param {*} bookClubs list of the book clubs / groups the user is in
-   * @return {JSX} rendering of the user's groups depending on if they're logged in
-   */
-  const renderGroups = (bookClubs) => {
-    if (storedProfile && bookClubs.length > 0) { // if the user is logged in and has book clubs
-      return (
+  const renderGroups = () => {
+    return (
+      <div className="row flex justify-center align-middle w-full">
+        <div className="border-b border-slate-300 mb-4"/>
+        <div className="font-bold text-xl pt-30 ml-4 mb-3">
+          {!storedProfile ? 'Sign in to see your bookclubs!' : leftColumn.length>0 ? 'Your Bookclubs:' : 'You are not in any bookclubs yet. Join one or create your own!'}
+        </div>
+        <div className="col-md-6 flex flex-col w-1/2">
+          {leftColumn.map((groupData) =>
+            (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
+              <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
+                <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                  <p className="text-gray-400 text-base">
+                    {'@' + groupData.tag}
+                  </p>
+                  <p className="text-gray-700 text-base">
+                    {groupData.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+            ))}
+        </div>
+        <div className="col-md-6 flex flex-col w-1/2">
+          {rightColumn.map((groupData) =>
+            (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
+              <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
+                <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                  <p className="text-gray-400 text-base">
+                    {'@' + groupData.tag}
+                  </p>
+                  <p className="text-gray-700 text-base">
+                    {groupData.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+            ))}
+        </div>
+        <div className="border-b border-slate-300 m-4"/>
         <div className="row flex justify-center align-middle w-full">
           <div className="font-bold text-xl mb-3 pt-30">
-              Your Bookclubs:
-          </div>
-          <div className="col-md-6 flex flex-col w-1/2">
-            {leftColumn.map((groupData) =>
-              (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
-                <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
-                  <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-                  <div className="px-6 py-4">
-                    <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                    <p className="text-gray-400 text-base">
-                      {'@' + groupData.tag}
-                    </p>
-                    <p className="text-gray-700 text-base">
-                      {groupData.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              ))}
-          </div>
-          <div className="col-md-6 flex flex-col w-1/2">
-            {rightColumn.map((groupData) =>
-              (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
-                <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
-                  <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-                  <div className="px-6 py-4">
-                    <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                    <p className="text-gray-400 text-base">
-                      {'@' + groupData.tag}
-                    </p>
-                    <p className="text-gray-700 text-base">
-                      {groupData.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              ))}
-          </div>
-          <div className="row flex justify-center align-middle w-full">
-            <div className="font-bold text-xl mb-3 pt-30">
               Explore Popular Bookclubs:
-            </div>
-            <div className="col-md-6 flex flex-col w-1/2">
-              {trendingLeftColumn.map((groupData) =>
-                (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
-                  <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
-                    <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                      <p className="text-gray-400 text-base">
-                        {'@' + groupData.tag}
-                      </p>
-                      <p className="text-gray-700 text-base">
-                        {groupData.description}
-                      </p>
-                    </div>
+          </div>
+          <div className="col-md-6 flex flex-col w-1/2">
+            {trendingLeftColumn.map((groupData) =>
+              (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
+                <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
+                  <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                    <p className="text-gray-400 text-base">
+                      {'@' + groupData.tag}
+                    </p>
+                    <p className="text-gray-700 text-base">
+                      {groupData.description}
+                    </p>
                   </div>
                 </div>
-                ))}
-            </div>
-            <div className="col-md-6 flex flex-col w-1/2">
-              {trendingRightColumn.map((groupData) =>
-                (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
-                  <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
-                    <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                      <p className="text-gray-400 text-base">
-                        {'@' + groupData.tag}
-                      </p>
-                      <p className="text-gray-700 text-base">
-                        {groupData.description}
-                      </p>
-                    </div>
+              </div>
+              ))}
+          </div>
+          <div className="col-md-6 flex flex-col w-1/2">
+            {trendingRightColumn.map((groupData) =>
+              (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
+                <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
+                  <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">{groupData.name}</div>
+                    <p className="text-gray-400 text-base">
+                      {'@' + groupData.tag}
+                    </p>
+                    <p className="text-gray-700 text-base">
+                      {groupData.description}
+                    </p>
                   </div>
                 </div>
-                ))}
-            </div>
+              </div>
+              ))}
           </div>
         </div>
-
-      );
-    } else if (storedProfile && bookClubs.length == 0) { // user is logged in but has no book clubs
-      return (
-        <div className="row flex justify-center align-middle w-full">
-          <div className="font-bold text-xl mb-2 pt-30">
-          You are not in any book clubs. Join one or create your own! Here are the most popular:
-          </div>
-          <div>
-            <div className="col-md-6 flex flex-col w-1/2">
-              {trendingLeftColumn.map((groupData) =>
-                (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
-                  <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
-                    <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                      <p className="text-gray-400 text-base">
-                        {'@' + groupData.tag}
-                      </p>
-                      <p className="text-gray-700 text-base">
-                        {groupData.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                ))}
-            </div>
-            <div className="col-md-6 flex flex-col w-1/2">
-              {trendingRightColumn.map((groupData) =>
-                (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
-                  <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
-                    <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                      <p className="text-gray-400 text-base">
-                        {'@' + groupData.tag}
-                      </p>
-                      <p className="text-gray-700 text-base">
-                        {groupData.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                ))}
-            </div>
-          </div>
-        </div>);
-    } else { // user is not logged in
-      return (
-        <div className="row flex justify-center align-middle w-full">
-          <div className="font-bold text-xl mb-2 pt-30">
-        Sign in or make an account to see your book clubs. Here are the most popular:
-          </div>
-          <div>
-            <div className="col-md-6 flex flex-col w-1/2">
-              {trendingLeftColumn.map((groupData) =>
-                (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
-                  <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
-                    <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                      <p className="text-gray-400 text-base">
-                        {'@' + groupData.tag}
-                      </p>
-                      <p className="text-gray-700 text-base">
-                        {groupData.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                ))}
-            </div>
-            <div className="col-md-6 flex flex-col w-1/2">
-              {trendingRightColumn.map((groupData) =>
-                (<div key={groupData._id} className="mb-3 w-full cursor-pointer" onClick={(e) => loadBookClubHome(e, groupData._id)}>
-                  <div className="w-full block rounded overflow-hidden bg-white shadow-lg mb-3">
-                    <img className="w-full h-28 object-none" src={groupData.banner_picture} alt="Group Banner Picture"/>
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{groupData.name}</div>
-                      <p className="text-gray-400 text-base">
-                        {'@' + groupData.tag}
-                      </p>
-                      <p className="text-gray-700 text-base">
-                        {groupData.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                ))}
-            </div>
-          </div>
-        </div>);
-    }
+      </div>);
   };
 
   /**
@@ -342,7 +244,7 @@ export const BookClubsPage = () => {
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                 Tag
               </label>
-              <input value= {newTag} onChange={handleTagChange} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter a unique tag for your new group."></input>
+              <input value= {newTag} onChange={handleTagChange} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter a tag for your new group"></input>
               <p className="text-red-500 text-xs italic">{tagExists ? 'This tag is already taken.' :''}</p>
             </div>
             <div className="flex items-center justify-between">
@@ -350,25 +252,35 @@ export const BookClubsPage = () => {
                 Create Group
               </button>
               <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={toggleCreatingGroup}>
-                Dismiss
+                Cancel
               </button>
             </div>
           </form>
         );
       } else { // user is logged in but not creating a group
         return (
-          <div className="flex flex-row w-full justify-between border-slate-300 border-b border-slate-300 p-4">
-            <div className="bg-white font-bold text-3xl text-black">
-              Book Clubs
+          <>
+            <div className="flex flex-row w-full justify-between p-4">
+              <div className="bg-white font-bold text-3xl text-black">
+                Book Clubs
+              </div>
+              <button className="wrap-text mr-3 text-green-500 rounded-full shadow-md py-2 px-4 border-2 border-green-500 transform transition-colors duration-200 hover:bg-green-500 hover:text-white" onClick={toggleCreatingGroup}>
+                Create Group
+              </button>
             </div>
-            <button className="wrap-text mr-3 text-green-500 rounded-full shadow-md py-2 px-4 border-2 border-green-500 transform transition-colors duration-200 hover:bg-green-500 hover:text-white" onClick={toggleCreatingGroup}>
-              Create Group
-            </button>
-          </div>
+          </>
         );
       }
     } else { // user is not logged in
-      return (<></>);
+      return (
+        <>
+          <div className="flex flex-row w-full justify-between p-4">
+            <div className="bg-white font-bold text-3xl text-black">
+              Book Clubs
+            </div>
+          </div>
+        </>
+      );
     }
   };
 
@@ -376,7 +288,7 @@ export const BookClubsPage = () => {
     <div className="h-full bg-white pt-10">
       {renderCreateGroup()}
       <div className="min-h-screen mx-auto max-w-7xl mt-1 flex">
-        <div className="h-full w-full bg-white pt-10">
+        <div className="h-full w-full bg-white">
           {renderGroups(bookClubs)}
         </div>
       </div>
