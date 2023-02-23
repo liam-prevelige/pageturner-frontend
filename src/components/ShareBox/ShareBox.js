@@ -91,7 +91,7 @@ export const ShareBox = () => {
             </button>
           </div>
           <div className='rounded bg-slate-200 mb-3 p-2'>
-            <BookDisplay bid={attachedBook.volumeId} disableClickThrough />
+            <BookDisplay bid={attachedBook.id} disableClickThrough />
           </div>
         </div>}
         <div className="items-center flex justify-between">
