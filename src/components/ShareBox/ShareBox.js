@@ -4,8 +4,8 @@ import {AttachBookshelfPopup} from './AttachBookshelfPopup';
 import {AttachBookPopup} from './AttachBookPopup';
 import {postComment} from '../../api';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
-import {BookDisplay} from '../ProfilePage/BookDisplay';
 import {FaTimes} from 'react-icons/fa';
+import {IndividualBookDisplay} from '../Comment/IndividualBookDisplay';
 
 export const ShareBox = () => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
@@ -26,6 +26,8 @@ export const ShareBox = () => {
       window.dispatchEvent(new Event('newPost'));
       // Reset state
       setPostText('');
+      setIsAttachedBook(false);
+      setAttachedBook({});
       setIsAttachedBookshelf(false);
       setAttachedBookshelf({});
       setPid('');
@@ -91,7 +93,7 @@ export const ShareBox = () => {
             </button>
           </div>
           <div className='rounded bg-slate-200 mb-3 p-2'>
-            <BookDisplay bid={attachedBook.id} disableClickThrough />
+            <IndividualBookDisplay bid={attachedBook.id} disableClickThrough />
           </div>
         </div>}
         <div className="items-center flex justify-between">

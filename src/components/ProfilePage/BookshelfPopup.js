@@ -24,10 +24,16 @@ const Form = ({firstFieldRef, onCancel}) => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [name, setName] = useState('');
 
+  const closePopup = () => {
+    setName('');
+    onCancel();
+  };
+
   const submitBookshelf = async () => {
     const newBookshelfId = await createBookshelf(name, profile._id, 'user');
     window.dispatchEvent(new Event('bookshelfCreated'));
     postComment('global', newBookshelfId, 'bookshelf', 'Created a new bookshelf');
+    setName('');
     onCancel();
   };
 
@@ -35,10 +41,10 @@ const Form = ({firstFieldRef, onCancel}) => {
     <Stack spacing={4}>
       <FormControl>
         <FormLabel htmlFor='name'>New Bookshelf</FormLabel>
-        <Input ref={firstFieldRef} placeholder='Title' id='name' onChange={(e) => setName(e.target.value)} />
+        <Input ref={firstFieldRef} placeholder='Title' id='name' onChange={(e) => setName(e.target.value)} value={name}/>
       </FormControl>
       <ButtonGroup display='flex' justifyContent='flex-end'>
-        <Button variant='outline' onClick={onCancel}>
+        <Button variant='outline' onClick={closePopup}>
           Cancel
         </Button>
         <Button isDisabled={name.length == 0} colorScheme='teal' onClick={submitBookshelf}>
@@ -64,7 +70,6 @@ export const PopoverForm = () => {
         onClose={onClose}
         placement='right'
         closeOnBlur={true}
-        className="relative z-20"
       >
         <PopoverTrigger>
           <IconButton size='sm' icon={<FaPlus />} />
