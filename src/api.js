@@ -136,9 +136,8 @@ export async function onLogin() {
     throw new Error('Call to /on_login failed');
   }
 
-  sessionStorage.setItem('auth_token', body.result.tokens.id_token);
-  sessionStorage.setItem('expiry_date', body.result.tokens.expiry_date);
-
+  await sessionStorage.setItem('auth_token', body.result.tokens.id_token);
+  await sessionStorage.setItem('expiry_date', body.result.tokens.expiry_date);
   return body.result;
 }
 

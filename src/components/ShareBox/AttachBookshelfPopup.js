@@ -32,8 +32,6 @@ const Form = ({firstFieldRef, onCancel}) => {
 
   const fetchBookshelves = async () => {
     if (!profile) return;
-    // TODO: stop sequential fetching
-    // TODO: add ability for book club
     const loadedBookshelves = await getBookshelves(profile._id, 'user');
     setBookshelves(loadedBookshelves);
   };

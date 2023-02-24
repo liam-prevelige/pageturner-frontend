@@ -13,32 +13,48 @@ export const HomePage = () => {
 
   useEffect(() => {
     ReactGA.pageview(window.location.pathname);
-
     // Initialize Intro.js and define the steps for the pop-ups
-    introJs()
-        .setOptions({
-          steps: [
-            {
-              title: 'Welcome to Pageturner!',
-              intro: 'Thank you for visiting our site. Our goal is to promote reading by fostering meaningful interactions centered around books.',
-              position: 'bottom',
-            },
-            {
-              element: document.querySelector('.profilepage'),
-              title: 'Your profile',
-              intro: 'Your profile is a space to highlight your personal information, posts, reviews, bookshelves, and likes. When you\'re ready to edit your profile, simply click on this tab.',
-              position: 'right',
-            },
-            {
-              element: document.querySelector('.searchbar'),
-              title: 'Search for content',
-              intro: 'Discover fascinating content with our search bar! Search results are divided into People, Groups, Bookshelves, Comments, and Books. Give it a try and find your first book!',
-              position: 'bottom',
-            },
-          ],
-        })
-        .start();
-  }, []);
+    if (profile && !profile.viewedIntro) {
+      introJs()
+          .setOptions({
+            steps: [
+              {
+                title: 'Welcome to Pageturner!',
+                intro: 'Thank you for visiting our site. Our goal is to promote reading by fostering meaningful interactions centered around books.',
+                position: 'bottom',
+              },
+              {
+                element: document.querySelector('.homepage'),
+                title: 'Home',
+                intro: 'This is your home page. Here, you can view your timeline, share your thoughts, and discover what your friends are reading.',
+                position: 'right',
+              },
+              {
+                element: document.querySelector('.bookclubs'),
+                title: 'Book Clubs',
+                intro: 'Book clubs are a great way to connect with other readers. Join or create a book club to discuss your favorite books and meet new people.',
+                position: 'right',
+              },
+              {
+                element: document.querySelector('.profilepage'),
+                title: 'Your profile',
+                intro: 'Your profile is a space to highlight your personal information, posts, reviews, bookshelves, and likes. When you\'re ready to edit your profile, simply click on this tab.',
+                position: 'right',
+              },
+              {
+                element: document.querySelector('.searchbar'),
+                title: 'Search for content',
+                intro: 'Discover fascinating content with our search bar! Search results are divided into People, Groups, Bookshelves, Comments, and Books. Give it a try and find your first book or friend on PageTurner!',
+                position: 'bottom',
+              },
+            ],
+          })
+          .start();
+      // Set viewedIntro to true locally. The backend already handled the update
+      profile.viewedIntro = true;
+      sessionStorage.setItem('profile', JSON.stringify(profile));
+    }
+  }, [profile]);
 
   const changeTimeline = (e) => {
     window.dispatchEvent(new CustomEvent('timelineChange', {detail: e.target.checked}));
