@@ -1,7 +1,7 @@
 import {React, useRef, useState, useEffect} from 'react';
 import FocusLock from 'react-focus-lock';
 // import {createBookshelf} from '../../api';
-import {ListIcon} from '../../assets/Icons';
+import {FaListAlt} from 'react-icons/fa';
 
 import {
   ChakraProvider,
@@ -78,13 +78,13 @@ export const AttachBookshelfPopup = () => {
         // initialFocusRef={firstFieldRef}
         onOpen={onOpen}
         onClose={onClose}
-        placement='auto'
+        placement='bottom'
         closeOnBlur={true}
         dataContainer='body'
       >
         <PopoverTrigger>
           <button className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
-            <ListIcon />
+            <FaListAlt className="h-5 w-7 text-blue-500" />
           </button>
         </PopoverTrigger>
         <Box zIndex='popover'>

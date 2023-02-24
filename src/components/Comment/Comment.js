@@ -182,7 +182,9 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
                   />
                 </div>}
                 {commentData.subtext && <div className="text-sm italic text-primary-gray_colors">{commentData.subtext}</div>}
-                {commentData.text}
+                {commentData.text === 'Created a new bookshelf' ?
+                  <div className="italic">{commentData.text}</div> :
+                  commentData.text}
                 {/* Created parent class vs using comment again to prevent issues with recursive calls */}
                 {hasParentComment && <Parent className="max-w-xl" comment={commentData.parent}/>}
                 {hasParentBookshelf && <div className='rounded bg-slate-200 mb-3 mt-3 p-2 max-w-xl'><Bookshelf bookshelfId={commentData.pid}/></div>}

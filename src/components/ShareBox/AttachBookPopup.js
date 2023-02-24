@@ -1,7 +1,8 @@
 import {React, useRef, useState} from 'react';
 import ReactLoading from 'react-loading';
 import FocusLock from 'react-focus-lock';
-import {BookPlusIcon, SearchIcon} from '../../assets/Icons';
+import {SearchIcon} from '../../assets/Icons';
+import {FaBook} from 'react-icons/fa';
 
 import {
   ChakraProvider,
@@ -125,7 +126,7 @@ export const AttachBookPopup = () => {
       >
         <PopoverTrigger>
           <button className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
-            <BookPlusIcon />
+            <FaBook className="text-blue-500 h-5 w-5" />
           </button>
         </PopoverTrigger>
         <Box zIndex='popover'>
