@@ -21,6 +21,7 @@ export const ProfileTabs = ({userId}) => {
   const theme = createTheme();
 
   const fetchBookshelves = async () => {
+    if (!profile) return;
     const loadedBookshelves = await getBookshelves(uid, 'user');
     setBookshelves(loadedBookshelves);
   };

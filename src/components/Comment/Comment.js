@@ -68,7 +68,6 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
     setProfileData(null);
     setCommentData(null);
     const comment = await getComment(cId);
-    console.log(comment);
     if (!comment) {
       setIsDeleted(true);
       return;

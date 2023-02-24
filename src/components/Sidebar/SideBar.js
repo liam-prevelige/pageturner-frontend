@@ -50,15 +50,19 @@ export const SideBar = () => {
           <nav className="mb-5 text-xl text-black font-semibold">
             <ul>
               <a href={homePath}>
-                <div className={path === homePath ? activeClassName : notActiveClassName}>
-                  <HomeIcon />
-                  <li className="ml-4 sidebar-text">Home</li>
+                <div className="homepage">
+                  <div className={path === homePath ? activeClassName : notActiveClassName}>
+                    <HomeIcon />
+                    <li className="ml-4 sidebar-text">Home</li>
+                  </div>
                 </div>
               </a>
               <a href={bookClubsPath}>
-                <div className={path === bookClubsPath ? activeClassName : notActiveClassName}>
-                  <GroupIcon />
-                  <li className="ml-4 sidebar-text">Book Clubs</li>
+                <div className="bookclubs">
+                  <div className={path === bookClubsPath ? activeClassName : notActiveClassName}>
+                    <GroupIcon />
+                    <li className="ml-4 sidebar-text">Book Clubs</li>
+                  </div>
                 </div>
               </a>
               <a href={notificationsPath}>
