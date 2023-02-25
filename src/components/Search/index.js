@@ -3,10 +3,13 @@ import {SearchIcon} from '../../assets/Icons';
 import {searchContent, searchBooks} from '../../api';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import ReactLoading from 'react-loading';
-import {UserSearchResult, BookshelfSearchResult, GroupSearchResult, BookSearchResult} from './SearchResults';
+import {UserSearchResult, GroupSearchResult, BookSearchResult} from './SearchResults';
+// import {BookshelfSearchResult} from './SearchResults';
 import Row from 'react-bootstrap/Row';
 import {Comment} from '../Comment/Comment';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
+import {FaTimes} from 'react-icons/fa';
+import {FaAngleUp} from 'react-icons/fa';
 
 export const Search = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -66,6 +69,11 @@ export const Search = () => {
     }
   };
 
+  const resetSearch = () => {
+    setSearchInput('');
+    setShow(false);
+  };
+
   // Execute the book search when the user clicks the 'books' tab if books is null
   useEffect(() => {
     if (tabIndex === 4 && books === null) {
@@ -86,6 +94,7 @@ export const Search = () => {
           onKeyDown={handleKeyDown}
         />
       </div>
+      {searchInput.length>0 && <FaTimes className="cursor-pointer w-4 h-4" onClick={resetSearch}/>}
     </div>
     {show && (results == null ? <div className="flex margin-auto justify-content-center">
       <ReactLoading type="spin" color="black" />
@@ -102,10 +111,10 @@ export const Search = () => {
           >
             <TabList>
               <Tab>People</Tab>
-              <Tab>Groups</Tab>
-              <Tab>Bookshelves</Tab>
-              <Tab>Comments</Tab>
               <Tab>Books</Tab>
+              <Tab>Book Clubs</Tab>
+              {/* <Tab>Bookshelves</Tab> */}
+              <Tab>Comments</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -114,29 +123,34 @@ export const Search = () => {
                 </Row>)) : <Row>No Results</Row>}
               </TabPanel>
               <TabPanel>
+                {(books && books.length > 0) ? books.map((book, index) => (<Row key={index}>
+                  <BookSearchResult bookInfo={book}/>
+                </Row>)) : books ? <Row>No Results</Row> : <ReactLoading type="spin" color="black"/>}
+              </TabPanel>
+              <TabPanel>
                 {(results && results.groups && results.groups.length > 0) ? results.groups.map((group, index) => (<Row key={index}>
                   <GroupSearchResult groupInfo={group}/>
                 </Row>)): <Row>No Results</Row>}
               </TabPanel>
-              <TabPanel>
+              {/* <TabPanel>
                 {(results && results.bookshelves && results.bookshelves.length > 0) ? results.bookshelves.map((bookshelf, index) => (<Row key={index}>
                   <BookshelfSearchResult bookshelfInfo={bookshelf}/>
                 </Row>)): <Row>No Results</Row>}
-              </TabPanel>
+              </TabPanel> */}
               <TabPanel>
                 {(results && results.comments && results.comments.length > 0) ? results.comments.map((comment, index) => (<Row key={index}>
                   <Comment comment={comment} noParent={true}/>
                 </Row>)): <Row>No Results</Row>}
               </TabPanel>
-              <TabPanel>
-                {(books && books.length > 0) ? books.map((book, index) => (<Row key={index}>
-                  <BookSearchResult bookInfo={book}/>
-                </Row>)) : books ? <Row>No Results</Row> : <ReactLoading type="spin" color="black"/>}
-              </TabPanel>
             </TabPanels>
           </Tabs>
         </ChakraProvider>
       </ThemeProvider>
+      <div className="flex justify-center group cursor-pointer" onClick={() => setShow(false)}>
+        <div className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 group-hover:bg-primary-retweet_hover">
+          <FaAngleUp/>
+        </div>
+      </div>
     </div>)}
   </div>);
 };

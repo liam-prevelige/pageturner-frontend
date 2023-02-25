@@ -10,6 +10,7 @@ import ReactGA from 'react-ga';
 import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-ui/react'; // https://chakra-ui.com/docs/components/tabs/usage
 import {ThemeProvider, createTheme} from '@mui/material/styles';
 import {FollowModal} from '../ProfilePage/FollowModal';
+import ReactLoading from 'react-loading';
 
 export const GroupProfilePage = () => {
   const {clubId} = useParams();
@@ -18,6 +19,7 @@ export const GroupProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [adminObjects, setAdminObjects] = useState([]);
   const [memberObjects, setMemberObjects] = useState([]);
+  const [loadingModal, setLoadingModal] = useState(false);
 
   const retrieveProfileFromUid = async () => {
     const retrievedProfileArray = await getGroupProfile(clubId);
@@ -49,15 +51,19 @@ export const GroupProfilePage = () => {
   }, [profile]);
 
   const handleOpenAdminsModal = async () => {
+    setLoadingModal(true);
     const admins = await getProfilesFromIds(profile.admins);
     setAdminObjects(admins);
     setShowAdminsModal(true);
+    setLoadingModal(false);
   };
 
   const handleOpenMembersModal = async () => {
+    setLoadingModal(true);
     const members = await getProfilesFromIds(profile.members);
     setMemberObjects(members);
     setShowMembersModal(true);
+    setLoadingModal(false);
   };
 
   const handleEditProfile = async () => {
@@ -208,6 +214,7 @@ export const GroupProfilePage = () => {
                       <button className="text-base text-slate-500 mt-2" onClick={handleOpenMembersModal}><strong className="text-black">{profile.members.length}</strong>{(profile.members.length == 1 ? ' Member' : ' Members')}</button>
                       {showAdminsModal && <FollowModal title={'Admins'} users={adminObjects}/>}
                       {showMembersModal && <FollowModal title={'Members'} users={memberObjects}/>}
+                      {loadingModal && <ReactLoading type="spin" color="black" />}
                     </div>
                   </div>
                   {groupButtonOptions()}

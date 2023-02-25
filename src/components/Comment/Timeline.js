@@ -6,6 +6,7 @@
 import React, {useEffect, useState} from 'react';
 import {getFeed, getGlobalFeed} from '../../api';
 import {Comment} from './Comment';
+import ReactLoading from 'react-loading';
 
 export const Timeline = () => {
   const [timeline, setTimeline] = useState([]);
@@ -14,6 +15,8 @@ export const Timeline = () => {
   const [globalPageNumber, setGlobalPageNumber] = useState(0);
   const [privatePageNumber, setPrivatePageNumber] = useState(0);
   const [isPrivateTimeline, setIsPrivateTimeline] = useState(false);
+  const [isGettingPage, setIsGettingPage] = useState(false);
+  const [noMorePages, setNoMorePages] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -56,24 +59,34 @@ export const Timeline = () => {
   });
 
   const getNewTimelinePage = async () => {
-    try {
-      if (isPrivateTimeline) {
-        const newTimelinePage = await getFeed(privatePageNumber+1);
-        const newTimeline = timeline.concat(newTimelinePage);
-        setTimeline(newTimeline);
-        if (newTimelinePage.length > 0) {
-          setPrivatePageNumber(privatePageNumber+1);
+    if (!isGettingPage) {
+      setIsGettingPage(true);
+      try {
+        if (isPrivateTimeline) {
+          const newTimelinePage = await getFeed(privatePageNumber+1);
+          const newTimeline = timeline.concat(newTimelinePage);
+          setTimeline(newTimeline);
+          if (newTimelinePage.length > 0) {
+            setPrivatePageNumber(privatePageNumber+1);
+            setNoMorePages(false);
+          } else {
+            setNoMorePages(true);
+          }
+        } else {
+          const newTimelinePage = await getGlobalFeed(globalPageNumber+1);
+          const newTimeline = timeline.concat(newTimelinePage);
+          setTimeline(newTimeline);
+          if (newTimelinePage.length > 0) {
+            setGlobalPageNumber(globalPageNumber+1);
+            setNoMorePages(false);
+          } else {
+            setNoMorePages(true);
+          }
         }
-      } else {
-        const newTimelinePage = await getGlobalFeed(globalPageNumber+1);
-        const newTimeline = timeline.concat(newTimelinePage);
-        setTimeline(newTimeline);
-        if (newTimelinePage.length > 0) {
-          setGlobalPageNumber(globalPageNumber+1);
-        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+      setIsGettingPage(false);
     }
   };
 
@@ -99,6 +112,7 @@ export const Timeline = () => {
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
         </div>
         ))}
+      {!noMorePages && isGettingPage && <ReactLoading type="spin" color="black" />}
     </div>
   );
 };

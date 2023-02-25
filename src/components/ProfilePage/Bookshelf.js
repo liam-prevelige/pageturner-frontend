@@ -77,7 +77,7 @@ export const Bookshelf = ({bookshelfId, isProfile, bookshelfData, isMyProfile}) 
               Delete Bookshelf
             </button> :
             <div>
-              {isMyProfile && <FaEdit className="cursor-pointer w-5 h-5 fill-green-500" onClick={() => setIsEditMode(true)}/>}
+              {isMyProfile && <FaEdit className="cursor-pointer w-5 h-5 text-primary-gray_colors hover:text-green-500" onClick={() => setIsEditMode(true)}/>}
             </div>}
         </div>
         {isMyProfile && bookshelf.books.length === 0 && !isEditMode && !bookshelf.isDeleted && <div className="text-sm text-center italic">This bookshelf is empty. Search for books on the homepage to start adding!</div>}
