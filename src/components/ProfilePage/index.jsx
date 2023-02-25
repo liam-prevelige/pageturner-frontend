@@ -17,6 +17,7 @@ import {Auth} from '../Auth/Auth';
 import {FakeProfilePage} from './FakeProfilePage';
 import {FollowModal} from './FollowModal';
 import {useParams} from 'react-router-dom';
+import ReactLoading from 'react-loading';
 
 export const ProfilePage = () => {
   // const search = window.location.search;
@@ -35,6 +36,7 @@ export const ProfilePage = () => {
   const [profile, setProfile] = useState((isMyProfile && storedProfile) ? storedProfile : null);
   const [newEditedProfile, setNewEditedProfile] = useState(profile);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
 
   const retrieveProfileFromUid = async () => {
     // const uid = queryParams.get('uid');
@@ -90,15 +92,19 @@ export const ProfilePage = () => {
   };
 
   const handleOpenFollowersModal = async () => {
+    setLoadingModal(true);
     const followers = await getFollowers(profile._id);
     profile.followers = followers;
     setShowFollowersModal(true);
+    setLoadingModal(false);
   };
 
   const handleOpenFollowingModal = async () => {
+    setLoadingModal(true);
     const following = await getFollowing(profile._id);
     profile.following = following;
     setShowFollowingModal(true);
+    setLoadingModal(false);
   };
 
   const handleEditProfile = async () => {
@@ -281,6 +287,7 @@ export const ProfilePage = () => {
                     <button className="text-base text-slate-500 mt-2" type="button" onClick={handleOpenFollowingModal}><strong className="text-black">{profile.following.length}</strong> Following</button>
                     {showFollowersModal && <FollowModal title={'Followers'} users={profile.followers}/>}
                     {showFollowingModal && <FollowModal title={'Following'} users={profile.following}/>}
+                    {loadingModal && <ReactLoading type="spin" color="black" />}
                   </div>
                 </div>
               </div>

@@ -168,7 +168,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
                   <span className="text-primary-gray_colors">• {formatDistance(new Date(commentData.metadata.timestamp), new Date())} ago</span>
                 </div>
                 <div className="flex flex-row align-text-end justify-end align-end">
-                  {myProfile && commentData && commentData.uid === myProfile._id && <FaEdit className="w-6 h-4 text-green-500" onClick={(e) => handleEditCb(e)}/>}
+                  {myProfile && commentData && commentData.uid === myProfile._id && <FaEdit className="w-6 h-4 text-primary-gray_colors hover:text-green-500" onClick={(e) => handleEditCb(e)}/>}
                 </div>
               </div>
             </div>

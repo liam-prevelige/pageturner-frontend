@@ -6,12 +6,15 @@
 import React, {useEffect, useState} from 'react';
 import {getClubFeed} from '../../api';
 import {Comment} from '../Comment/Comment';
+import ReactLoading from 'react-loading';
 
 export const ClubTimeline = ({club}) => {
   const [timeline, setTimeline] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddingPage, setIsAddingPage] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
+  const [isGettingPage, setIsGettingPage] = useState(false);
+  const [noMorePages, setNoMorePages] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -37,15 +40,21 @@ export const ClubTimeline = ({club}) => {
   });
 
   const getNewTimelinePage = async () => {
-    try {
-      const newTimelinePage = await getClubFeed(club._id, pageNumber+1);
-      const newTimeline = timeline.concat(newTimelinePage);
-      setTimeline(newTimeline);
-      if (newTimelinePage.length > 0) {
-        setPrivatePageNumber(pageNumber+1);
+    if (!isGettingPage && !noMorePages) {
+      setIsGettingPage(true);
+      try {
+        const newTimelinePage = await getClubFeed(club._id, pageNumber+1);
+        const newTimeline = timeline.concat(newTimelinePage);
+        setTimeline(newTimeline);
+        if (newTimelinePage.length > 0) {
+          setPrivatePageNumber(pageNumber+1);
+        } else {
+          setNoMorePages(true);
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+      setIsGettingPage(false);
     }
   };
 
@@ -71,6 +80,7 @@ export const ClubTimeline = ({club}) => {
           <div className="border-b ml-3 mr-3 border-slate-300"></div>
         </div>
         ))}
+      {isGettingPage && <ReactLoading type="spin" color="black" />}
     </div>
   );
 };

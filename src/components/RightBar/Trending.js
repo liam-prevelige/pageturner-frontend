@@ -36,9 +36,9 @@ export const Trending = () => {
             </div>
             ))}
         </div>
-        <div className="p-2 transform transition-colors duration-2 bg-slate-200 cursor-pointer">
+        {/* <div className="p-2 transform transition-colors duration-2 bg-slate-200 cursor-pointer">
           <span className=" text-primary-button">Show more</span>
-        </div>
+        </div> */}
       </div>
     </>
   );
