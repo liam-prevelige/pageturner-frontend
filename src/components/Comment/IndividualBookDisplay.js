@@ -37,7 +37,7 @@ export const IndividualBookDisplay = ({bid}) => {
                   {book.title}
                 </div>
                 <div className="text-md text-left">
-                  {book.authors[0]}
+                  {book.authors && book.authors[0]}
                 </div>
                 <div className="text-sm text-left">
                   Published {book.publishedDate}
