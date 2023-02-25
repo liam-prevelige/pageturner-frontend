@@ -130,7 +130,7 @@ export const SideBar = () => {
                 type="text"
                 placeholder={feedbackPlaceholder}
                 value={feedbackInput}
-                rows="10"
+                rows="5"
                 onChange={(e) => handleInputChange(e)}
               />
               <div className="flex justify-end mt-1">
