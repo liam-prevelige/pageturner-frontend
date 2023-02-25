@@ -91,10 +91,10 @@ const Form = ({firstFieldRef, onCancel}) => {
             <div className="flex flex-row space-x-2">
               {'volumeInfo' in bookInfo && 'imageLinks' in bookInfo.volumeInfo && 'smallThumbnail' in bookInfo.volumeInfo.imageLinks &&
             <div className="flex flex-row space-x-2">
-              <img className="h-8 object-scale-down" src={bookInfo.volumeInfo.imageLinks.smallThumbnail} />
-              <div className="flex flex-col items-left text-sm space-x-2 h-8 justify-center">
+              {bookInfo.volumeInfo.imageLinks && bookInfo.volumeInfo.imageLinks.smallThumbnail && <img className="h-8 object-scale-down" src={bookInfo.volumeInfo.imageLinks.smallThumbnail} />}
+              <div className="flex flex-col items-left text-sm space-x-2 min-h-8 justify-center">
                 <span className="ml-1 font-bold text-black">{bookInfo.volumeInfo.title}</span>
-                <span className="ml-2 text-black">{bookInfo.volumeInfo.authors[0]}</span>
+                {bookInfo.volumeInfo.authors && bookInfo.volumeInfo.authors[0] && <span className="ml-2 text-black">{bookInfo.volumeInfo.authors[0]}</span>}
               </div>
             </div>}
             </div>
