@@ -110,7 +110,12 @@ export const ProfilePage = () => {
   const handleEditProfile = async () => {
     if (isEditMode) {
       let updatedProfile = null;
-      updatedProfile = await updateProfile(newEditedProfile);
+      try {
+        updatedProfile = await updateProfile(newEditedProfile);
+      } catch (e) {
+        alert('Uploaded image is too large. Please upload a smaller image.');
+        return;
+      }
       sessionStorage.setItem('profile', JSON.stringify(updatedProfile));
       setNewEditedProfile(updatedProfile);
       window.location.reload();
