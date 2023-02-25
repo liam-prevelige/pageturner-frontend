@@ -45,7 +45,7 @@ export const Search = () => {
 
     // Get search results for all content
     const res = await searchContent(searchInput);
-
+    console.log(res);
     // Set results (will change from loading icon to results)
     setResults(res);
   };
@@ -54,7 +54,6 @@ export const Search = () => {
   const performBookSearch = async () => {
     // Clear books to null
     setBooks(null);
-
     // Get search results for books
     const res = await searchBooks(searchInput);
 
@@ -76,7 +75,7 @@ export const Search = () => {
 
   // Execute the book search when the user clicks the 'books' tab if books is null
   useEffect(() => {
-    if (tabIndex === 4 && books === null) {
+    if (tabIndex === 1 && books === null) {
       performBookSearch();
     }
   }, [tabIndex]);
@@ -118,17 +117,17 @@ export const Search = () => {
             </TabList>
             <TabPanels>
               <TabPanel>
-                {(results && results.users && results.users.length > 0) ? results.users.map((user, index) => (<Row key={index}>
+                {(results && results.users && results.users.length > 0) ? results.users.map((user) => (<Row key={user._id}>
                   <UserSearchResult userInfo={user}/>
                 </Row>)) : <Row>No Results</Row>}
               </TabPanel>
               <TabPanel>
-                {(books && books.length > 0) ? books.map((book, index) => (<Row key={index}>
+                {(books && books.length > 0) ? books.map((book) => (<Row key={book.volumeId}>
                   <BookSearchResult bookInfo={book}/>
                 </Row>)) : books ? <Row>No Results</Row> : <ReactLoading type="spin" color="black"/>}
               </TabPanel>
               <TabPanel>
-                {(results && results.groups && results.groups.length > 0) ? results.groups.map((group, index) => (<Row key={index}>
+                {(results && results.groups && results.groups.length > 0) ? results.groups.map((group) => (<Row key={group._id}>
                   <GroupSearchResult groupInfo={group}/>
                 </Row>)): <Row>No Results</Row>}
               </TabPanel>
@@ -138,7 +137,7 @@ export const Search = () => {
                 </Row>)): <Row>No Results</Row>}
               </TabPanel> */}
               <TabPanel>
-                {(results && results.comments && results.comments.length > 0) ? results.comments.map((comment, index) => (<Row key={index}>
+                {(results && results.comments && results.comments.length > 0) ? results.comments.map((comment) => (<Row key={comment._id}>
                   <Comment comment={comment} noParent={true}/>
                 </Row>)): <Row>No Results</Row>}
               </TabPanel>
