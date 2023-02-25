@@ -3,6 +3,7 @@ import {getNotifications} from '../../api';
 import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon} from '../../assets/Icons';
 import {Auth} from '../Auth/Auth';
 import {FaAngleUp, FaAngleDown} from 'react-icons/fa';
+import {sendFeedback} from '../../api';
 
 export const SideBar = () => {
   const [path, setPath] = useState(window.location.pathname);
@@ -10,6 +11,7 @@ export const SideBar = () => {
   const [viewCount, setViewCount] = useState(0);
   const [feedbackInput, setFeedbackInput] = useState('');
   const [collapsed, setCollapsed] = useState(false);
+  const [feedbackPlaceholder, setFeedbackPlaceholder] = useState('Find a bug or have any comments? Let us know!');
 
   const handleInputChange = (e) => {
     setFeedbackInput(e.target.value);
@@ -45,6 +47,19 @@ export const SideBar = () => {
 
   const reloadPageFunc = () => {
     window.location.reload();
+  };
+
+  const submitFeedback = () => {
+    if (feedbackInput.length === 0) return;
+    if (profile && profile.email) {
+      sendFeedback(profile.email, feedbackInput);
+    } else {
+      sendFeedback('Anonymous', feedbackInput);
+    }
+    // Set the placeholder to 'Message received, thank you!' for 2 seconds, then revert back to original placeholder
+    setFeedbackInput('');
+    setFeedbackPlaceholder('Message received, thanks!');
+    setTimeout(() => setFeedbackPlaceholder('Find a bug or have any comments? Let us know!'), 2000);
   };
 
   return (
@@ -113,7 +128,7 @@ export const SideBar = () => {
               <textarea
                 className="flex focus:outline-none border bg-white border-slate-400 break-words resize-none p-2 text-slate-800 w-full"
                 type="text"
-                placeholder="Find a bug or have any comments? Let us know!"
+                placeholder={feedbackPlaceholder}
                 value={feedbackInput}
                 rows="10"
                 onChange={(e) => handleInputChange(e)}

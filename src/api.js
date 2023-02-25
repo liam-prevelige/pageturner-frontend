@@ -168,6 +168,31 @@ export const updateProfile = async (newProfile) => {
 };
 
 /**
+ * Sends a feedback message to the backend
+ *
+ * @param {String} user - 'Anonymous' or user's email
+ * @param {String} feedbackText - feedback message
+ */
+export const sendFeedback = async (user, feedbackText) => {
+  await refreshToken();
+  const response = await fetch(`${API_URL}/user/send_feedback`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': sessionStorage.getItem('auth_token'),
+    },
+    body: JSON.stringify({user: user, feedbackText: feedbackText}),
+  });
+
+  const res = await response.json();
+  if (!response.ok) {
+    throw new Error('Call to /send_feedback failed');
+  }
+  return res.result;
+};
+
+/**
  * Creates a new group
  *
  * @param {dict} newGroupProfile - new group profile
