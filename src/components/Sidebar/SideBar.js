@@ -10,14 +10,18 @@ export const SideBar = () => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
   const [viewCount, setViewCount] = useState(0);
   const [feedbackInput, setFeedbackInput] = useState('');
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(sessionStorage.getItem('compressed')==='true');
   const [feedbackPlaceholder, setFeedbackPlaceholder] = useState('Find a bug or have any comments? Let us know!');
-
+  console.log('top', sessionStorage.getItem('compressed'));
   const handleInputChange = (e) => {
     setFeedbackInput(e.target.value);
   };
 
   useEffect(() => {
+    if (sessionStorage.getItem('compressed') === null) {
+      sessionStorage.setItem('compressed', 'false');
+    }
+    setCollapsed(sessionStorage.getItem('compressed') === 'true');
     if (!profile) return;
     // Fetch notifications every 60 seconds
     const intervalId = setInterval(() => {
@@ -60,6 +64,14 @@ export const SideBar = () => {
     setFeedbackInput('');
     setFeedbackPlaceholder('Message received, thanks!');
     setTimeout(() => setFeedbackPlaceholder('Find a bug or have any comments? Let us know!'), 2000);
+  };
+
+  const switchCollapsed = (e, value) => {
+    e.stopPropagation();
+    console.log(value);
+    sessionStorage.setItem('compressed', value.toString());
+    setCollapsed(value);
+    console.log(sessionStorage.getItem('compressed'));
   };
 
   return (
@@ -140,10 +152,10 @@ export const SideBar = () => {
               </div>
             </div>}
             <div className="flex items-center justify-center">
-              {!collapsed && <button className="flex bg-red-300 w-7 h-7 -mb-5 justify-center align-middle items-center rounded-full border-2 border-red-300" onClick={() => setCollapsed(!collapsed)}>
+              {!collapsed && <button className="flex bg-red-300 w-7 h-7 -mb-5 justify-center align-middle items-center rounded-full border-2 border-red-300" onClick={(e) => switchCollapsed(e, true)}>
                 <FaAngleUp className="w-5 h-5 text-white rounded-full"/>
               </button>}
-              {collapsed && <button className="flex bg-green-300 w-7 h-7 -mb-5 justify-center align-middle items-center rounded-full border-2 border-green-300" onClick={() => setCollapsed(!collapsed)}>
+              {collapsed && <button className="flex bg-green-300 w-7 h-7 -mb-5 justify-center align-middle items-center rounded-full border-2 border-green-300" onClick={(e) => switchCollapsed(e, false)}>
                 <FaAngleDown className="mt-0.5 w-5 h-5 text-white rounded-full"/>
               </button>}
             </div>
