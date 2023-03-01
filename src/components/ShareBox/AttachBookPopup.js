@@ -126,7 +126,7 @@ export const AttachBookPopup = () => {
       >
         <PopoverTrigger>
           <button className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
-            <FaBook className="text-blue-500 h-5 w-5" />
+            <FaBook className="text-primary-button h-5 w-5" />
           </button>
         </PopoverTrigger>
         <Box zIndex='popover'>

@@ -84,7 +84,7 @@ export const AttachBookshelfPopup = () => {
       >
         <PopoverTrigger>
           <button className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
-            <FaListAlt className="h-5 w-7 text-blue-500" />
+            <FaListAlt className="h-5 w-7 text-primary-button" />
           </button>
         </PopoverTrigger>
         <Box zIndex='popover'>
