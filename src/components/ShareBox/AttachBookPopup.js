@@ -89,7 +89,7 @@ const Form = ({firstFieldRef, onCancel}) => {
         </div> : <div> {books.map((bookInfo) => <div key={bookInfo.volumeId} className="cursor-pointer p-2 text-sm hover:bg-slate-300" onClick={() => attachSelectedBook(bookInfo)}>
           <div className='flex space-x-3 px-2 py-2 justify-between border-primary-container_border_color cursor-pointer'>
             <div className="flex flex-row space-x-2">
-              {'volumeInfo' in bookInfo && 'imageLinks' in bookInfo.volumeInfo && 'smallThumbnail' in bookInfo.volumeInfo.imageLinks &&
+              {bookInfo.volumeInfo &&
             <div className="flex flex-row space-x-2">
               {bookInfo.volumeInfo.imageLinks && bookInfo.volumeInfo.imageLinks.smallThumbnail && <img className="h-8 object-scale-down" src={bookInfo.volumeInfo.imageLinks.smallThumbnail} />}
               <div className="flex flex-col items-left text-sm space-x-2 min-h-8 justify-center">

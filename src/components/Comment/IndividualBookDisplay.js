@@ -4,7 +4,7 @@ import ReactLoading from 'react-loading';
 
 import {getBook} from '../../api';
 
-export const IndividualBookDisplay = ({bid}) => {
+export const IndividualBookDisplay = ({bid, disableClickThrough}) => {
   const [book, setBook] = useState(null);
 
   const navigate = useNavigate();
@@ -16,6 +16,9 @@ export const IndividualBookDisplay = ({bid}) => {
 
   const loadBook = (e) => {
     e.stopPropagation();
+    if (disableClickThrough) {
+      return;
+    }
     const path = `/book-info?id=${bid}`;
     navigate(path);
   };
