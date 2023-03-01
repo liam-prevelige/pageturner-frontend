@@ -52,6 +52,7 @@ const Form = ({firstFieldRef, onCancel}) => {
           Attach Bookshelf
           <div className="border-b mr-3 mt-2 mb-2 border-black"/>
         </FormLabel>
+        {bookshelves && bookshelves.length === 0 && <div className="text-sm italic">No bookshelves found</div>}
         {bookshelves && bookshelves.map((bookshelfData) =>
           (<div key={bookshelfData._id}>
             <div className="cursor-pointer p-2 text-sm hover:bg-slate-300" onClick={() => attachSelectedBookshelf(bookshelfData)}>
