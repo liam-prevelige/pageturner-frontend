@@ -13,7 +13,7 @@ module.exports = {
       },
       colors: {
         primary: {
-          button: '#1da1f2',
+          button: '#45A070',
           button_hover: 'rgb(23, 124, 192)',
           twıtter_ıcon: '#1da1f2',
           navi_hover: '#161616',

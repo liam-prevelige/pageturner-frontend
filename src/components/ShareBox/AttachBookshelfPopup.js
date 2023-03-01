@@ -52,6 +52,7 @@ const Form = ({firstFieldRef, onCancel}) => {
           Attach Bookshelf
           <div className="border-b mr-3 mt-2 mb-2 border-black"/>
         </FormLabel>
+        {bookshelves && bookshelves.length === 0 && <div className="text-sm italic">No bookshelves found</div>}
         {bookshelves && bookshelves.map((bookshelfData) =>
           (<div key={bookshelfData._id}>
             <div className="cursor-pointer p-2 text-sm hover:bg-slate-300" onClick={() => attachSelectedBookshelf(bookshelfData)}>
@@ -84,7 +85,7 @@ export const AttachBookshelfPopup = () => {
       >
         <PopoverTrigger>
           <button className="flex items-center justify-center w-9 h-9 rounded-full transform transition-colors duration-2 hover:bg-slate-300 cursor-pointer">
-            <FaListAlt className="h-5 w-7 text-blue-500" />
+            <FaListAlt className="h-5 w-7 text-primary-button" />
           </button>
         </PopoverTrigger>
         <Box zIndex='popover'>

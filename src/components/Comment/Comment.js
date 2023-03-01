@@ -53,7 +53,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
 
   const getData = async (cId) => {
     // We should already have the comment info from props
-    if (commentData) {
+    if (commentData && commentData.profile) {
       setProfileData(commentData.profile);
       if (myProfile != null) {
         setIsLiked(myProfile.likedPosts && myProfile.likedPosts.includes(commentData._id));

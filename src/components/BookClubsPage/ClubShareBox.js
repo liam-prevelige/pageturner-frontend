@@ -17,7 +17,7 @@ export const ClubShareBox = ({club}) => {
   const [pid, setPid] = useState('');
   const [ptype, setPtype] = useState('');
   const canPost = profile && club.members.includes(profile._id);
-  const placeholderText = canPost ? 'Share your thoughts with ' + club.name + '!' : 'Post to ' + club.name + ' by clicking \'More Info\' above and joining the club!';
+  const placeholderText = canPost ? 'Share your thoughts with ' + club.name + '!' : 'Post to ' + club.name + ' by joining the club!';
 
   const submitPostCb = async () => {
     if (postText && postText.length > 0) {
