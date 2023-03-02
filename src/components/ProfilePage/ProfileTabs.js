@@ -9,7 +9,7 @@ import {getBookshelves, getPosts, getBookmarks, getLikedPosts} from '../../api';
 // import {PopoverForm} from './BookshelfPopup';
 import {Bookshelf} from './Bookshelf';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
-import {ReactLoading} from 'react-loading';
+import ReactLoading from 'react-loading';
 
 export const ProfileTabs = ({userId}) => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
@@ -27,7 +27,7 @@ export const ProfileTabs = ({userId}) => {
   });
 
   const fetchBookshelves = async () => {
-    if (!profile) return;
+    // if (!profile) return;
     if (bookshelves.length==0 && tabIndex===0) {
       setLoading(true);
       const loadedBookshelves = await getBookshelves(uid, 'user');
