@@ -68,10 +68,8 @@ export const SideBar = () => {
 
   const switchCollapsed = (e, value) => {
     e.stopPropagation();
-    console.log(value);
     sessionStorage.setItem('compressed', value.toString());
     setCollapsed(value);
-    console.log(sessionStorage.getItem('compressed'));
   };
 
   return (

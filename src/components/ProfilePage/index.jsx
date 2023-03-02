@@ -23,7 +23,6 @@ export const ProfilePage = () => {
   // const search = window.location.search;
   // const queryParams = new URLSearchParams(search);
   const {uid} = useParams();
-  console.log(uid);
   const storedProfile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
 
   if (!storedProfile && !uid) {

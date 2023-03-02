@@ -2,7 +2,7 @@ import {React, useState, useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Share} from '../../assets/Icons';
 import {Parent} from './Parent';
-import {getProfile, getComment, updateLikes, updateBookmarks, postNotification, deleteComment} from '../../api';
+import {getBasicProfile, getComment, updateLikes, updateBookmarks, postNotification, deleteComment} from '../../api';
 import ReactLoading from 'react-loading';
 import {formatDistance} from 'date-fns';
 import {FaHeart, FaRegHeart, FaRegComment, FaBookmark, FaRegBookmark, FaTrash, FaEdit} from 'react-icons/fa';
@@ -72,7 +72,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
       setIsDeleted(true);
       return;
     }
-    const profile = await getProfile(comment.uid);
+    const profile = await getBasicProfile(comment.uid);
     setProfileData(profile);
     setCommentData(comment);
     if (myProfile != null) {

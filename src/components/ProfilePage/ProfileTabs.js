@@ -9,6 +9,7 @@ import {getBookshelves, getPosts, getBookmarks, getLikedPosts} from '../../api';
 // import {PopoverForm} from './BookshelfPopup';
 import {Bookshelf} from './Bookshelf';
 import {ThemeProvider, createTheme} from '@mui/material/styles';
+import ReactLoading from 'react-loading';
 
 export const ProfileTabs = ({userId}) => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
@@ -17,38 +18,55 @@ export const ProfileTabs = ({userId}) => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [bookmarksIds, setBookmarksIds] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
-
+  const [tabIndex, setTabIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
   const theme = createTheme();
-
-  const fetchBookshelves = async () => {
-    if (!profile) return;
-    const loadedBookshelves = await getBookshelves(uid, 'user');
-    setBookshelves(loadedBookshelves);
-  };
 
   window.addEventListener('bookshelfCreated', () => {
     fetchBookshelves();
   });
 
+  const fetchBookshelves = async () => {
+    // if (!profile) return;
+    if (bookshelves.length==0 && tabIndex===0) {
+      setLoading(true);
+      const loadedBookshelves = await getBookshelves(uid, 'user');
+      setBookshelves(loadedBookshelves);
+      setLoading(false);
+    }
+  };
+
   const fetchPosts = async () => {
-    const profilePosts = await getPosts(uid);
-    setPosts(profilePosts);
+    if (posts.length==0 && tabIndex===1) {
+      setLoading(true);
+      const profilePosts = await getPosts(uid);
+      setPosts(profilePosts);
+      setLoading(false);
+    }
   };
 
   const fetchBookmarkedIds = async () => {
-    let fetchedBookmarksIds = await getBookmarks(uid);
-    if (fetchedBookmarksIds) {
-      fetchedBookmarksIds = fetchedBookmarksIds.reverse();
+    if (bookmarksIds.length===0 && tabIndex===2) {
+      setLoading(true);
+      let fetchedBookmarksIds = await getBookmarks(uid);
+      if (fetchedBookmarksIds) {
+        fetchedBookmarksIds = fetchedBookmarksIds.reverse();
+      }
+      setBookmarksIds(fetchedBookmarksIds);
+      setLoading(false);
     }
-    setBookmarksIds(fetchedBookmarksIds);
   };
 
   const fetchLikedPosts = async () => {
-    let fetchedLikedPosts = await getLikedPosts(uid);
-    if (fetchedLikedPosts) {
-      fetchedLikedPosts = fetchedLikedPosts.reverse();
+    if (likedPosts.length===0 && tabIndex===3) {
+      setLoading(true);
+      let fetchedLikedPosts = await getLikedPosts(uid);
+      if (fetchedLikedPosts) {
+        fetchedLikedPosts = fetchedLikedPosts.reverse();
+      }
+      setLikedPosts(fetchedLikedPosts);
+      setLoading(false);
     }
-    setLikedPosts(fetchedLikedPosts);
   };
 
   useEffect(() => {
@@ -56,12 +74,19 @@ export const ProfileTabs = ({userId}) => {
     fetchPosts();
     fetchBookmarkedIds();
     fetchLikedPosts();
+  }, [tabIndex]);
+
+  useEffect(() => {
+    setBookshelves([]);
+    setPosts([]);
+    setBookmarksIds([]);
+    setLikedPosts([]);
   }, [uid]);
 
   return (
     <ThemeProvider theme={theme}>
       <ChakraProvider resetCSS={false}>
-        <Tabs isFitted className="m-3" variant='line' colorScheme='cyan'>
+        <Tabs isFitted className="m-3" variant='line' colorScheme='cyan' index={tabIndex} onChange={(e) => setTabIndex(e)}>
           <TabList>
             <Tab>Bookshelves</Tab>
             <Tab>Posts</Tab>
@@ -78,6 +103,7 @@ export const ProfileTabs = ({userId}) => {
                       <PopoverForm/>
                       <div className="ml-3 mt-1">Create Bookshelf</div>
                     </div>}
+                  {loading && <ReactLoading type="spin" color="black" />}
                   {bookshelves && bookshelves.map((bookshelfData) =>
                     (<div key={bookshelfData._id}>
                       <Bookshelf bookshelfId={bookshelfData._id} isProfile={true} isMyProfile={profile && (!uid || profile._id==uid)}/>
@@ -90,6 +116,7 @@ export const ProfileTabs = ({userId}) => {
             {/* Posts Tab */}
             <TabPanel width={'710px'}>
               <div className="bg-white h-full">
+                {loading && <ReactLoading type="spin" color="black" />}
                 {posts && posts.map((commentData) =>
                   (<div key={commentData._id}>
                     <Comment comment={commentData} isMyProfile={profile && (!uid || profile._id==uid)}/>
@@ -101,6 +128,7 @@ export const ProfileTabs = ({userId}) => {
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowX: 'auto'}}>
                 <div className="bg-white h-full">
+                  {loading && <ReactLoading type="spin" color="black" />}
                   {bookmarksIds && bookmarksIds.map((bookmarkId) =>
                     (<div key={bookmarkId}>
                       <Comment commentId={bookmarkId}/>
@@ -112,6 +140,7 @@ export const ProfileTabs = ({userId}) => {
             </TabPanel>
             <TabPanel width={'710px'}>
               <div className="bg-white h-full">
+                {loading && <ReactLoading type="spin" color="black" />}
                 {likedPosts && likedPosts.map((commentId) =>
                   (<div key={commentId}>
                     <Comment commentId={commentId}/>
