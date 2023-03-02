@@ -33,7 +33,7 @@ export const ProfilePage = () => {
   const [showFollowingModal, setShowFollowingModal] = useState(false);
   const isMyProfile = !uid || (storedProfile && uid === storedProfile._id);
   const [profile, setProfile] = useState((isMyProfile && storedProfile) ? storedProfile : null);
-  const [newEditedProfile, setNewEditedProfile] = useState(profile);
+  const [newEditedProfile, setNewEditedProfile] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [loadingModal, setLoadingModal] = useState(false);
 
@@ -119,7 +119,7 @@ export const ProfilePage = () => {
       setNewEditedProfile(updatedProfile);
       window.location.reload();
     } else {
-      setNewEditedProfile(profile);
+      setNewEditedProfile({});
     }
     setIsEditMode(!isEditMode);
   };
