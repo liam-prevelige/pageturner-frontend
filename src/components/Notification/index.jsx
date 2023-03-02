@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from 'react';
 import {FaHeart, FaComment, FaUser} from 'react-icons/fa';
 import {Comment} from '../Comment/Comment';
-import {getNotifications, updateNotifications, getComment, getProfile} from '../../api';
+import {getNotifications, updateNotifications, getComment, getBasicProfile} from '../../api';
 import ReactGA from 'react-ga';
 import {formatDistance} from 'date-fns';
 import {useNavigate} from 'react-router-dom';
@@ -33,7 +33,7 @@ export const Notification = () => {
 
   const loadProfileOther = async (cId) => {
     const comment = await getComment(cId);
-    const userId = await getProfile(comment.uid);
+    const userId = await getBasicProfile(comment.uid);
     const path = `/profile/${userId._id}`;
     navigate(path);
   };

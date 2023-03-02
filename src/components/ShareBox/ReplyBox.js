@@ -1,5 +1,5 @@
 import {React, useState} from 'react';
-import {getComment, getProfile, postComment, postNotification} from '../../api';
+import {getComment, getBasicProfile, postComment, postNotification} from '../../api';
 import {useParams} from 'react-router-dom';
 
 export const ReplyBox = () => {
@@ -18,11 +18,11 @@ export const ReplyBox = () => {
 
       // Get the owner of the post
       const comment = await getComment(pid);
-      const postOwner = await getProfile(comment.uid);
+      const postOwner = await getBasicProfile(comment.uid);
 
       // Get the commenter id
       const reply = await getComment(commentId);
-      const commenter = await getProfile(reply.uid);
+      const commenter = await getBasicProfile(reply.uid);
 
       await postNotification(postOwner._id, commentId, commenter.tag, false, 'reply');
     }

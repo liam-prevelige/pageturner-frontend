@@ -1,6 +1,6 @@
 import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {getProfile} from '../../api';
+import {getBasicProfile} from '../../api';
 import {getComment} from '../../api';
 import ReactLoading from 'react-loading';
 import {Bookshelf} from '../ProfilePage/Bookshelf';
@@ -30,7 +30,7 @@ export const Parent = ({comment, commentId}) => {
       setIsDeleted(true);
       return;
     }
-    const profile = await getProfile(comment.uid);
+    const profile = await getBasicProfile(comment.uid);
     setProfileData(profile);
     setCommentData(comment);
   };

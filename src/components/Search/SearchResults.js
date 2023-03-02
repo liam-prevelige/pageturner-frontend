@@ -1,6 +1,6 @@
 import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {getProfile} from '../../api';
+import {getBasicProfile} from '../../api';
 import {BookshelfPopup} from '../BookInfo/BookshelfPopup';
 
 export const UserSearchResult = (userInfo) => {
@@ -43,7 +43,7 @@ export const BookshelfSearchResult = ({bookshelfInfo}) => {
   const getUser = async (uid) => {
     if (!uid) return;
     setUser(null);
-    const profile = await getProfile(uid);
+    const profile = await getBasicProfile(uid);
     setUser(profile);
   };
 
