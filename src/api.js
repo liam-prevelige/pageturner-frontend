@@ -11,7 +11,6 @@ const API_URL = (process.env.NODE_ENV === 'development') ? 'http://localhost:500
 export async function refreshToken() {
   const expiryDate = sessionStorage.getItem('expiry_date');
   const profile = JSON.parse(sessionStorage.getItem('profile'));
-
   if (!expiryDate || !profile || !profile.email) {
     return;
   }

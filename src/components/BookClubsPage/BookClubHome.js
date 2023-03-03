@@ -33,7 +33,6 @@ export const BookClubHome = () => {
 
   const updatePostCount = async () => {
     if (!club) return;
-    console.log('club not null');
     const numPosts = await getPostCount(club._id, 'club');
     setNumPosts(numPosts);
   };
