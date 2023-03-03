@@ -74,7 +74,6 @@ export const BookClubsPage = () => {
   const retrieveTopClubs = async () => {
     const response = await getTopClubs();
     const trendingClubs = response.result;
-    console.log(trendingClubs);
     if (trendingClubs.length > 0) {
       const leftTrendingCol = [];
       const rightTrendingCol = [];

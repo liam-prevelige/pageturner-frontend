@@ -12,7 +12,6 @@ export const SideBar = () => {
   const [feedbackInput, setFeedbackInput] = useState('');
   const [collapsed, setCollapsed] = useState(sessionStorage.getItem('compressed')==='true');
   const [feedbackPlaceholder, setFeedbackPlaceholder] = useState('Find a bug or have any comments? Let us know!');
-  console.log('top', sessionStorage.getItem('compressed'));
   const handleInputChange = (e) => {
     setFeedbackInput(e.target.value);
   };

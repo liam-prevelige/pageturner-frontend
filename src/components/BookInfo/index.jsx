@@ -92,6 +92,12 @@ export const BookInfo = () => {
     }
   };
 
+  const handleBuyBook = () => {
+    const affiliateTag = 'pageturner0a-20';
+    const amazonSearchUrl = `https://www.amazon.com/s?k=${book.title}&tag=${affiliateTag}`;
+    window.open(amazonSearchUrl, '_blank');
+  };
+
   const loadReviews = async (newBookId) => {
     if (!newBookId) return;
     let newReviews = await getReviews(newBookId);
@@ -108,6 +114,7 @@ export const BookInfo = () => {
 
   useEffect(() => {
     if (book) {
+      console.log(book);
       loadReviews(book.bookId);
     }
   }, [book]);
@@ -137,7 +144,12 @@ export const BookInfo = () => {
                   precision={0.5}
                   readOnly
                 />
-                <BookshelfPopup bid={book.bookId} useIcon={false}/>
+                <div className="flex flex-row">
+                  <BookshelfPopup bid={book.bookId} useIcon={false}/>
+                  {book.title && <button className="font-bold px-3 mt-3 mr-3 text-blue-400 wrap-text text-sm rounded-full shadow-sm py-2 border-2 border-blue-400 transform transition-colors duration-200 hover:bg-blue-400 hover:border-blue-400 hover:text-white" onClick={handleBuyBook}>
+                    Buy Now
+                  </button>}
+                </div>
               </div>
             </div>
             {isCollapsed && <div>
@@ -172,7 +184,9 @@ export const BookInfo = () => {
               </div>
               {ratingMissing && <div>Please provide a star rating to post this review.</div>}
               {reviewMissing && <div>Please provide text for this review.</div>}
-              <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>Post Review</button>
+              <button className="button-tweet font-bold wrap-text justify-center text-primary-button rounded-full shadow-sm justify-center py-2 px-4 border-2 border-primary-button transform transition-colors duration-200 hover:bg-primary-button hover:text-white" type="submit" onClick={submitPostCb}>
+                Post Review
+              </button>
             </div>
           }
 

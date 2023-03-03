@@ -30,7 +30,6 @@ export const ThreadView = () => {
   }, []);
 
   useEffect(() => {
-    console.log('commentIdParam changed', commentIdParam);
     setTopLevelCommentId(commentIdParam);
     loadReplies(commentIdParam);
   }, [commentIdParam]);

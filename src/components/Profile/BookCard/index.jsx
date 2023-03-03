@@ -39,7 +39,6 @@ export const PostContainer = () => {
       load();
     } else {
       addPosts();
-      console.log(posts.length);
       const tempTriggerNumber = triggerNumber;
       setTriggerNumber(tempTriggerNumber + 10);
     }

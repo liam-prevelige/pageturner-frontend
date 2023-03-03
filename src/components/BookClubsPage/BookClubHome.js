@@ -33,7 +33,6 @@ export const BookClubHome = () => {
 
   const updatePostCount = async () => {
     if (!club) return;
-    console.log('club not null');
     const numPosts = await getPostCount(club._id, 'club');
     setNumPosts(numPosts);
   };
@@ -52,7 +51,7 @@ export const BookClubHome = () => {
       {club && <div className="min-h-screen max-w-7xl flex">
         <main className="flex-1 flex flex-col">
           <div className="h-full border-r w-full border-l">
-            <div className="sticky top-0 z-20 flex flex-row w-full justify-between border-slate-300 border-b border-slate-300 p-4" style={{backgroundImage: `url(\'${club.banner_picture}\')`, backgroundSize: 'cover'}}>
+            <div className="flex flex-row w-full justify-between border-slate-300 border-b border-slate-300 p-4" style={{backgroundImage: `url(\'${club.banner_picture}\')`, backgroundSize: 'cover'}}>
               <div className='flex flex-col bg-white rounded p-3'>
                 <div className="font-bold text-3xl text-black mb-1">
                   {club.name}

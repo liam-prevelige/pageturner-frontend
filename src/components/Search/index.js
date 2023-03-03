@@ -45,7 +45,6 @@ export const Search = () => {
 
     // Get search results for all content
     const res = await searchContent(searchInput);
-    console.log(res);
     // Set results (will change from loading icon to results)
     setResults(res);
   };

@@ -11,7 +11,32 @@ export const IndividualBookDisplay = ({bid, disableClickThrough}) => {
   const retrieveBookFromId = async () => {
     if (!bid) return;
     const retrievedBook = await getBook(bid);
+    fillMissingData(retrievedBook);
     setBook(retrievedBook);
+  };
+
+  const fillMissingData = (retrievedBook) => {
+    if (!retrievedBook.imageLinks) {
+      retrievedBook.imageLinks = {thumbnail: 'https://cdn.pixabay.com/photo/2018/01/17/18/43/book-3088777__340.png'};
+    }
+    if (!retrievedBook.averageRating) {
+      retrievedBook.averageRating = 0;
+    }
+    if (!retrievedBook.publishedDate) {
+      retrievedBook.publishedDate = 'Unknown';
+    }
+    if (!retrievedBook.pageCount) {
+      retrievedBook.pageCount = 'Unknown';
+    }
+    if (!retrievedBook.authors) {
+      retrievedBook.authors = ['Author Unknown'];
+    }
+    if (!retrievedBook.categories) {
+      retrievedBook.categories = ['Uncategorized'];
+    }
+    if (!retrievedBook.description) {
+      retrievedBook.description = 'No description available';
+    }
   };
 
   const loadBook = (e) => {

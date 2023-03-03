@@ -136,7 +136,6 @@ export const Profile = () => {
                   <TabPanels>
                     <TabPanel>
                       <ScrollMenu style={{overflowX: 'auto'}}>
-                        {console.log(bookmarks.length)}
                         {bookmarks.length === 0 ? <ReactLoading type="spin" color="black" /> : bookmarks.map((book, index) => (
                           <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
                             <BookDisplay url={book.image_l} title={book.title} author={book.author} />
@@ -147,7 +146,6 @@ export const Profile = () => {
                     </TabPanel>
                     <TabPanel>
                       <ScrollMenu style={{overflowX: 'auto'}}>
-                        {console.log(read.length)}
                         {read.length === 0 ? <ReactLoading type="spin" color="black" /> : read.map((book, index) => (
                           <Col key={index} style={{width: '190px', marginLeft: '10px', marginRight: '10px'}}>
                             <BookDisplay url={book.image_l} title={book.title} author={book.author} />
