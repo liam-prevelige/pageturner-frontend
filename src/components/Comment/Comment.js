@@ -35,6 +35,10 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
   };
 
   useEffect(() => {
+    setHasParentComment(false);
+    setHasParentBook(false);
+    setHasParentBookshelf(false);
+
     if (noParent || !commentData || !commentData.pid) return;
     if (commentData.ptype && commentData.ptype === 'bookshelf') {
       setHasParentBookshelf(true);
@@ -54,6 +58,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
   const getData = async (cId) => {
     // We should already have the comment info from props
     if (commentData && commentData.profile) {
+      console.log('commentData', commentData);
       setProfileData(commentData.profile);
       if (myProfile != null) {
         setIsLiked(myProfile.likedPosts && myProfile.likedPosts.includes(commentData._id));
@@ -72,6 +77,7 @@ export const Comment = ({comment, commentId, noParent, isMyProfile}) => {
       setIsDeleted(true);
       return;
     }
+    console.log('comment', comment);
     const profile = await getBasicProfile(comment.uid);
     setProfileData(profile);
     setCommentData(comment);
