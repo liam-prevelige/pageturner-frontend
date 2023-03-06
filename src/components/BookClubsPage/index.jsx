@@ -105,7 +105,7 @@ export const BookClubsPage = () => {
       <div className="row flex justify-center align-middle w-full">
         <div className="border-b border-slate-300 mb-4"/>
         <div className="font-bold text-xl pt-30 ml-4 mb-3">
-          {!storedProfile ? 'Sign in to see your bookclubs!' : leftColumn.length>0 ? 'Your Bookclubs:' : 'You are not in any bookclubs yet. Join one or create your own!'}
+          {!storedProfile ? 'Sign in to see your book clubs!' : leftColumn.length>0 ? 'Your Book Clubs:' : 'You are not in any book clubs yet. Join one or create your own!'}
         </div>
         <div className="col-md-6 flex flex-col w-1/2">
           {leftColumn.map((groupData) =>
@@ -146,7 +146,7 @@ export const BookClubsPage = () => {
         <div className="border-b border-slate-300 m-4"/>
         <div className="row flex justify-center align-middle w-full">
           <div className="font-bold text-xl mb-3 pt-30">
-              Explore Popular Bookclubs:
+              Explore Popular Book Clubs:
           </div>
           <div className="col-md-6 flex flex-col w-1/2">
             {trendingLeftColumn.map((groupData) =>
