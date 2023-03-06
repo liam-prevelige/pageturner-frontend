@@ -47,7 +47,6 @@ const Form = ({firstFieldRef, onCancel}) => {
 
     // Get search results for books
     const res = await searchBooks(searchInput);
-
     // Set books (will change from loading icon to results)
     setBooks(res.books);
   };
