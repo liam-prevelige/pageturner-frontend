@@ -123,7 +123,9 @@ export const Search = () => {
               <TabPanel>
                 {(books && books.length > 0) ? books.map((book) => (<Row key={book.volumeId}>
                   <BookSearchResult bookInfo={book}/>
-                </Row>)) : books ? <Row>No Results</Row> : <ReactLoading type="spin" color="black"/>}
+                </Row>)) : books ? <Row>No Results</Row> : <div className="flex margin-auto justify-content-center">
+                  <ReactLoading type="spin" color="black" />
+                </div>}
               </TabPanel>
               <TabPanel>
                 {(results && results.groups && results.groups.length > 0) ? results.groups.map((group) => (<Row key={group._id}>
