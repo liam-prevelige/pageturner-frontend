@@ -4,6 +4,7 @@ import {ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel} from '@chakra-u
 import {ScrollMenu} from 'react-horizontal-scrolling-menu'; // https://www.npmjs.com/package/react-horizontal-scrolling-menu
 import {Comment} from '../Comment/Comment';
 import {PopoverForm} from './BookshelfPopup';
+import {SearchIcon} from '../../assets/Icons';
 
 import {getBookshelves, getPosts, getBookmarks, getLikedPosts} from '../../api';
 // import {PopoverForm} from './BookshelfPopup';
@@ -18,8 +19,10 @@ export const ProfileTabs = ({userId}) => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [bookmarksIds, setBookmarksIds] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
+  const [allBookshelves, setAllBookshelves] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
   const theme = createTheme();
 
   window.addEventListener('bookshelfCreated', () => {
@@ -32,6 +35,7 @@ export const ProfileTabs = ({userId}) => {
       setLoading(true);
       const loadedBookshelves = await getBookshelves(uid, 'user');
       setBookshelves(loadedBookshelves);
+      setAllBookshelves(loadedBookshelves);
       setLoading(false);
     }
   };
@@ -83,6 +87,26 @@ export const ProfileTabs = ({userId}) => {
     setLikedPosts([]);
   }, [uid]);
 
+  // Handler for text change in bookshelf search bar
+  const handleInputChange = async (newInput) => {
+    // Update search bar text
+    setSearchInput(newInput);
+
+    // If searchInput not empty, filter books
+    if (newInput) {
+      // Prepare searchString by removing quotes, escaping special characters
+      let searchString = newInput;
+      searchString = searchString.replace(/^["'](.+(?=["']$))["']$/, '$1');
+      searchString = searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // Use regular expressions to perform a case-insensitive search
+      const searchRegex = new RegExp(searchString, 'i');
+
+      setBookshelves(allBookshelves.filter((bookshelf) => searchRegex.test(bookshelf.name)));
+    } else {
+      setBookshelves(allBookshelves);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <ChakraProvider resetCSS={false}>
@@ -98,11 +122,24 @@ export const ProfileTabs = ({userId}) => {
             <TabPanel width={'710px'}>
               <ScrollMenu style={{overflowY: 'auto'}}>
                 <div className="bg-white h-full w-[42rem] min-h-[16rem]">
-                  {(profile && (!uid || profile._id==uid)) &&
+                  {(profile && (!uid || profile._id==uid)) && <div>
+                    <div className="flex items-center space-x-5 p-1 m-3 rounded-full bg-slate-200 text-black focus-within:ring-2 focus-within:ring-primary-button focus:ring-1">
+                      <SearchIcon />
+                      <div className="w-full">
+                        <input
+                          className="focus:outline-none bg-transparent w-full"
+                          type="text"
+                          placeholder="Search your bookshelves..."
+                          value={searchInput}
+                          onChange={(e) => handleInputChange(e.target.value)}
+                        />
+                      </div>
+                    </div>
                     <div className="flex border-b mb-3 -mt-2 p-3 wrap-content">
                       <PopoverForm/>
                       <div className="ml-3 mt-1">Create Bookshelf</div>
-                    </div>}
+                    </div>
+                  </div>}
                   {loading && <ReactLoading type="spin" color="black" />}
                   {bookshelves && bookshelves.map((bookshelfData) =>
                     (<div key={bookshelfData._id}>
