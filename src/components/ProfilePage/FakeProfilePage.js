@@ -6,14 +6,14 @@ import {BackNav} from '../BackNav/BackNav';
 export const FakeProfilePage = () => {
   const profile = {
     id: 1,
-    tag: 'barackobama',
-    name: 'Barack Obama',
-    description: 'Hey there, it\'s Barack. Former POTUS, dad, and grandfather. I love books, wrote a couple (you may have heard of \'em), and believe in the power of stories to change the world. Let\'s chat about what we\'re reading!',
+    tag: 'yourtag',
+    name: 'Your Name',
+    description: 'Welcome to PageTurner! By signing in, you can begin to create your own profile page, complete with bookshelves and posts.',
     friends: Array.from(Array(9473).keys()),
     following: Array.from(Array(891).keys()),
     followers: Array.from(Array(891).keys()),
-    profilePicture: 'https://mastersofscale.com/wp-content/uploads/sites/2/2021/05/barack_obama-1.jpg',
-    cover: 'https://www.penguinrandomhouse.ca/sites/default/files/2021-07/obamapicks-Summer2021-Hero.jpg',
+    profilePicture: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg',
+    cover: 'https://cdn-image.staticsfly.com/i/photobooks/WF327823_1-up_make_it_yours.jpg?impolicy=resize&width=960',
   };
 
   useEffect(() => {
