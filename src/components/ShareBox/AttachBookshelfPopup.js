@@ -79,7 +79,7 @@ const Form = ({firstFieldRef, onCancel}) => {
             <input
               className="focus:outline-none bg-transparent w-full"
               type="text"
-              placeholder="Search for books..."
+              placeholder="Search your bookshelves..."
               value={searchInput}
               onChange={(e) => handleInputChange(e.target.value)}
             />
