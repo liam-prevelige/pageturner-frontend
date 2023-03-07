@@ -1,6 +1,6 @@
 import {React, useState, useEffect} from 'react';
 import {getNotifications} from '../../api';
-import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon} from '../../assets/Icons';
+import {BookIcon, HomeIcon, GroupIcon, NotificationsIcon, ProfileIcon} from '../../assets/Icons';
 import {Auth} from '../Auth/Auth';
 import {FaAngleUp, FaAngleDown} from 'react-icons/fa';
 import {sendFeedback} from '../../api';
@@ -110,15 +110,11 @@ export const SideBar = () => {
                 </div>
               </a>
               <a href={profilePath}>
-                <div className='profilepage '>
-                  <div className={path===profilePath ? activeClassName : notActiveClassName}>
-                    <div className="rounded-full h-7 w-7 border border-slate-300">
-                      {profile ? <img className="rounded-full object-fill h-7 w-7" src={profile.profilePicture} /> :
-                    <img className="rounded-full object-fill h-7 w-7" src="https://mastersofscale.com/wp-content/uploads/sites/2/2021/05/barack_obama-1.jpg" />
-                      }
-                    </div>
-                    <li className="ml-4 sidebar-text">Profile</li>
-                  </div>
+                <div className={path === profilePath ? activeClassName : notActiveClassName}>
+                  {profile ? <img className="rounded-full object-fill h-7 w-7" src={profile.profilePicture} /> :
+                    <ProfileIcon />
+                  }
+                  <li className="ml-4 sidebar-text">Profile</li>
                 </div>
               </a>
             </ul>
