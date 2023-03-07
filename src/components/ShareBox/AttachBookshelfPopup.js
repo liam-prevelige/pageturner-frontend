@@ -2,6 +2,7 @@ import {React, useRef, useState, useEffect} from 'react';
 import FocusLock from 'react-focus-lock';
 // import {createBookshelf} from '../../api';
 import {FaListAlt} from 'react-icons/fa';
+import {SearchIcon} from '../../assets/Icons';
 
 import {
   ChakraProvider,
@@ -23,27 +24,47 @@ import {getBookshelves} from '../../api';
 // 2. Create the form
 const Form = ({firstFieldRef, onCancel}) => {
   const profile = useState(JSON.parse(sessionStorage.getItem('profile')))[0];
+  const [allBookshelves, setAllBookshelves] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
-
-  // const submitBookshelf = async () => {
-  //   await createBookshelf(name, profile._id, 'user');
-  //   onCancel();
-  // };
+  const [searchInput, setSearchInput] = useState('');
 
   const fetchBookshelves = async () => {
     if (!profile) return;
     const loadedBookshelves = await getBookshelves(profile._id, 'user');
+    setAllBookshelves(loadedBookshelves);
     setBookshelves(loadedBookshelves);
   };
 
   const attachSelectedBookshelf = (bookshelfData) => {
     window.dispatchEvent(new CustomEvent('attachBookshelf', {detail: bookshelfData}));
+    setSearchInput('');
+    setBookshelves(allBookshelves);
     onCancel();
   };
 
   useEffect(() => {
     fetchBookshelves();
   }, []);
+
+  // Handler for text change in search bar
+  const handleInputChange = async (newInput) => {
+    // Update search bar text
+    setSearchInput(newInput);
+
+    // If searchInput not empty, filter books
+    if (newInput) {
+      // Prepare searchString by removing quotes, escaping special characters
+      let searchString = newInput;
+      searchString = searchString.replace(/^["'](.+(?=["']$))["']$/, '$1');
+      searchString = searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // Use regular expressions to perform a case-insensitive search
+      const searchRegex = new RegExp(searchString, 'i');
+
+      setBookshelves(allBookshelves.filter((bookshelf) => searchRegex.test(bookshelf.name)));
+    } else {
+      setBookshelves(allBookshelves);
+    }
+  };
 
   return (
     <Stack spacing={4}>
@@ -52,6 +73,18 @@ const Form = ({firstFieldRef, onCancel}) => {
           Attach Bookshelf
           <div className="border-b mr-3 mt-2 mb-2 border-black"/>
         </FormLabel>
+        <div className="flex items-center space-x-5 p-1 m-3 rounded-full bg-slate-200 text-black focus-within:ring-2 focus-within:ring-primary-button focus:ring-1">
+          <SearchIcon />
+          <div className="w-full">
+            <input
+              className="focus:outline-none bg-transparent w-full"
+              type="text"
+              placeholder="Search your bookshelves..."
+              value={searchInput}
+              onChange={(e) => handleInputChange(e.target.value)}
+            />
+          </div>
+        </div>
         {bookshelves && bookshelves.length === 0 && <div className="text-sm italic">No bookshelves found</div>}
         {bookshelves && bookshelves.map((bookshelfData) =>
           (<div key={bookshelfData._id}>
