@@ -10,7 +10,6 @@ import {
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import {SideBar} from './components/Sidebar/SideBar';
-import {Feed} from './components/Feed';
 import {ProfilePage} from './components/ProfilePage';
 import {GroupProfilePage} from './components/ProfilePage/GroupProfilePage';
 // import {Auth} from './components/Auth/Auth';
@@ -43,7 +42,6 @@ const App = () => {
             <Route path='/book-clubs' element={<BookClubsPage />} />
             <Route path='/book-clubs/:clubId' element={<BookClubHome />} />
             <Route path='/book-clubs/:clubId/about' element={<GroupProfilePage />} />
-            <Route path="/feed" element={<Feed />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/:uid" element={<ProfilePage />} />
             <Route path="/group-profile" element={<GroupProfilePage />} />
